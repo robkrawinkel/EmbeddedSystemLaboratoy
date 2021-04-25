@@ -72,14 +72,14 @@ BEGIN
 			IF (signalA /= oldStateA AND signalA = '1') THEN
 				IF resetTimer = '0' THEN	-- If the timer is not running yet
 					resetTimer <= '1';			-- Release the timer from reset
-					runTimer <= '1';			-- Start counting
-					CW := '1';					-- Note that the rotation is CW
+					runTimer <= '1';				-- Start counting
+					CW := '1';						-- Note that the rotation is CW
 					
 				ELSIF CW = '0'	THEN			-- If the timer is running and rotation is CCW
-					runTimer <= '0';			-- Stop the timer
+					runTimer <= '0';				-- Stop the timer
 					
 					IF timerCount > maxRotSpeed THEN		-- If not too fast
-						velocity <= -1000000*(RadPerPulse*(50000000/1000000))/(timerCount);  -- in micro Rad / s
+						velocity <= -50000000/timerCount*RadPerPulse;		-- in micro Rad / s
 						overSpeedError <= '0';
 						
 					ELSE 											-- If too fast
@@ -104,7 +104,7 @@ BEGIN
 					runTimer <= '0';			-- Stop the timer
 					
 					IF timerCount > maxRotSpeed THEN		-- If not too fast
-						velocity <= 1000000*(RadPerPulse*(50000000/1000000))/(timerCount);  -- in micro Rad / s
+						velocity <= 50000000/timerCount*RadPerPulse;		-- in micro Rad / s
 						overSpeedError <= '0';
 						
 					ELSE 											-- If too fast
