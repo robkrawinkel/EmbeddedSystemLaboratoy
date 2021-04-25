@@ -9,7 +9,7 @@ run 500 us
 force GPIO_0(7) 0, 1 1 ms -repeat 2 ms
 run 10 ms
 
-force GPIO_0(9) 0, 1 1 ms -repeat 2 ms
-run 200 us
-force GPIO_0(8) 0, 1 1 ms -repeat 2 ms
+force GPIO_0(9) 0, 1 500 us -repeat 1 ms
+run 250 us
+force GPIO_0(8) 0, 1 500 us -repeat 1 ms
 run 10 ms
