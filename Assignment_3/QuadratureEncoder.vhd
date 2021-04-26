@@ -15,6 +15,9 @@ ENTITY QuadratureEncoder IS
 	-- Output velocity in 32 bits
 	velocity	: OUT integer;
 	
+	-- Output step counter in 32 bits signed
+	stepCount : INOUT integer;
+	
 	-- Output error
 	overSpeedError : OUT std_logic
 
@@ -65,6 +68,7 @@ BEGIN
 			runTimer <= '0';
 			resetTimer <= '0';
 			overSpeedError <= '0';
+			stepCount <= 0;
 			
 		-- If A is detected
 		ELSIF rising_edge(CLOCK_50) THEN
@@ -76,7 +80,8 @@ BEGIN
 					CW := '1';						-- Note that the rotation is CW
 					
 				ELSIF CW = '0'	THEN			-- If the timer is running and rotation is CCW
-					runTimer <= '0';				-- Stop the timer
+					runTimer <= '0';					-- Stop the timer
+					stepCount <= stepCount - 1;	-- Decrement step counter
 					
 					IF timerCount > maxRotSpeed THEN		-- If not too fast
 						velocity <= -50000000/timerCount*RadPerPulse;		-- in micro Rad / s
@@ -101,7 +106,8 @@ BEGIN
 					CW := '0';					-- Note that the rotation is CW
 					
 				ELSIF CW = '1' THEN				-- If the timer is running and rotation is CCW
-					runTimer <= '0';			-- Stop the timer
+					runTimer <= '0';					-- Stop the timer
+					stepCount <= stepCount + 1;	-- Increment step coun
 					
 					IF timerCount > maxRotSpeed THEN		-- If not too fast
 						velocity <= 50000000/timerCount*RadPerPulse;		-- in micro Rad / s
