@@ -1,0 +1,117 @@
+# do esl_demonstrator_run_msim_rtl_vhdl.do 
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Copying /opt/altera/13.1/modelsim_ase/linuxaloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# ** Warning: Copied /opt/altera/13.1/modelsim_ase/linuxaloem/../modelsim.ini to modelsim.ini.
+#          Updated modelsim.ini.
+# 
+# vcom -93 -work work {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_3/timer.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity timer
+# -- Compiling architecture bhv of timer
+# vcom -93 -work work {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_3/QuadratureEncoder.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity QuadratureEncoder
+# -- Compiling architecture bhv of QuadratureEncoder
+# -- Loading entity timer
+# vcom -93 -work work {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_3/esl_demonstrator.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Compiling entity esl_demonstrator
+# -- Compiling architecture behavior of esl_demonstrator
+# -- Loading package NUMERIC_STD
+# -- Loading entity QuadratureEncoder
+# 
+vcom -93 -work work -O0 /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_3/esl_demonstrator.vhd
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Compiling entity esl_demonstrator
+# -- Compiling architecture behavior of esl_demonstrator
+# -- Loading package NUMERIC_STD
+# -- Loading entity QuadratureEncoder
+vcom -93 -work work -O0 /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_3/QuadratureEncoder.vhd
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity QuadratureEncoder
+# -- Compiling architecture bhv of QuadratureEncoder
+# -- Loading entity timer
+vcom -93 -work work -O0 /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_3/timer.vhd
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity timer
+# -- Compiling architecture bhv of timer
+vsim work.esl_demonstrator
+# vsim work.esl_demonstrator 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.esl_demonstrator(behavior)
+# Loading work.quadratureencoder(bhv)
+# Loading work.timer(bhv)
+do encoder.do
+# Cannot open macro file: encoder.do
+do encoder.do
+add wave *
+add wave -position end  sim:/esl_demonstrator/CLOCK_50
+add wave -position end  sim:/esl_demonstrator/GPIO_0(9)
+add wave -position end  sim:/esl_demonstrator/GPIO_0(8)
+add wave -position end  sim:/esl_demonstrator/GPIO_0(7)
+add wave -position end  sim:/esl_demonstrator/GPIO_0(6)
+add wave -position end  sim:/esl_demonstrator/velocity0
+add wave -position end  sim:/esl_demonstrator/velocity1
+add wave -position end  sim:/esl_demonstrator/KEY(0)
+restart; do encoder.do
+edit encoder.do
+vcom -93 -work work -O0 /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_3/esl_demonstrator.vhd
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Compiling entity esl_demonstrator
+# -- Compiling architecture behavior of esl_demonstrator
+# -- Loading package NUMERIC_STD
+# -- Loading entity QuadratureEncoder
+vcom -93 -work work -O0 /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_3/QuadratureEncoder.vhd
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity QuadratureEncoder
+# -- Compiling architecture bhv of QuadratureEncoder
+# -- Loading entity timer
+vcom -93 -work work -O0 /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_3/timer.vhd
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity timer
+# -- Compiling architecture bhv of timer
+restart; do encoder.do
+# Loading work.esl_demonstrator(behavior)
+# Loading work.quadratureencoder(bhv)
+# Loading work.timer(bhv)
