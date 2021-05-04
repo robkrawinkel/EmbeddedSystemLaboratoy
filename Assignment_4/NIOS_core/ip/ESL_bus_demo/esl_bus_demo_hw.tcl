@@ -48,8 +48,9 @@ set_module_property VALIDATION_CALLBACK validate_me
 ## - List all files required by the IP
 ##  
 add_file esl_bus_demo.vhdl {SYNTHESIS SIMULATION}
-add_file esl_bus_demo_example.vhdl {SYNTHESIS SIMULATION}
-
+##add_file esl_bus_demo_example.vhdl {SYNTHESIS SIMULATION}
+add_file QuadratureEncoder.vhd {SYNTHESIS SIMULATION}
+add_file timer.vhd {SYNTHESIS SIMULATION}
 ## 
 ## IP parameters
 ## - Generics defined in the VHDL can be modified from
@@ -119,6 +120,9 @@ add_interface_port s0 slave_writedata writedata Input -1
 add_interface user_interface conduit end
 add_interface_port user_interface user_output export Output 1
 
+add_interface_port user_interface GPIO_0 export Bidir 1
+add_interface_port user_interface GPIO_1 export Bidir 1
+
 ##
 ## - Validation/ elaboration functions
 ##
@@ -136,6 +140,8 @@ proc elaborate_me {}  {
 
   ## Set data with for the custom logic
   set_port_property user_output WIDTH $the_led_width
+  set_port_property GPIO_0 		WIDTH 34
+  set_port_property GPIO_1 		WIDTH 34
   
   ## DO NOT REMOVE:
   ## adding the slave_byteenable and user_byteenable signals only if the data width is greater than 8 bits

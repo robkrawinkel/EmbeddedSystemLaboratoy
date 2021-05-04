@@ -29,58 +29,122 @@ entity esl_bus_demo is
 
 		-- signals to connect to an Avalon-MM slave interface
 		slave_address		: in  std_logic_vector(7 downto 0);
-		slave_read		: in  std_logic;
-		slave_write		: in  std_logic;
+		slave_read			: in  std_logic;
+		slave_write			: in  std_logic;
 		slave_readdata		: out std_logic_vector(DATA_WIDTH-1 downto 0);
 		slave_writedata		: in  std_logic_vector(DATA_WIDTH-1 downto 0);
 		slave_byteenable	: in  std_logic_vector((DATA_WIDTH/8)-1 downto 0);
 
 		-- signals to connect to custom user logic
 		user_output		: out std_logic_vector(LED_WIDTH-1 downto 0)
+		GPIO_0			: INOUT std_logic_vector(33 downto 0);
+		GPIO_1			: INOUT std_logic_vector(33 downto 0);
 	);
 end entity;
 
 architecture behavior of esl_bus_demo is
 	-- Internal memory for the system and a subset for the IP
-	signal enable : std_logic;
 	signal mem        : std_logic_vector(31 downto 0);
-	signal mem_masked : std_logic_vector(LED_WIDTH-1 downto 0);
+	signal memSend    : std_logic_vector(31 downto 0);
+	signal stepCount0 : integer;
+	signal stepCount1 : integer;
 
-	-- Definition of the counter
-	component esl_bus_demo_example
-	  generic (
-		 DATA_WIDTH : natural := 8
-	  );
-	  port(
-		 clk        : in  std_logic;
-		 rst        : in  std_logic;
-		 input	    : in  std_logic_vector(DATA_WIDTH-1 downto 0);
-       cnt_enable : in std_logic;
-		 output     : out std_logic_vector(DATA_WIDTH-1 downto 0)
-	  );
+	component QuadratureEncoder
+		generic(
+		);
+		
+		PORT (
+			-- CLOCK and reset
+			reset		: IN std_logic;
+			CLOCK_50	: IN std_logic;
+			-- Signals from the encoder
+			signalA	: IN std_logic;
+			signalB	: IN std_logic;
+			-- Output velocity in 32 bits
+			velocity	: OUT integer;
+			-- Output step counter in 32 bits signed
+			stepCount : INOUT integer;
+			-- Output error
+			overSpeedError : OUT std_logic
+
+			);
 	end component;
-begin
+	
+	
+	
+	begin
+	
+	--------------------------------- quadrature encoder -----------------------------------
+	encoder0 : QuadratureEncoder
+		generic map(
+		);
+		PORT MAP (
+			-- CLOCK and reset
+			reset		=> reset,
+			CLOCK_50	=> clk,
+
+			-- Signals from the encoder
+			signalA	=> GPIO_0(20),
+			signalB	=> GPIO_0(22),
+			
+			-- Output velocity in 32 bits
+			velocity	=> open,
+			
+			-- Output step count
+			stepCount => stepCount0,
+			
+			-- Output error
+			overSpeedError => open
+		);
+	
+	encoder1 : QuadratureEncoder
+		generic map(
+		);
+		PORT MAP (
+			-- CLOCK and reset
+			reset		=> reset,
+			CLOCK_50	=> clk,
+
+			-- Signals from the encoder
+			signalA	=> GPIO_0(21),
+			signalB	=> GPIO_0(23),
+			
+			-- Output velocity in 32 bits
+			velocity	=> open,
+			
+			-- Output step count
+			stepCount => stepCount1,
+			
+			-- Output error
+			overSpeedError => open
+		);
+		
+	user_output <= std_logic_vector(to_signed(stepCount0, 8));
+	memSend <= signed(stepcount0,16) & signed(stepCount1,16);
+	
+	------------------------------------------------------------------------------------------
 	-- Initialization of the example
-	my_ip : esl_bus_demo_example
-	generic map(
-		DATA_WIDTH => LED_WIDTH
-	)
-	port map(
-		clk    => clk,
-		rst    => reset,
-		input  => mem_masked,
-		cnt_enable => enable,
-		output => user_output
-	);
+	--my_ip : esl_bus_demo_example
+	--generic map(
+	--	DATA_WIDTH => LED_WIDTH
+	--)
+	--port map(
+	--	clk    => clk,
+	--	rst    => reset,
+	--	input  => mem_masked,
+	--	cnt_enable => enable,
+	--	output => user_output
+	--);
 
 	-- Communication with the bus
 	p_avalon : process(clk, reset)
 	begin
 		if (reset = '1') then
 			mem <= (others => '0');
+			memSend <= (others => '0');
 		elsif (rising_edge(clk)) then
 			if (slave_read = '1') then
-				slave_readdata <= mem;
+				slave_readdata <= memSend;
 			end if;
 			
 			if (slave_write = '1') then
@@ -89,7 +153,4 @@ begin
 		end if;
 	end process;
 	
-	-- Only select the amount bits that the logic can handle
-	mem_masked <= mem(LED_WIDTH-1 downto 0);
-	enable <= mem(DATA_WIDTH-1);
 end architecture;

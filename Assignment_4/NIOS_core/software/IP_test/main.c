@@ -30,11 +30,16 @@ int main()
 	IOWR(ESL_BUS_DEMO_0_BASE, 0x00, 1 << 31 | 0x08);
 
 	// Verify that it is there
-	int nReadOut = IORD(ESL_BUS_DEMO_0_BASE, 0x00);
-	printf("From the IP: %u \n\r", nReadOut);
+	//int nReadOut = IORD(ESL_BUS_DEMO_0_BASE, 0x00);
+	//printf("From the IP: %u \n\r", nReadOut);
 
 	// Now loop forever ...
 	while(1){}
-
+		//show steps
+		int nReadOut = IORD(ESL_BUS_DEMO_0_BASE, 0x00);
+		int stepCount0 = nReadOut >> 16;
+		int stepCount1 = nReadOut && 0x0000FFFF;
+		
+		printf("Step counter 0: %s \t Step counter 1: %s \n\r", stepCount0,stepCount1);
 	return 0;
 }
