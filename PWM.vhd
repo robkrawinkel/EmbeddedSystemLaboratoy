@@ -55,13 +55,18 @@ BEGIN
 			dutycycleError <= '0';
 			
 		ELSIF rising_edge(CLOCK_50) THEN
-			counter := counter + 1;
+			IF counter = 0 THEN
+				PWM_signal <= '1';
+			END
+				
 			IF counter = periodOn THEN
 				PWM_signal <= '0';
 			ELSIF counter = period THEN
 				PWM_signal <= '1'
 				counter := 0;
 			END
+			
+			counter := counter + 1;
 			
 		END IF;
 		
