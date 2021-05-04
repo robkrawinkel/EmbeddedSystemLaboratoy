@@ -16,6 +16,7 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
+USE IEEE.numeric_std.ALL;
 
 entity esl_bus_demo is
 	generic (
@@ -36,9 +37,9 @@ entity esl_bus_demo is
 		slave_byteenable	: in  std_logic_vector((DATA_WIDTH/8)-1 downto 0);
 
 		-- signals to connect to custom user logic
-		user_output		: out std_logic_vector(LED_WIDTH-1 downto 0)
+		user_output		: out std_logic_vector(LED_WIDTH-1 downto 0);
 		GPIO_0			: INOUT std_logic_vector(33 downto 0);
-		GPIO_1			: INOUT std_logic_vector(33 downto 0);
+		GPIO_1			: INOUT std_logic_vector(33 downto 0)
 	);
 end entity;
 
@@ -49,10 +50,7 @@ architecture behavior of esl_bus_demo is
 	signal stepCount0 : integer;
 	signal stepCount1 : integer;
 
-	component QuadratureEncoder
-		generic(
-		);
-		
+	component QuadratureEncoder		
 		PORT (
 			-- CLOCK and reset
 			reset		: IN std_logic;
@@ -76,8 +74,6 @@ architecture behavior of esl_bus_demo is
 	
 	--------------------------------- quadrature encoder -----------------------------------
 	encoder0 : QuadratureEncoder
-		generic map(
-		);
 		PORT MAP (
 			-- CLOCK and reset
 			reset		=> reset,
@@ -98,8 +94,6 @@ architecture behavior of esl_bus_demo is
 		);
 	
 	encoder1 : QuadratureEncoder
-		generic map(
-		);
 		PORT MAP (
 			-- CLOCK and reset
 			reset		=> reset,
@@ -120,7 +114,7 @@ architecture behavior of esl_bus_demo is
 		);
 		
 	user_output <= std_logic_vector(to_signed(stepCount0, 8));
-	memSend <= signed(stepcount0,16) & signed(stepCount1,16);
+	
 	
 	------------------------------------------------------------------------------------------
 	-- Initialization of the example
@@ -143,6 +137,8 @@ architecture behavior of esl_bus_demo is
 			mem <= (others => '0');
 			memSend <= (others => '0');
 		elsif (rising_edge(clk)) then
+			memSend <= std_logic_vector(to_signed(stepcount0,16)) & std_logic_vector(to_signed(stepCount1,16));
+			
 			if (slave_read = '1') then
 				slave_readdata <= memSend;
 			end if;

@@ -49,8 +49,8 @@ set_module_property VALIDATION_CALLBACK validate_me
 ##  
 add_file esl_bus_demo.vhdl {SYNTHESIS SIMULATION}
 ##add_file esl_bus_demo_example.vhdl {SYNTHESIS SIMULATION}
-add_file QuadratureEncoder.vhd {SYNTHESIS SIMULATION}
-add_file timer.vhd {SYNTHESIS SIMULATION}
+add_file QuadratureEncoder.vhdl {SYNTHESIS SIMULATION}
+add_file timer.vhdl {SYNTHESIS SIMULATION}
 ## 
 ## IP parameters
 ## - Generics defined in the VHDL can be modified from

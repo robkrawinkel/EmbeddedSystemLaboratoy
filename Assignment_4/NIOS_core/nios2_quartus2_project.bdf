@@ -4,26 +4,26 @@ editor if you plan to continue editing the block that represents it in
 the Block Editor! File corruption is VERY likely to occur.
 */
 /*
-Copyright (C) 2018  Intel Corporation. All rights reserved.
-Your use of Intel Corporation's design tools, logic functions 
+Copyright (C) 1991-2013 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
 and other software and tools, and its AMPP partner logic 
 functions, and any output files from any of the foregoing 
 (including device programming or simulation files), and any 
 associated documentation or information are expressly subject 
-to the terms and conditions of the Intel Program License 
-Subscription Agreement, the Intel Quartus Prime License Agreement,
-the Intel FPGA IP License Agreement, or other applicable license
-agreement, including, without limitation, that your use is for
-the sole purpose of programming logic devices manufactured by
-Intel and sold by Intel or its authorized distributors.  Please
-refer to the applicable agreement for further details.
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
 */
 (header "graphic" (version "1.4"))
 (pin
 	(input)
 	(rect 624 424 792 440)
-	(text "INPUT" (rect 133 0 161 10)(font "Arial" (font_size 6)))
-	(text "CLOCK_50" (rect 5 0 60 12)(font "Arial" ))
+	(text "INPUT" (rect 133 0 162 9)(font "Arial" (font_size 6)))
+	(text "CLOCK_50" (rect 5 0 60 10)(font "Arial" ))
 	(pt 168 8)
 	(drawing
 		(line (pt 92 12)(pt 117 12))
@@ -33,14 +33,14 @@ refer to the applicable agreement for further details.
 		(line (pt 117 4)(pt 121 8))
 		(line (pt 117 12)(pt 121 8))
 	)
-	(text "VCC" (rect 136 7 156 17)(font "Arial" (font_size 6)))
+	(text "VCC" (rect 136 7 157 16)(font "Arial" (font_size 6)))
 	(annotation_block (location)(rect 624 368 672 384))
 )
 (pin
 	(output)
-	(rect 608 504 784 520)
-	(text "OUTPUT" (rect 137 0 175 10)(font "Arial" (font_size 6)))
-	(text "LED[7..0]" (rect 5 0 52 12)(font "Arial" ))
+	(rect 432 504 608 520)
+	(text "OUTPUT" (rect 137 0 177 9)(font "Arial" (font_size 6)))
+	(text "LED[7..0]" (rect 5 0 49 10)(font "Arial" ))
 	(pt 176 8)
 	(drawing
 		(line (pt 176 8)(pt 124 8))
@@ -52,17 +52,55 @@ refer to the applicable agreement for further details.
 		(line (pt 98 12)(pt 94 8))
 	)
 	(flipy)
-	(annotation_block (location)(rect 784 520 848 632))
+	(annotation_block (location)(rect 608 520 672 632))
+)
+(pin
+	(bidir)
+	(rect 752 536 928 552)
+	(text "BIDIR" (rect 148 0 175 9)(font "Arial" (font_size 6)))
+	(text "GPIO_1[33..0]" (rect 18 0 86 10)(font "Arial" ))
+	(pt 176 8)
+	(drawing
+		(line (pt 120 4)(pt 98 4))
+		(line (pt 176 8)(pt 124 8))
+		(line (pt 120 12)(pt 98 12))
+		(line (pt 98 4)(pt 94 8))
+		(line (pt 98 12)(pt 94 8))
+		(line (pt 120 4)(pt 124 8))
+		(line (pt 124 8)(pt 120 12))
+	)
+	(flipy)
+	(text "GND" (rect 150 7 172 16)(font "Arial" (font_size 6)))
+	(annotation_block (location)(rect 752 560 816 976))
+)
+(pin
+	(bidir)
+	(rect 752 520 928 536)
+	(text "BIDIR" (rect 148 0 175 9)(font "Arial" (font_size 6)))
+	(text "GPIO_0[33..0]" (rect 18 0 86 10)(font "Arial" ))
+	(pt 176 8)
+	(drawing
+		(line (pt 120 4)(pt 98 4))
+		(line (pt 176 8)(pt 124 8))
+		(line (pt 120 12)(pt 98 12))
+		(line (pt 98 4)(pt 94 8))
+		(line (pt 98 12)(pt 94 8))
+		(line (pt 120 4)(pt 124 8))
+		(line (pt 124 8)(pt 120 12))
+	)
+	(flipy)
+	(text "GND" (rect 150 7 172 16)(font "Arial" (font_size 6)))
+	(annotation_block (location)(rect 688 528 744 944))
 )
 (symbol
 	(rect 560 448 592 464)
-	(text "VCC" (rect 7 0 27 10)(font "Arial" (font_size 6)))
-	(text "inst2" (rect 3 5 26 17)(font "Arial" )(invisible))
+	(text "VCC" (rect 7 0 28 9)(font "Arial" (font_size 6)))
+	(text "inst2" (rect 3 5 26 15)(font "Arial" )(invisible))
 	(port
 		(pt 16 16)
 		(output)
-		(text "1" (rect 19 7 24 19)(font "Courier New" (bold))(invisible))
-		(text "1" (rect 19 7 24 19)(font "Courier New" (bold))(invisible))
+		(text "1" (rect 19 7 27 18)(font "Courier New" (bold))(invisible))
+		(text "1" (rect 19 7 27 18)(font "Courier New" (bold))(invisible))
 		(line (pt 16 16)(pt 16 8))
 	)
 	(drawing
@@ -70,52 +108,68 @@ refer to the applicable agreement for further details.
 	)
 )
 (symbol
-	(rect 968 360 1512 544)
-	(text "first_nios2_system" (rect 216 -1 344 15)(font "Arial" (font_size 10)))
-	(text "inst" (rect 8 168 25 180)(font "Arial" ))
+	(rect 968 360 1592 576)
+	(text "first_nios2_system" (rect 256 -1 383 14)(font "Arial" (font_size 10)))
+	(text "inst" (rect 8 200 25 210)(font "Arial" ))
 	(port
 		(pt 0 72)
 		(input)
-		(text "clk_clk" (rect 0 0 37 14)(font "Arial" (font_size 8)))
-		(text "clk_clk" (rect 4 61 41 75)(font "Arial" (font_size 8)))
-		(line (pt 0 72)(pt 240 72))
+		(text "clk_clk" (rect 0 0 40 12)(font "Arial" (font_size 8)))
+		(text "clk_clk" (rect 4 61 44 73)(font "Arial" (font_size 8)))
+		(line (pt 0 72)(pt 272 72))
 	)
 	(port
 		(pt 0 112)
 		(input)
-		(text "reset_reset_n" (rect 0 0 80 14)(font "Arial" (font_size 8)))
-		(text "reset_reset_n" (rect 4 101 84 115)(font "Arial" (font_size 8)))
-		(line (pt 0 112)(pt 240 112))
+		(text "reset_reset_n" (rect 0 0 81 12)(font "Arial" (font_size 8)))
+		(text "reset_reset_n" (rect 4 101 85 113)(font "Arial" (font_size 8)))
+		(line (pt 0 112)(pt 272 112))
 	)
 	(port
 		(pt 0 152)
 		(output)
-		(text "esl_bus_demo_0_user_interface_export[7..0]" (rect 0 0 259 14)(font "Arial" (font_size 8)))
-		(text "esl_bus_demo_0_user_interface_export[7..0]" (rect 4 141 263 155)(font "Arial" (font_size 8)))
-		(line (pt 0 152)(pt 240 152)(line_width 3))
+		(text "esl_bus_demo_0_user_interface_user_output[7..0]" (rect 0 0 293 12)(font "Arial" (font_size 8)))
+		(text "esl_bus_demo_0_user_interface_user_output[7..0]" (rect 4 141 297 153)(font "Arial" (font_size 8)))
+		(line (pt 0 152)(pt 272 152)(line_width 3))
+	)
+	(port
+		(pt 0 168)
+		(bidir)
+		(text "esl_bus_demo_0_user_interface_GPIO_0[33..0]" (rect 0 0 279 12)(font "Arial" (font_size 8)))
+		(text "esl_bus_demo_0_user_interface_GPIO_0[33..0]" (rect 4 157 283 169)(font "Arial" (font_size 8)))
+		(line (pt 0 168)(pt 272 168)(line_width 3))
+	)
+	(port
+		(pt 0 184)
+		(bidir)
+		(text "esl_bus_demo_0_user_interface_GPIO_1[33..0]" (rect 0 0 279 12)(font "Arial" (font_size 8)))
+		(text "esl_bus_demo_0_user_interface_GPIO_1[33..0]" (rect 4 173 283 185)(font "Arial" (font_size 8)))
+		(line (pt 0 184)(pt 272 184)(line_width 3))
 	)
 	(drawing
-		(text "clk" (rect 225 43 242 58)(font "Arial" (color 128 0 0)(font_size 9)))
-		(text "clk" (rect 245 67 259 79)(font "Arial" (color 0 0 0)))
-		(text "reset" (rect 211 83 244 98)(font "Arial" (color 128 0 0)(font_size 9)))
-		(text "reset_n" (rect 245 107 281 119)(font "Arial" (color 0 0 0)))
-		(text "esl_bus_demo_0_user_interface" (rect 47 123 264 138)(font "Arial" (color 128 0 0)(font_size 9)))
-		(text "export" (rect 245 147 275 159)(font "Arial" (color 0 0 0)))
-		(text " first_nios2_system " (rect 457 168 559 180)(font "Arial" ))
-		(line (pt 241 52)(pt 241 76))
-		(line (pt 242 52)(pt 242 76))
-		(line (pt 241 92)(pt 241 116))
-		(line (pt 242 92)(pt 242 116))
-		(line (pt 241 132)(pt 241 156))
-		(line (pt 242 132)(pt 242 156))
-		(line (pt 240 32)(pt 304 32))
-		(line (pt 304 32)(pt 304 168))
-		(line (pt 240 168)(pt 304 168))
-		(line (pt 240 32)(pt 240 168))
-		(line (pt 0 0)(pt 544 0))
-		(line (pt 544 0)(pt 544 184))
-		(line (pt 0 184)(pt 544 184))
-		(line (pt 0 0)(pt 0 184))
+		(text "clk" (rect 257 43 275 57)(font "Arial" (color 128 0 0)(font_size 9)))
+		(text "clk" (rect 277 67 291 77)(font "Arial" (color 0 0 0)))
+		(text "reset" (rect 243 83 277 97)(font "Arial" (color 128 0 0)(font_size 9)))
+		(text "reset_n" (rect 277 107 313 117)(font "Arial" (color 0 0 0)))
+		(text "esl_bus_demo_0_user_interface" (rect 79 123 286 137)(font "Arial" (color 128 0 0)(font_size 9)))
+		(text "user_output" (rect 277 147 334 157)(font "Arial" (color 0 0 0)))
+		(text "GPIO_0" (rect 277 163 317 173)(font "Arial" (color 0 0 0)))
+		(text "GPIO_1" (rect 277 179 315 189)(font "Arial" (color 0 0 0)))
+		(text " first_nios2_system " (rect 537 200 631 210)(font "Arial" ))
+		(line (pt 273 52)(pt 273 76))
+		(line (pt 274 52)(pt 274 76))
+		(line (pt 273 92)(pt 273 116))
+		(line (pt 274 92)(pt 274 116))
+		(line (pt 273 132)(pt 273 188))
+		(line (pt 274 132)(pt 274 188))
+		(line (pt 272 32)(pt 352 32))
+		(line (pt 352 32)(pt 352 200))
+		(line (pt 272 200)(pt 352 200))
+		(line (pt 272 32)(pt 272 200))
+		(line (pt 0 0)(pt 624 0))
+		(line (pt 624 0)(pt 624 216))
+		(line (pt 0 216)(pt 624 216))
+		(line (pt 0 0)(pt 0 216))
 	)
 )
 (connector
@@ -131,9 +185,19 @@ refer to the applicable agreement for further details.
 	(pt 968 432)
 )
 (connector
-	(pt 784 512)
+	(pt 608 512)
 	(pt 968 512)
 	(bus)
 )
-(text "This is the top level for the HW tutorial" (rect 768 264 982 278)(font "Arial" (color 0 0 0)(font_size 8)))
-(text "NiosII QuartusII Project" (rect 768 232 1067 259)(font "Arial" (color 0 0 0)(font_size 18)))
+(connector
+	(pt 968 528)
+	(pt 928 528)
+	(bus)
+)
+(connector
+	(pt 968 544)
+	(pt 928 544)
+	(bus)
+)
+(text "This is the top level for the HW tutorial" (rect 768 264 988 276)(font "Arial" (color 0 0 0)(font_size 8)))
+(text "NiosII QuartusII Project" (rect 768 232 1061 259)(font "Arial" (color 0 0 0)(font_size 18)))

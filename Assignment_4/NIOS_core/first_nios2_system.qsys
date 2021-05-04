@@ -84,19 +84,19 @@
          type = "String";
       }
    }
-   element onchip_mem.s1
-   {
-      datum baseAddress
-      {
-         value = "32768";
-         type = "String";
-      }
-   }
    element sys_clock_timer.s1
    {
       datum baseAddress
       {
          value = "70656";
+         type = "String";
+      }
+   }
+   element onchip_mem.s1
+   {
+      datum baseAddress
+      {
+         value = "32768";
          type = "String";
       }
    }
