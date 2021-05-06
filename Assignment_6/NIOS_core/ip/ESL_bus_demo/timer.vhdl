@@ -6,9 +6,7 @@ ENTITY timer IS
 	PORT (reset		: IN std_logic;
 			CLOCK 	: IN std_logic;
 			runTimer : IN std_logic;
-			maxTimer : IN integer;
 			result 	: INOUT integer;
-			timerLimit : OUT std_logic
 			);
 END timer;
 
@@ -30,11 +28,7 @@ BEGIN
 		ELSIF runTimer = '1' THEN
 			
 			IF rising_edge(CLOCK) THEN
-				IF result < maxTimer THEN
-					result <= result + 1;
-				ELSE
-					result <= maxTimer;
-					timerLimit <= '1';
+				result <= result + 1;
 				END IF;
 
 			END IF;
