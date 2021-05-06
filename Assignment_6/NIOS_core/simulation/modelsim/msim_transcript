@@ -277,3 +277,85 @@ force PWM_frequency 100
 run 1ms
 # ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
 #    Time: 0 ps  Iteration: 0  Instance: /esl_bus_demo
+edit wave.do
+# Error opening /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/simulation/modelsim/wave.do
+# Path name '/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/simulation/modelsim/wave.do' doesn't exist.
+add wave.do
+# bad option "wave.do": should be one of...
+#   add atv ?options? ?arg arg ...?
+#   add button text action ?disable? ?options? ?help?
+#   add dataflow ?options? ?arg arg ...?
+#   add lists ?options? ?arg arg ...?
+#   add log ?options? ?arg arg ...?
+#   add memory options ?arg arg ...?
+#   add message ?options? ?arg arg ...?
+#   add monitor ?options? ?arg arg ...?
+#   add schematic ?options? ?arg arg ...?
+#   add testbrowser ?options? ?arg arg ...?
+#   add virtual ?options? ?arg arg ...?
+#   add watch ?options? ?arg arg ...?
+#   add wave ?options? ?arg arg ...?
+new wave.do
+# invalid command name "new"
+do PWM_testbench.do
+# Cannot open macro file: PWM_testbench.do
+do PWM_testbench.do
+# ** Error: (vish-4008) Object 'CLOCK_50' not found.
+# Error in macro ./PWM_testbench.do line 5
+# ** Error: (vish-4008) Object 'CLOCK_50' not found.
+# 
+#     while executing
+# "force CLOCK_50 0, 1 10 ns -repeat 20 ns"
+run 1ms
+do PWM_testbench.do
+add wave -position end  sim:/esl_bus_demo/PWM0/PWM_signal
+add wave -position end  sim:/esl_bus_demo/PWM0/INA
+add wave -position end  sim:/esl_bus_demo/PWM0/INB
+add wave -position end  sim:/esl_bus_demo/PWM1/PWM_signal
+add wave -position end  sim:/esl_bus_demo/PWM1/INA
+add wave -position end  sim:/esl_bus_demo/PWM1/INB
+restart
+do PWM_testbench.do
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 0 ps  Iteration: 0  Instance: /esl_bus_demo
+force KEY(0) 1
+restart; do PWM_testbench.do
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 0 ps  Iteration: 0  Instance: /esl_bus_demo
+restart; do PWM_testbench.do
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 0 ps  Iteration: 0  Instance: /esl_bus_demo
+restart; do PWM_testbench.do
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 0 ps  Iteration: 0  Instance: /esl_bus_demo
+# ** Error: (vish-4008) Object 'PWM_frequency1' not found.
+# Error in macro ./PWM_testbench.do line 13
+# ** Error: (vish-4008) Object 'PWM_frequency1' not found.
+# 
+#     while executing
+# "force PWM_frequency1 1000"
+restart; do PWM_testbench.do
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 0 ps  Iteration: 0  Instance: /esl_bus_demo
+restart; do PWM_testbench.do
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 0 ps  Iteration: 0  Instance: /esl_bus_demo
+vsim -voptargs=+acc first_nios2_system.pwm
+# vsim -voptargs=+acc first_nios2_system.pwm 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading first_nios2_system.pwm(bhv)
+add wave
+# wrong number of args for "add wave".
+# Usage: add wave [-allowconstants] [-clampanalog [0|1]] [-color <standard_color_name>] [-depth <level>] [-divider <divider_name>...] [-expand <signal_name>] [-<format>] [-group <group_name> [<sig_name1>...]] [-height <pixels>] [[-in] [-out] [-inout] | [-ports]] [-internal] [-label <name>] [-max <real_num>] [-min <real_num>] [-noupdate] [-position] [-radix <type> | <radix_type>] [-radixenumnumeric | -radixenumsymbolic] [-recursive] [-time] [<object_name>...] [{<object_name> {sig1 sig2 sig3 ...}}] 
+restart; do PWM_testbench.do
+add wave -position end  sim:/pwm/PWM_signal
+add wave -position end  sim:/pwm/INA
+add wave -position end  sim:/pwm/INB
+add wave -position end  sim:/pwm/INB
+
+restart; do PWM_testbench.do
+restart; do PWM_testbench.do
+restart; do PWM_testbench.do

@@ -44,6 +44,7 @@ int main()
 		stepCount1 = nReadOut & 0x0000FFFF;
 
 		//printf("%x \n\r", nReadOut);
+		printf("nReadOut: %x \t", nReadOut);
 		printf("stepCount0: %d\t stepCount1: %d \n\r", stepCount0, stepCount1);
 	}
 

@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 6, 2021 10:39:24 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1620290364620</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>May 6, 2021 11:19:16 AM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1620292756862</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/software/Assignment_6_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../first_nios2_system.sopcinfo</SopcDesignFile>
