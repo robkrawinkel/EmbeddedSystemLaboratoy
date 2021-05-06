@@ -1,0 +1,279 @@
+# do nios2_quartus2_project_run_msim_rtl_vhdl.do 
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Copying /opt/altera/13.1/modelsim_ase/linuxaloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# ** Warning: Copied /opt/altera/13.1/modelsim_ase/linuxaloem/../modelsim.ini to modelsim.ini.
+#          Updated modelsim.ini.
+# 
+# vlib first_nios2_system
+# ** Warning: (vlib-34) Library already exists at "first_nios2_system".
+# vmap first_nios2_system first_nios2_system
+# Modifying modelsim.ini
+# vlog -vlog01compat -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_reset_controller.v}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module altera_reset_controller
+# 
+# Top level modules:
+# 	altera_reset_controller
+# vlog -vlog01compat -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_reset_synchronizer.v}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module altera_reset_synchronizer
+# 
+# Top level modules:
+# 	altera_reset_synchronizer
+# vlog -vlog01compat -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_mm_interconnect_0.v}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_mm_interconnect_0
+# 
+# Top level modules:
+# 	first_nios2_system_mm_interconnect_0
+# vlog -vlog01compat -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_sysid.v}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_sysid
+# 
+# Top level modules:
+# 	first_nios2_system_sysid
+# vlog -vlog01compat -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_sys_clock_timer.v}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_sys_clock_timer
+# 
+# Top level modules:
+# 	first_nios2_system_sys_clock_timer
+# vlog -vlog01compat -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_jtag_uart.v}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_jtag_uart_sim_scfifo_w
+# -- Compiling module first_nios2_system_jtag_uart_scfifo_w
+# -- Compiling module first_nios2_system_jtag_uart_sim_scfifo_r
+# -- Compiling module first_nios2_system_jtag_uart_scfifo_r
+# -- Compiling module first_nios2_system_jtag_uart
+# 
+# Top level modules:
+# 	first_nios2_system_jtag_uart
+# vlog -vlog01compat -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_onchip_mem.v}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_onchip_mem
+# 
+# Top level modules:
+# 	first_nios2_system_onchip_mem
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_irq_mapper.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_irq_mapper
+# 
+# Top level modules:
+# 	first_nios2_system_irq_mapper
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_arbitrator.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module altera_merlin_arbitrator
+# -- Compiling module altera_merlin_arb_adder
+# 
+# Top level modules:
+# 	altera_merlin_arbitrator
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_mm_interconnect_0_rsp_xbar_mux_001.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_mm_interconnect_0_rsp_xbar_mux_001
+# 
+# Top level modules:
+# 	first_nios2_system_mm_interconnect_0_rsp_xbar_mux_001
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_mm_interconnect_0_rsp_xbar_mux.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_mm_interconnect_0_rsp_xbar_mux
+# 
+# Top level modules:
+# 	first_nios2_system_mm_interconnect_0_rsp_xbar_mux
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_mm_interconnect_0_rsp_xbar_demux_002.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_mm_interconnect_0_rsp_xbar_demux_002
+# 
+# Top level modules:
+# 	first_nios2_system_mm_interconnect_0_rsp_xbar_demux_002
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_mm_interconnect_0_rsp_xbar_demux.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_mm_interconnect_0_rsp_xbar_demux
+# 
+# Top level modules:
+# 	first_nios2_system_mm_interconnect_0_rsp_xbar_demux
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_mm_interconnect_0_cmd_xbar_mux_002.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_mm_interconnect_0_cmd_xbar_mux_002
+# 
+# Top level modules:
+# 	first_nios2_system_mm_interconnect_0_cmd_xbar_mux_002
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_mm_interconnect_0_cmd_xbar_mux.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_mm_interconnect_0_cmd_xbar_mux
+# 
+# Top level modules:
+# 	first_nios2_system_mm_interconnect_0_cmd_xbar_mux
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_mm_interconnect_0_cmd_xbar_demux_001.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_mm_interconnect_0_cmd_xbar_demux_001
+# 
+# Top level modules:
+# 	first_nios2_system_mm_interconnect_0_cmd_xbar_demux_001
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_mm_interconnect_0_cmd_xbar_demux.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_mm_interconnect_0_cmd_xbar_demux
+# 
+# Top level modules:
+# 	first_nios2_system_mm_interconnect_0_cmd_xbar_demux
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module altera_merlin_traffic_limiter
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(512): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(584): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(585): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(586): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(587): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(588): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(589): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(595): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(598): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(599): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(602): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(628): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(630): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(631): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(632): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(633): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(634): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(640): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(643): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(644): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_traffic_limiter.sv(647): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# 
+# Top level modules:
+# 	altera_merlin_traffic_limiter
+# vlog -vlog01compat -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_avalon_sc_fifo.v}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module altera_avalon_sc_fifo
+# 
+# Top level modules:
+# 	altera_avalon_sc_fifo
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_mm_interconnect_0_id_router_002.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_mm_interconnect_0_id_router_002_default_decode
+# -- Compiling module first_nios2_system_mm_interconnect_0_id_router_002
+# 
+# Top level modules:
+# 	first_nios2_system_mm_interconnect_0_id_router_002
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_mm_interconnect_0_id_router.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_mm_interconnect_0_id_router_default_decode
+# -- Compiling module first_nios2_system_mm_interconnect_0_id_router
+# 
+# Top level modules:
+# 	first_nios2_system_mm_interconnect_0_id_router
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_mm_interconnect_0_addr_router_001.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_mm_interconnect_0_addr_router_001_default_decode
+# -- Compiling module first_nios2_system_mm_interconnect_0_addr_router_001
+# 
+# Top level modules:
+# 	first_nios2_system_mm_interconnect_0_addr_router_001
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/first_nios2_system_mm_interconnect_0_addr_router.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module first_nios2_system_mm_interconnect_0_addr_router_default_decode
+# -- Compiling module first_nios2_system_mm_interconnect_0_addr_router
+# 
+# Top level modules:
+# 	first_nios2_system_mm_interconnect_0_addr_router
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_slave_agent.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module altera_merlin_slave_agent
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_slave_agent.sv(591): (vlog-2186) SystemVerilog testbench feature
+# (randomization, coverage or assertion) detected in the design.
+# These features are only supported in Questasim.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_slave_agent.sv(472): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_slave_agent.sv(473): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_slave_agent.sv(474): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_slave_agent.sv(475): (vlog-2583) [SVCHK] - Some checking for conflicts with always_comb and always_latch variables not yet supported. Run vopt to provide additional design-level checks.
+# ** Warning: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_slave_agent.sv(34): (vlog-2186) SystemVerilog testbench feature
+# (randomization, coverage or assertion) detected in the design.
+# These features are only supported in Questasim.
+# 
+# Top level modules:
+# 	altera_merlin_slave_agent
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_burst_uncompressor.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module altera_merlin_burst_uncompressor
+# 
+# Top level modules:
+# 	altera_merlin_burst_uncompressor
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_master_agent.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module altera_merlin_master_agent
+# 
+# Top level modules:
+# 	altera_merlin_master_agent
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_slave_translator.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module altera_merlin_slave_translator
+# 
+# Top level modules:
+# 	altera_merlin_slave_translator
+# vlog -sv -work first_nios2_system +incdir+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/altera_merlin_master_translator.sv}
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module altera_merlin_master_translator
+# 
+# Top level modules:
+# 	altera_merlin_master_translator
+# vcom -93 -work first_nios2_system {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/first_nios2_system.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity first_nios2_system
+# -- Compiling architecture rtl of first_nios2_system
+# vcom -93 -work first_nios2_system {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/esl_bus_demo.vhdl}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity esl_bus_demo
+# -- Compiling architecture behavior of esl_bus_demo
+# vcom -93 -work first_nios2_system {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/timer.vhdl}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity timer
+# -- Compiling architecture bhv of timer
+# vcom -93 -work first_nios2_system {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/PWM.vhdl}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity PWM
+# -- Compiling architecture bhv of PWM
+# vcom -93 -work first_nios2_system {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_6/NIOS_core/first_nios2_system/synthesis/submodules/QuadratureEncoder.vhdl}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity QuadratureEncoder
+# -- Compiling architecture bhv of QuadratureEncoder
+# -- Loading entity timer
+# 
+vsim -voptargs=+acc first_nios2_system.esl_bus_demo
+# vsim -voptargs=+acc first_nios2_system.esl_bus_demo 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading first_nios2_system.esl_bus_demo(behavior)
+# Loading first_nios2_system.quadratureencoder(bhv)
+# Loading first_nios2_system.timer(bhv)
+# Loading first_nios2_system.pwm(bhv)
+force PWM_frequency 100
+run 1ms
+# ** Warning: NUMERIC_STD.TO_SIGNED: vector truncated
+#    Time: 0 ps  Iteration: 0  Instance: /esl_bus_demo

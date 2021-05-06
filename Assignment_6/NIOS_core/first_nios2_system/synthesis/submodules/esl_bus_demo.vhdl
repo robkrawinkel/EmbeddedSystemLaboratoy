@@ -39,16 +39,30 @@ entity esl_bus_demo is
 		-- signals to connect to custom user logic
 		user_output		: out std_logic_vector(LED_WIDTH-1 downto 0);
 		GPIO_0			: INOUT std_logic_vector(33 downto 0);
-		GPIO_1			: INOUT std_logic_vector(33 downto 0)
-	);
-end entity;
+		GPIO_1			: INOUT std_logic_vector(33 downto 0);
+		KEY				: IN std_logic_vector(1 downto 0);
+		SW				: IN std_logic_vector(3 downto 0)
 
-architecture behavior of esl_bus_demo is
+	);
+END entity;
+
+ARCHITECTURE behavior of esl_bus_demo is
 	-- Internal memory for the system and a subset for the IP
 	signal mem        : std_logic_vector(31 downto 0);
-	signal memSend    : std_logic_vector(31 downto 0);
+	signal memSEND    : std_logic_vector(31 downto 0);
+
+	-- Signals for quadrature encoder
 	signal stepCount0 : integer;
 	signal stepCount1 : integer;
+
+	-- Signals for the PWM generation
+	signal PWM_frequency : integer range 0 to 50000000;
+	signal PWM_dutycycle0: integer range 0 to 100;
+	signal PWM_dutycycle1: integer range 0 to 100;
+	signal PWM_CW0	 : std_logic;
+	signal PWM_CW1	 : std_logic;
+	signal PWM_enable0: std_logic;
+	signal PWM_enable1: std_logic;
 
 	component QuadratureEncoder		
 		PORT (
@@ -62,17 +76,32 @@ architecture behavior of esl_bus_demo is
 			velocity	: OUT integer;
 			-- Output step counter in 32 bits signed
 			stepCount : INOUT integer;
-			-- Output error
-			overSpeedError : OUT std_logic
-
+			-- Output errorCW
+				overSpeedError : OUT std_logic
 			);
-	end component;
+	END component;
+
+	component PWM
+		PORT (
+			-- CLOCK and reset
+			reset		: IN std_logic;
+			CLOCK_50	: IN std_logic;
+			-- Input signals module
+			frequency	: IN integer range 0 to 50000000; --frequency of the signal in Hz
+			dutycycle	: IN integer range 0 to 100; --dutycycle of the signal in percentage
+			CW			: IN std_logic; --rotational direction of the signal
+			-- Output pwm_signal and rotation direction
+			PWM_signal 	: OUT std_logic;
+			INA 		: OUT std_logic;
+			INB			: OUT std_logic;
+
+			enable		: IN std_logic
+			);
+	END component;
 	
 	
+	BEGIN
 	
-	begin
-	
-	--------------------------------- quadrature encoder -----------------------------------
 	encoder0 : QuadratureEncoder
 		PORT MAP (
 			-- CLOCK and reset
@@ -88,12 +117,11 @@ architecture behavior of esl_bus_demo is
 			
 			-- Output step count
 			stepCount => stepCount0,
-			
+
 			-- Output error
 			overSpeedError => open
 		);
-	
-	encoder1 : QuadratureEncoder
+encoder1: QuadratureEncoder
 		PORT MAP (
 			-- CLOCK and reset
 			reset		=> reset,
@@ -105,48 +133,100 @@ architecture behavior of esl_bus_demo is
 			
 			-- Output velocity in 32 bits
 			velocity	=> open,
-			
+
 			-- Output step count
 			stepCount => stepCount1,
 			
 			-- Output error
 			overSpeedError => open
 		);
+
+	PWM0: PWM
+		PORT MAP (
+			-- CLOCK and reset
+			reset		=> reset,
+			CLOCK_50	=> clk,
+			-- Input signals module
+			frequency	=> PWM_frequency,
+			dutycycle	=> PWM_dutycycle0,
+			CW			=> PWM_CW0,
+			-- Output pwm_signal and rotation direction
+			PWM_signal 	=> GPIO_0(8),
+			INA 		=> GPIO_0(10),
+			INB			=> GPIO_0(12),
+			
+			enable		=> PWM_enable0
+			);
+
+	PWM1: PWM
+		PORT MAP (
+			-- CLOCK and reset
+			reset		=> reset,
+			CLOCK_50	=> clk,
+			-- Input signals module
+			frequency	=> PWM_frequency,
+			dutycycle	=> PWM_dutycycle1,
+			CW			=> PWM_CW1,
+			-- Output pwm_signal and rotation direction
+			PWM_signal 	=> GPIO_0(9),
+			INA 		=> GPIO_0(11),
+			INB			=> GPIO_0(13),
+			
+			enable		=> PWM_enable1
+			);
 		
-	user_output <= std_logic_vector(to_signed(stepCount0, 8));
-	--user_output <= std_logic_vector(to_signed(21, 8));
-	--user_output <= GPIO_0(27 downto 20);
+	user_output <= '1' & std_logic_vector(to_signed(stepCount0, 7));
 	
-	------------------------------------------------------------------------------------------
-	-- Initialization of the example
-	--my_ip : esl_bus_demo_example
-	--generic map(
-	--	DATA_WIDTH => LED_WIDTH
-	--)
-	--port map(
-	--	clk    => clk,
-	--	rst    => reset,
-	--	input  => mem_masked,
-	--	cnt_enable => enable,
-	--	output => user_output
-	--);
+	PWM_process : PROCESS(clk,reset,KEY)
+	BEGIN
+		IF (reset = '1') THEN
+			PWM_enable0 <= '0';
+			PWM_enable1 <= '0';
+			PWM_dutycycle0 <= 0;
+			PWM_dutycycle1 <= 0;
+			PWM_CW0 <= '0';
+			PWM_CW1 <= '0';
+			PWM_frequency  <= 20000;
+		ELSIF rising_edge(clk) THEN
+			PWM_frequency <= 20000;
+			PWM_dutycycle1 <= 50;
+			PWM_dutycycle0 <= 10;
+			IF KEY(0) = '0' THEN
+				PWM_CW0 <= '0';
+				PWM_CW1 <= '0';
+				PWM_enable0 <= '1';
+				PWM_enable1 <= '1';
+			ELSIF KEY(1) = '0' THEN
+				PWM_CW0 <= '1';
+				PWM_CW1 <= '1';
+				PWM_enable0 <= '1';
+				PWM_enable1 <= '1';
+			ELSE
+				PWM_enable0 <= '0';
+				PWM_enable1 <= '0';
+			END IF;
+		END IF;
+	END PROCESS;
+
 
 	-- Communication with the bus
-	p_avalon : process(clk, reset)
-	begin
-		if (reset = '1') then
+	p_avalon : PROCESS(clk, reset)
+	BEGIN
+		IF (reset = '1') THEN
 			mem <= (others => '0');
-			memSend <= (others => '0');
-		elsif (rising_edge(clk)) then
-			memSend <= std_logic_vector(to_signed(stepcount0,16)) & std_logic_vector(to_signed(stepCount1,16));
-			if (slave_read = '1') then
-				slave_readdata <= memSend;
-			end if;
+			memSEND <= (others => '0');
+		ELSIF (rising_edge(clk)) THEN
+			memSEND <= std_logic_vector(to_signed(stepcount0,16)) & std_logic_vector(to_signed(stepCount1,16));
 			
-			if (slave_write = '1') then
+			IF (slave_read = '1') THEN
+				slave_readdata <= memSEND;
+			END IF;
+			
+			IF (slave_write = '1') THEN
 				mem <= slave_writedata;
-			end if;
-		end if;
-	end process;
+			END IF;
+		END IF;
+	END PROCESS;
 	
-end architecture;
+END ARCHITECTURE;
+

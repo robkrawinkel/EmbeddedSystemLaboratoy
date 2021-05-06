@@ -16,7 +16,7 @@
    {
       datum baseAddress
       {
-         value = "70712";
+         value = "70696";
          type = "String";
       }
    }
@@ -32,7 +32,7 @@
    {
       datum baseAddress
       {
-         value = "70704";
+         value = "70688";
          type = "String";
       }
    }
@@ -84,19 +84,19 @@
          type = "String";
       }
    }
-   element sys_clock_timer.s1
-   {
-      datum baseAddress
-      {
-         value = "70656";
-         type = "String";
-      }
-   }
    element onchip_mem.s1
    {
       datum baseAddress
       {
          value = "32768";
+         type = "String";
+      }
+   }
+   element sys_clock_timer.s1
+   {
+      datum baseAddress
+      {
+         value = "70656";
          type = "String";
       }
    }
@@ -285,7 +285,7 @@
   <parameter name="tightlyCoupledInstructionMaster2AddrWidth" value="1" />
   <parameter name="tightlyCoupledInstructionMaster3AddrWidth" value="1" />
   <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_mem.s1' start='0x8000' end='0xD000' /><slave name='cpu.jtag_debug_module' start='0x10800' end='0x11000' /></address-map>]]></parameter>
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_mem.s1' start='0x8000' end='0xD000' /><slave name='cpu.jtag_debug_module' start='0x10800' end='0x11000' /><slave name='esl_bus_demo_0.s0' start='0x11000' end='0x11400' /><slave name='sys_clock_timer.s1' start='0x11400' end='0x11420' /><slave name='sysid.control_slave' start='0x11430' end='0x11438' /><slave name='jtag_uart.avalon_jtag_slave' start='0x11438' end='0x11440' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_mem.s1' start='0x8000' end='0xD000' /><slave name='cpu.jtag_debug_module' start='0x10800' end='0x11000' /><slave name='esl_bus_demo_0.s0' start='0x11000' end='0x11400' /><slave name='sys_clock_timer.s1' start='0x11400' end='0x11420' /><slave name='sysid.control_slave' start='0x11420' end='0x11428' /><slave name='jtag_uart.avalon_jtag_slave' start='0x11428' end='0x11430' /></address-map>]]></parameter>
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="deviceFamilyName" value="Cyclone IV E" />
   <parameter name="internalIrqMaskSystemInfo" value="65538" />
@@ -405,7 +405,7 @@
    start="cpu.data_master"
    end="jtag_uart.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00011438" />
+  <parameter name="baseAddress" value="0x00011428" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -435,7 +435,7 @@
    start="cpu.data_master"
    end="sysid.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00011430" />
+  <parameter name="baseAddress" value="0x00011420" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection

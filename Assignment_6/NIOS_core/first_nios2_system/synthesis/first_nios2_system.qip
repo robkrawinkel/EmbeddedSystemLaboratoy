@@ -2,7 +2,7 @@ set_global_assignment -entity "first_nios2_system" -library "first_nios2_system"
 set_global_assignment -entity "first_nios2_system" -library "first_nios2_system" -name IP_TOOL_VERSION "13.1"
 set_global_assignment -entity "first_nios2_system" -library "first_nios2_system" -name IP_TOOL_ENV "Qsys"
 set_global_assignment -library "first_nios2_system" -name SOPCINFO_FILE [file join $::quartus(qip_path) "../../first_nios2_system.sopcinfo"]
-set_global_assignment -entity "first_nios2_system" -library "first_nios2_system" -name SLD_INFO "QSYS_NAME first_nios2_system HAS_SOPCINFO 1 GENERATION_ID 1620134087"
+set_global_assignment -entity "first_nios2_system" -library "first_nios2_system" -name SLD_INFO "QSYS_NAME first_nios2_system HAS_SOPCINFO 1 GENERATION_ID 1620291227"
 set_global_assignment -library "first_nios2_system" -name MISC_FILE [file join $::quartus(qip_path) "../../first_nios2_system.cmp"]
 set_global_assignment -library "first_nios2_system" -name SLD_FILE [file join $::quartus(qip_path) "first_nios2_system.regmap"]
 set_global_assignment -library "first_nios2_system" -name SLD_FILE [file join $::quartus(qip_path) "first_nios2_system.debuginfo"]
@@ -38,8 +38,9 @@ set_global_assignment -library "first_nios2_system" -name SYSTEMVERILOG_FILE [fi
 set_global_assignment -library "first_nios2_system" -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_merlin_slave_translator.sv"]
 set_global_assignment -library "first_nios2_system" -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_merlin_master_translator.sv"]
 set_global_assignment -library "first_nios2_system" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/esl_bus_demo.vhdl"]
-set_global_assignment -library "first_nios2_system" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/QuadratureEncoder.vhd"]
-set_global_assignment -library "first_nios2_system" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/timer.vhd"]
+set_global_assignment -library "first_nios2_system" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/QuadratureEncoder.vhdl"]
+set_global_assignment -library "first_nios2_system" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/timer.vhdl"]
+set_global_assignment -library "first_nios2_system" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/PWM.vhdl"]
 set_global_assignment -library "first_nios2_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/first_nios2_system_sysid.v"]
 set_global_assignment -library "first_nios2_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/first_nios2_system_sys_clock_timer.v"]
 set_global_assignment -library "first_nios2_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/first_nios2_system_jtag_uart.v"]

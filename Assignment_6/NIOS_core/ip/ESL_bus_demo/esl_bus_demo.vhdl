@@ -56,7 +56,7 @@ ARCHITECTURE behavior of esl_bus_demo is
 	signal stepCount1 : integer;
 
 	-- Signals for the PWM generation
-	signal PWM_frequency : integer;
+	signal PWM_frequency : integer range 0 to 50000000;
 	signal PWM_dutycycle0: integer range 0 to 100;
 	signal PWM_dutycycle1: integer range 0 to 100;
 	signal PWM_CW0	 : std_logic;
@@ -75,12 +75,13 @@ ARCHITECTURE behavior of esl_bus_demo is
 			-- Output velocity in 32 bits
 			velocity	: OUT integer;
 			-- Output step counter in 32 bits signed
-			stepCount : INOUT integer
+			stepCount : INOUT integer;
 			-- Output errorCW
+				overSpeedError : OUT std_logic
 			);
 	END component;
 
-	component PWM := 20000
+	component PWM
 		PORT (
 			-- CLOCK and reset
 			reset		: IN std_logic;
@@ -94,7 +95,7 @@ ARCHITECTURE behavior of esl_bus_demo is
 			INA 		: OUT std_logic;
 			INB			: OUT std_logic;
 
-			constantenable		: IN std_logic
+			enable		: IN std_logic
 			);
 	END component;
 	
@@ -174,9 +175,9 @@ encoder1: QuadratureEncoder
 			enable		=> PWM_enable1
 			);
 		
-	user_output <= std_l := 20000ogic_vector(to_signed(stepCount0, 8));
+	user_output <= '1' & std_logic_vector(to_signed(stepCount0, 7));
 	
-	PWM_process: PROCESS(clk,reset,KEY)
+	PWM_process : PROCESS(clk,reset,KEY)
 	BEGIN
 		IF (reset = '1') THEN
 			PWM_enable0 <= '0';
@@ -185,11 +186,11 @@ encoder1: QuadratureEncoder
 			PWM_dutycycle1 <= 0;
 			PWM_CW0 <= '0';
 			PWM_CW1 <= '0';
-			PWM_frequency  := 20000;
+			PWM_frequency  <= 20000;
 		ELSIF rising_edge(clk) THEN
-			PWM_frequency := 20000;
+			PWM_frequency <= 20000;
 			PWM_dutycycle1 <= 50;
-			PWM_dutycycle0 <= 1;
+			PWM_dutycycle0 <= 10;
 			IF KEY(0) = '0' THEN
 				PWM_CW0 <= '0';
 				PWM_CW1 <= '0';
@@ -200,6 +201,9 @@ encoder1: QuadratureEncoder
 				PWM_CW1 <= '1';
 				PWM_enable0 <= '1';
 				PWM_enable1 <= '1';
+			ELSE
+				PWM_enable0 <= '0';
+				PWM_enable1 <= '0';
 			END IF;
 		END IF;
 	END PROCESS;
@@ -225,3 +229,4 @@ encoder1: QuadratureEncoder
 	END PROCESS;
 	
 END ARCHITECTURE;
+
