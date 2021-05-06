@@ -1,3 +1,18 @@
+-- QuadratureEncoder, used to count the number of steps the motor has turned.
+
+-- The steps are created using a state machine, as follows:
+-- 	State	0	1	2	3 
+---------------------------
+--	A 		0	0	1	1
+--  B 		0	1	1	0
+-------------------------
+
+-- If the transition from state 3 to 0 happens, the counter is increased. If 0 to 3 happens, the counter is decreased.
+-- State 4 is used if the current state is not known.
+
+-- Every cycle the current state is compared to the previous state. If the next state is not a neighbour of the last state due to too high a speed, 
+-- the previous direction of rotation is used.
+
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
@@ -12,133 +27,85 @@ ENTITY QuadratureEncoder IS
 	signalA	: IN std_logic;
 	signalB	: IN std_logic;
 	
-	-- Output velocity in 32 bits
-	velocity	: OUT integer;
-	
 	-- Output step counter in 32 bits signed
-	stepCount : INOUT integer;
-	
-	-- Output error
-	overSpeedError : OUT std_logic
+	stepCount : INOUT integer
 
 	);
 END ENTITY;
 
 ARCHITECTURE bhv OF QuadratureEncoder IS
-	
-	-- Create signals to manage the timer
-	SIGNAL runTimer	: std_logic;
-	SIGNAL resetTimer	: std_logic;
-	SIGNAL timerCount	: integer;
-	SIGNAL maxTimer	: integer := 50000000;
-	SIGNAL timerLimit	: std_logic;	
+	SIGNAL inputSignals : std_logic_vector(1 downto 0);
 
 BEGIN
-	
-	-- Initialize timer and tie to local variables and signals
-	timer : ENTITY work.timer
-		PORT MAP (
-			reset		=> resetTimer,
-			CLOCK 	=> CLOCK_50,
-			runTimer => runTimer,
-			maxTimer => maxTimer,
-			result 	=> timerCount,
-			timerLimit => timerLimit
-		);
 
 	-- Create a process which reacts to the specified signals
-	PROCESS(reset, CLOCK_50, signalA, signalB, timerLimit)
+	PROCESS(reset, CLOCK_50)
 	
 		-- Create variable to keep track of direction, ClockWise
 		VARIABLE CW	: std_logic;
+		VARIABLE state: integer range 0 to 4;
 		
 		-- Variables to keep track of previous states
-		VARIABLE oldStateA : std_logic;
-		VARIABLE oldStateB : std_logic;
-		
-		-- Define device constants
-		CONSTANT RadPerPulse : integer := 12566;	-- 2pi/pulsesPerRot*1000000, with 500 pulsesPerRot
-		CONSTANT maxRotSpeed : integer := 1;		-- Defined in clock pulses
-		
+		VARIABLE oldState : integer range 0 to 4;
 	BEGIN
 		
 		-- Reset everything
 		IF reset = '1' THEN
-			velocity <= 0;
-			runTimer <= '0';
-			resetTimer <= '0';
-			overSpeedError <= '0';
 			stepCount <= 0;
+			state := 4;
+			CW := '0';
 			
 		-- If A is detected
 		ELSIF rising_edge(CLOCK_50) THEN
+			inputSignals <= signalA & signalB;
 			
-			IF (signalA /= oldStateA AND signalA = '1') THEN
-				IF resetTimer = '0' THEN	-- If the timer is not running yet
-					resetTimer <= '1';			-- Release the timer from reset
-					runTimer <= '1';				-- Start counting
-					CW := '1';						-- Note that the rotation is CW
-					
-				ELSIF CW = '0'	THEN			-- If the timer is running and rotation is CCW
-					runTimer <= '0';					-- Stop the timer
-					stepCount <= stepCount - 1;	-- Decrement step counter
-					
-					IF timerCount > maxRotSpeed THEN		-- If not too fast
-						velocity <= -50000000/timerCount*RadPerPulse;		-- in micro Rad / s
-						overSpeedError <= '0';
-						
-					ELSE 											-- If too fast
-						-- Don't alter velocity
-						overSpeedError <= '1';
-						
+			IF state = 4 THEN
+				--redefine state as the current one is not known, don't do anything else
+				CASE inputSignals IS
+					WHEN "00" => state := 0;
+					WHEN "01" => state := 1;
+					WHEN "11" => state := 2;
+					WHEN "10" => state := 3;
+					WHEN OTHERS => state := 4;
+				END CASE;
+				
+				
+			ELSE
+				CASE inputSignals IS
+					WHEN "00" => state := 0;
+					WHEN "01" => state := 1;
+					WHEN "11" => state := 2;
+					WHEN "10" => state := 3;
+					WHEN OTHERS => state := 4;
+				END CASE;
+				
+				--if something has changed, find out if the counter should be increased/decreased and set the rotational direction
+				IF state /= oldState THEN
+					IF state = oldState + 1 THEN
+						CW := '1';
+					ELSIF state = 0 AND oldState = 3 THEN
+						CW := '1';
+						stepCount <= stepCount + 1;
+					ELSIF state = oldState - 1 THEN
+						CW := '0';
+					ELSIF state = 3 AND oldState = 0 THEN
+						CW := '0';
+						stepCount <= stepCount - 1;
+					ELSE
+						-- if it is not an increase or decrease of one step, assume the rotational direction didn't change and check if the counter should be increased
+						IF state < oldState AND CW = '1' THEN
+							stepCount <= stepCount + 1;
+						ELSIF state > oldState AND CW = '0' THEN
+							stepCount <= stepCount - 1;
+						END IF;
 					END IF;
-					
 				END IF;
 				
 			
-		
-			-- If B is detected
-			ELSIF (signalB /= oldStateB AND signalB = '1') THEN
-			
-				IF resetTimer = '0' THEN	-- If the timer is not running yet
-					resetTimer <= '1';			-- Release the timer from reset
-					runTimer <= '1';			-- Start counting
-					CW := '0';					-- Note that the rotation is CW
-					
-				ELSIF CW = '1' THEN				-- If the timer is running and rotation is CCW
-					runTimer <= '0';					-- Stop the timer
-					stepCount <= stepCount + 1;	-- Increment step coun
-					
-					IF timerCount > maxRotSpeed THEN		-- If not too fast
-						velocity <= 50000000/timerCount*RadPerPulse;		-- in micro Rad / s
-						overSpeedError <= '0';
-						
-					ELSE 											-- If too fast
-						-- Don't alter velocity
-						overSpeedError <= '1';
-						
-					END IF;
-					
-				END IF;
-			
-			
-		
-			-- Reset loop
-			ELSIF ((signalA /= oldStateA AND signalA = '0') OR (signalB /= oldStateB AND signalB = '0')) THEN
-				resetTimer <= '0';
-				runTimer <= '0';
-			
-			
-			-- Timer overflow
-			ELSIF timerLimit = '1' THEN
-				velocity <= 0;
-				resetTimer <= '0';
-				runTimer <= '0';
-				
 			END IF;
 			
-			oldStateA := signalA;
-			oldStateB := signalB;
+			--store old state for next loop
+			oldState := state;
 			
 		END IF;
 		

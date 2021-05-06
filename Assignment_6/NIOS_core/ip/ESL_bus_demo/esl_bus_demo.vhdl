@@ -72,12 +72,8 @@ ARCHITECTURE behavior of esl_bus_demo is
 			-- Signals from the encoder
 			signalA	: IN std_logic;
 			signalB	: IN std_logic;
-			-- Output velocity in 32 bits
-			velocity	: OUT integer;
 			-- Output step counter in 32 bits signed
-			stepCount : INOUT integer;
-			-- Output errorCW
-				overSpeedError : OUT std_logic
+			stepCount : INOUT integer
 			);
 	END component;
 
@@ -112,16 +108,10 @@ ARCHITECTURE behavior of esl_bus_demo is
 			signalA	=> GPIO_0(20),
 			signalB	=> GPIO_0(22),
 			
-			-- Output velocity in 32 bits
-			velocity	=> open,
-			
 			-- Output step count
-			stepCount => stepCount0,
-
-			-- Output error
-			overSpeedError => open
+			stepCount => stepCount0
 		);
-encoder1: QuadratureEncoder
+		encoder1: QuadratureEncoder
 		PORT MAP (
 			-- CLOCK and reset
 			reset		=> reset,
@@ -130,15 +120,9 @@ encoder1: QuadratureEncoder
 			-- Signals from the encoder
 			signalA	=> GPIO_0(21),
 			signalB	=> GPIO_0(23),
-			
-			-- Output velocity in 32 bits
-			velocity	=> open,
 
 			-- Output step count
-			stepCount => stepCount1,
-			
-			-- Output error
-			overSpeedError => open
+			stepCount => stepCount1
 		);
 
 	PWM0: PWM
