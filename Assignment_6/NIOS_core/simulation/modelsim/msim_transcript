@@ -396,3 +396,6 @@ vsim first_nios2_system.quadratureencoder
 add wave -position end  sim:/quadratureencoder/signalA
 add wave -position end  sim:/quadratureencoder/signalB
 restart; do quadrature_testbench.do
+add wave -position end  sim:/quadratureencoder/stepCount
+restart all
+restart; do quadrature_testbench.do
