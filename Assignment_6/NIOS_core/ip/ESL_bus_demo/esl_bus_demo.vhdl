@@ -37,7 +37,7 @@ ENTITY esl_bus_demo IS
 		slave_byteenable	: IN  std_logic_vector((DATA_WIDTH/8)-1 downto 0);
 
 		-- SIGNALs to connect to custom user logic
-		user_OUTput		: OUT std_logic_vector(LED_WIDTH-1 downto 0);
+		LED				: OUT std_logic_vector(LED_WIDTH-1 downto 0);
 		GPIO_0			: INOUT std_logic_vector(33 downto 0);
 		GPIO_1			: INOUT std_logic_vector(33 downto 0);
 		KEY				: IN std_logic_vector(1 downto 0);
@@ -174,7 +174,7 @@ ARCHITECTURE behavior OF esl_bus_demo IS
 		
 	
 	-- Output to the leds a 1 and the step count of encoder 0 in 7 bits signed
-	user_output <= '1' & std_logic_vector(to_signed(stepCount0, 7));
+	LED <= '1' & std_logic_vector(to_signed(stepCount0, 7));
 	
 
 	-- Process to handle PWM generation
