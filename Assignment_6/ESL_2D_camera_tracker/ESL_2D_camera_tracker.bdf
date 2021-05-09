@@ -143,7 +143,7 @@ applicable agreement for further details.
 )
 (symbol
 	(rect 968 360 1544 608)
-	(text "first_nios2_system" (rect 232 -1 364 15)(font "Arial" (font_size 10)))
+	(text "ESL_NIOS_II_system" (rect 224 -1 378 15)(font "Arial" (font_size 10)))
 	(text "inst" (rect 8 232 26 243)(font "Arial" ))
 	(port
 		(pt 0 72)
@@ -205,7 +205,7 @@ applicable agreement for further details.
 		(text "GPIO_1" (rect 261 179 302 190)(font "Arial" (color 0 0 0)))
 		(text "KEY" (rect 261 195 285 206)(font "Arial" (color 0 0 0)))
 		(text "SW" (rect 261 211 281 222)(font "Arial" (color 0 0 0)))
-		(text " first_nios2_system " (rect 489 232 586 243)(font "Arial" ))
+		(text " ESL_NIOS_II_system " (rect 475 232 588 243)(font "Arial" ))
 		(line (pt 257 52)(pt 257 76))
 		(line (pt 258 52)(pt 258 76))
 		(line (pt 257 92)(pt 257 116))
