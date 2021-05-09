@@ -12,6 +12,14 @@
    element $${FILENAME}
    {
    }
+   element ESL_NIOS_II_IP_0
+   {
+      datum _sortIndex
+      {
+         value = "6";
+         type = "int";
+      }
+   }
    element jtag_uart.avalon_jtag_slave
    {
       datum baseAddress
@@ -44,14 +52,6 @@
          type = "int";
       }
    }
-   element esl_bus_demo_0
-   {
-      datum _sortIndex
-      {
-         value = "6";
-         type = "int";
-      }
-   }
    element cpu.jtag_debug_module
    {
       datum baseAddress
@@ -77,6 +77,14 @@
       }
    }
    element esl_bus_demo_0.s0
+   {
+      datum baseAddress
+      {
+         value = "69632";
+         type = "String";
+      }
+   }
+   element ESL_NIOS_II_IP_0.s0
    {
       datum baseAddress
       {
@@ -128,7 +136,7 @@
  <parameter name="globalResetBus" value="false" />
  <parameter name="hdlLanguage" value="VERILOG" />
  <parameter name="maxAdditionalLatency" value="1" />
- <parameter name="projectName">nios2_quartus2_project.qpf</parameter>
+ <parameter name="projectName">ESL_2D_camera_tracker.qpf</parameter>
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
  <parameter name="timeStamp" value="0" />
@@ -137,8 +145,8 @@
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
  <interface
-   name="esl_bus_demo_0_user_interface"
-   internal="esl_bus_demo_0.user_interface"
+   name="esl_nios_ii_ip_0_user_interface"
+   internal="ESL_NIOS_II_IP_0.user_interface"
    type="conduit"
    dir="end" />
  <module kind="clock_source" version="13.1" enabled="1" name="clk_0">
@@ -285,7 +293,7 @@
   <parameter name="tightlyCoupledInstructionMaster2AddrWidth" value="1" />
   <parameter name="tightlyCoupledInstructionMaster3AddrWidth" value="1" />
   <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_mem.s1' start='0x8000' end='0xD000' /><slave name='cpu.jtag_debug_module' start='0x10800' end='0x11000' /></address-map>]]></parameter>
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_mem.s1' start='0x8000' end='0xD000' /><slave name='cpu.jtag_debug_module' start='0x10800' end='0x11000' /><slave name='esl_bus_demo_0.s0' start='0x11000' end='0x11400' /><slave name='sys_clock_timer.s1' start='0x11400' end='0x11420' /><slave name='sysid.control_slave' start='0x11420' end='0x11428' /><slave name='jtag_uart.avalon_jtag_slave' start='0x11428' end='0x11430' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_mem.s1' start='0x8000' end='0xD000' /><slave name='cpu.jtag_debug_module' start='0x10800' end='0x11000' /><slave name='ESL_NIOS_II_IP_0.s0' start='0x11000' end='0x11400' /><slave name='sys_clock_timer.s1' start='0x11400' end='0x11420' /><slave name='sysid.control_slave' start='0x11420' end='0x11428' /><slave name='jtag_uart.avalon_jtag_slave' start='0x11428' end='0x11430' /></address-map>]]></parameter>
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="deviceFamilyName" value="Cyclone IV E" />
   <parameter name="internalIrqMaskSystemInfo" value="65538" />
@@ -343,7 +351,11 @@
   <parameter name="AUTO_CLK_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
  </module>
- <module kind="esl_bus_demo" version="1.0" enabled="1" name="esl_bus_demo_0">
+ <module
+   kind="ESL_NIOS_II_IP"
+   version="1.0"
+   enabled="1"
+   name="ESL_NIOS_II_IP_0">
   <parameter name="DATA_WIDTH" value="32" />
   <parameter name="LED_WIDTH" value="8" />
   <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
@@ -452,17 +464,17 @@
    kind="clock"
    version="13.1"
    start="clk_0.clk"
-   end="esl_bus_demo_0.clock_reset" />
+   end="ESL_NIOS_II_IP_0.clock_reset" />
  <connection
    kind="reset"
    version="13.1"
    start="clk_0.clk_reset"
-   end="esl_bus_demo_0.clock_reset_reset" />
+   end="ESL_NIOS_II_IP_0.clock_reset_reset" />
  <connection
    kind="avalon"
    version="13.1"
    start="cpu.data_master"
-   end="esl_bus_demo_0.s0">
+   end="ESL_NIOS_II_IP_0.s0">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x00011000" />
   <parameter name="defaultConnection" value="false" />

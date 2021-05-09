@@ -18,7 +18,7 @@ LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
 
-ENTITY esl_bus_demo IS
+ENTITY ESL_NIOS_II_IP IS
 	GENERIC (
 		DATA_WIDTH : natural := 32;	-- word size OF each INput and OUTput regISter
 		LED_WIDTH  : natural := 8	-- numbers OF LEDs on the DE0-NANO
@@ -46,7 +46,7 @@ ENTITY esl_bus_demo IS
 	);
 END ENTITY;
 
-ARCHITECTURE behavior OF esl_bus_demo IS
+ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 	-- Internal memory for the system and a subset for the IP
 	SIGNAL mem        		: std_logic_vector(31 downto 0);
 	SIGNAL memSEND    		: std_logic_vector(31 downto 0);

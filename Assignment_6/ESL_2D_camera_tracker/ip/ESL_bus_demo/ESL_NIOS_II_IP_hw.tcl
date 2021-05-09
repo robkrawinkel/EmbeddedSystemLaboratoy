@@ -20,13 +20,13 @@
 ## IP details
 ##  
 set_module_property DESCRIPTION "ESL Demo (Avalon-MM slave port)"
-set_module_property NAME esl_bus_demo
+set_module_property NAME ESL_NIOS_II_IP
 set_module_property VERSION 1.0
 set_module_property GROUP Templates
 set_module_property AUTHOR Moll
-set_module_property DISPLAY_NAME esl_bus_demo
-set_module_property TOP_LEVEL_HDL_FILE esl_bus_demo.vhdl
-set_module_property TOP_LEVEL_HDL_MODULE esl_bus_demo
+set_module_property DISPLAY_NAME ESL_NIOS_II_IP
+set_module_property TOP_LEVEL_HDL_FILE ESL_NIOS_II_IP.vhdl
+set_module_property TOP_LEVEL_HDL_MODULE ESL_NIOS_II_IP
 set_module_property INSTANTIATE_IN_SYSTEM_MODULE true
 set_module_property EDITABLE false
 set_module_property SIMULATION_MODEL_IN_VERILOG false
@@ -47,8 +47,8 @@ set_module_property VALIDATION_CALLBACK validate_me
 ## Files
 ## - List all files required by the IP
 ##  
-add_file esl_bus_demo.vhdl {SYNTHESIS SIMULATION}
-##add_file esl_bus_demo_example.vhdl {SYNTHESIS SIMULATION}
+add_file ESL_NIOS_II_IP.vhdl {SYNTHESIS SIMULATION}
+##add_file ESL_NIOS_II_IP_example.vhdl {SYNTHESIS SIMULATION}
 add_file QuadratureEncoder.vhdl {SYNTHESIS SIMULATION}
 add_file timer.vhdl {SYNTHESIS SIMULATION}
 add_file PWM.vhdl {SYNTHESIS SIMULATION}

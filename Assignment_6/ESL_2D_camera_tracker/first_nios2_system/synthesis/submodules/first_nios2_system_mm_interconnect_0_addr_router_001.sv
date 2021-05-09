@@ -209,13 +209,13 @@ module first_nios2_system_mm_interconnect_0_addr_router_001
     // ( 0x10800 .. 0x11000 )
     if ( {address[RG:PAD1],{PAD1{1'b0}}} == 17'h10800   ) begin
             src_channel = 6'b000001;
-            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 0;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 1;
     end
 
     // ( 0x11000 .. 0x11400 )
     if ( {address[RG:PAD2],{PAD2{1'b0}}} == 17'h11000   ) begin
             src_channel = 6'b100000;
-            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 1;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 0;
     end
 
     // ( 0x11400 .. 0x11420 )

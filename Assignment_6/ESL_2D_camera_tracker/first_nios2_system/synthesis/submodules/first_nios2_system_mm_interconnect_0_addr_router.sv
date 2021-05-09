@@ -200,7 +200,7 @@ module first_nios2_system_mm_interconnect_0_addr_router
     // ( 0x10800 .. 0x11000 )
     if ( {address[RG:PAD1],{PAD1{1'b0}}} == 17'h10800   ) begin
             src_channel = 6'b01;
-            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 0;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 1;
     end
 
 end
