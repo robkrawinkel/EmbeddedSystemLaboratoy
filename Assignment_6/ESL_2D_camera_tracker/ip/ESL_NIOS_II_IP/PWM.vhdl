@@ -11,15 +11,15 @@ ENTITY PWM IS
 	-- Input signals module
 	frequency	: IN integer range 0 to 50000000; 	--frequency of the signal in Hz
 	dutycycle	: IN integer range 0 to 100; 		--dutycycle of the signal in percentage
-	CW		: IN std_logic; 			--rotational direction of the signal
+	CW			: IN std_logic; 					--rotational direction of the signal
 
 	-- Output pwm_signal and rotation direction
 	PWM_signal 	: OUT std_logic;
 	INA 		: OUT std_logic;
-	INB		: OUT std_logic;
+	INB			: OUT std_logic;
 	
 	-- Enable for the PMW module
-    	enable      	: IN std_logic
+	enable      	: IN std_logic
 
 	);
 END ENTITY;
@@ -57,7 +57,7 @@ BEGIN
 			on_cycles_per_period := ((50000000/frequency) * dutycycle) / 100;
 
 			--set the rotational direction based on the CW input
-            		IF enable = '1' THEN
+			IF enable = '1' THEN
 
 				-- Set the directional outputs
 				INA <= CW;

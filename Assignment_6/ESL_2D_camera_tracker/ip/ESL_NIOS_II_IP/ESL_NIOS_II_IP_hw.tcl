@@ -48,10 +48,11 @@ set_module_property VALIDATION_CALLBACK validate_me
 ## - List all files required by the IP
 ##  
 add_file ESL_NIOS_II_IP.vhdl {SYNTHESIS SIMULATION}
-##add_file ESL_NIOS_II_IP_example.vhdl {SYNTHESIS SIMULATION}
 add_file QuadratureEncoder.vhdl {SYNTHESIS SIMULATION}
 add_file timer.vhdl {SYNTHESIS SIMULATION}
 add_file PWM.vhdl {SYNTHESIS SIMULATION}
+
+
 ## 
 ## IP parameters
 ## - Generics defined in the VHDL can be modified from

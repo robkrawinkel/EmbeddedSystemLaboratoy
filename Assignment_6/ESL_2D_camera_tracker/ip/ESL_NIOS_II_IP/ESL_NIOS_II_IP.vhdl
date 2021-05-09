@@ -1,19 +1,3 @@
--------------------------------------------------------------------------------
--- 
--- ESL demo
--- Version: 1.0
--- Creator: Rene Moll
--- Date: 10th April 2012
---
--------------------------------------------------------------------------------
---
--- Straight forward INitialization and mappINg OF an IP to the avalon bus.
--- The communication part IS kept simple, sINce only regISter IS OF INterest.
---
--- Communication SIGNALs USE the prefix slave_
--- User SIGNALs USE the prefix user_
--------------------------------------------------------------------------------
-
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
@@ -24,11 +8,11 @@ ENTITY ESL_NIOS_II_IP IS
 		LED_WIDTH  : natural := 8	-- numbers OF LEDs on the DE0-NANO
 	);
 	PORT (
-		-- SIGNALs to connect to an Avalon clock source INterface
+		-- Signals to connect to an Avalon clock source INterface
 		clk				: IN  std_logic;
 		reset			: IN  std_logic;
 
-		-- SIGNALs to connect to an Avalon-MM slave INterface
+		-- Signals to connect to an Avalon-MM slave INterface
 		slave_address		: IN  std_logic_vector(7 downto 0);
 		slave_read			: IN  std_logic;
 		slave_write			: IN  std_logic;
@@ -36,7 +20,7 @@ ENTITY ESL_NIOS_II_IP IS
 		slave_writedata		: IN  std_logic_vector(DATA_WIDTH-1 downto 0);
 		slave_byteenable	: IN  std_logic_vector((DATA_WIDTH/8)-1 downto 0);
 
-		-- SIGNALs to connect to custom user logic
+		-- Signals to connect to custom user logic
 		LED				: OUT std_logic_vector(LED_WIDTH-1 downto 0);
 		GPIO_0			: INOUT std_logic_vector(33 downto 0);
 		GPIO_1			: INOUT std_logic_vector(33 downto 0);
@@ -47,9 +31,15 @@ ENTITY ESL_NIOS_II_IP IS
 END ENTITY;
 
 ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
+
+------------------------------------------------------------------------------ ARCHITECTURE - Avalon bus ------------------------------------------------------------------------------
+
 	-- Internal memory for the system and a subset for the IP
 	SIGNAL mem        		: std_logic_vector(31 downto 0);
 	SIGNAL memSEND    		: std_logic_vector(31 downto 0);
+
+
+------------------------------------------------------------------------------ ARCHITECTURE - Quadrature encoder ------------------------------------------------------------------------------
 
 
 	-- Signals for quadrature encoder
@@ -71,6 +61,10 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 			stepCount : INOUT integer
 			);
 	END COMPONENT;
+
+
+
+------------------------------------------------------------------------------ ARCHITECTURE - PWM module ------------------------------------------------------------------------------
 
 
 	-- Signals for the PWM generation
@@ -103,7 +97,10 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 			);
 	END COMPONENT;
 	
-	
+
+
+------------------------------------------------------------------------------ ARCHITECTURE - begin ------------------------------------------------------------------------------
+
 	BEGIN
 	
 	-- Initialize encoder 0
@@ -225,7 +222,9 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 		IF (reset = '1') THEN
 			mem <= (others => '0');
 			memSEND <= (others => '0');
-		ELSIF (rISINg_edge(clk)) THEN
+		ELSIF (rising_edge(clk)) THEN
+
+			-- Send the step counter data in 16 bit signed, concatenated to get 32 bits
 			memSEND <= std_logic_vector(to_signed(stepcount0,16)) & std_logic_vector(to_signed(stepCount1,16));
 			
 			IF (slave_read = '1') THEN

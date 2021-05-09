@@ -24,11 +24,11 @@ ENTITY QuadratureEncoder IS
 	CLOCK_50	: IN std_logic;
 
 	-- Signals from the encoder
-	signalA	: IN std_logic;
-	signalB	: IN std_logic;
+	signalA		: IN std_logic;
+	signalB		: IN std_logic;
 	
 	-- Output step counter in 32 bits signed
-	stepCount : INOUT integer
+	stepCount 	: INOUT integer
 
 	);
 END ENTITY;
