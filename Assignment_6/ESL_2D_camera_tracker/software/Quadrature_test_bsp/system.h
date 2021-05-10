@@ -4,7 +4,7 @@
  * Machine generated for CPU 'cpu' in SOPC Builder design 'ESL_NIOS_II_system'
  * SOPC Builder design path: ../../ESL_NIOS_II_system.sopcinfo
  *
- * Generated: Mon May 10 09:20:20 CEST 2021
+ * Generated: Mon May 10 09:49:43 CEST 2021
  */
 
 /*
