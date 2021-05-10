@@ -1,10 +1,10 @@
 /*
  * linker.h - Linker script mapping information
  *
- * Machine generated for CPU 'cpu' in SOPC Builder design 'first_nios2_system'
- * SOPC Builder design path: ../../first_nios2_system.sopcinfo
+ * Machine generated for CPU 'cpu' in SOPC Builder design 'ESL_NIOS_II_system'
+ * SOPC Builder design path: ../../ESL_NIOS_II_system.sopcinfo
  *
- * Generated: Tue May 04 15:58:55 CEST 2021
+ * Generated: Mon May 10 09:34:48 CEST 2021
  */
 
 /*

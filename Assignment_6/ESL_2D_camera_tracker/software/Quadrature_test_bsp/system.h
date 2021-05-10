@@ -1,10 +1,10 @@
 /*
  * system.h - SOPC Builder system and BSP software package information
  *
- * Machine generated for CPU 'cpu' in SOPC Builder design 'first_nios2_system'
- * SOPC Builder design path: ../../first_nios2_system.sopcinfo
+ * Machine generated for CPU 'cpu' in SOPC Builder design 'ESL_NIOS_II_system'
+ * SOPC Builder design path: ../../ESL_NIOS_II_system.sopcinfo
  *
- * Generated: Tue May 04 15:58:55 CEST 2021
+ * Generated: Mon May 10 09:20:20 CEST 2021
  */
 
 /*
@@ -128,7 +128,21 @@
 #define __ALTERA_AVALON_SYSID_QSYS
 #define __ALTERA_AVALON_TIMER
 #define __ALTERA_NIOS2_QSYS
-#define __ESL_BUS_DEMO
+#define __ESL_NIOS_II_IP
+
+
+/*
+ * ESL_NIOS_II_IP_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_ESL_NIOS_II_IP_0 ESL_NIOS_II_IP
+#define ESL_NIOS_II_IP_0_BASE 0x11000
+#define ESL_NIOS_II_IP_0_IRQ -1
+#define ESL_NIOS_II_IP_0_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define ESL_NIOS_II_IP_0_NAME "/dev/ESL_NIOS_II_IP_0"
+#define ESL_NIOS_II_IP_0_SPAN 1024
+#define ESL_NIOS_II_IP_0_TYPE "ESL_NIOS_II_IP"
 
 
 /*
@@ -147,38 +161,24 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart"
-#define ALT_STDERR_BASE 0x11438
+#define ALT_STDERR_BASE 0x11428
 #define ALT_STDERR_DEV jtag_uart
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart"
-#define ALT_STDIN_BASE 0x11438
+#define ALT_STDIN_BASE 0x11428
 #define ALT_STDIN_DEV jtag_uart
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart"
-#define ALT_STDOUT_BASE 0x11438
+#define ALT_STDOUT_BASE 0x11428
 #define ALT_STDOUT_DEV jtag_uart
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
 #define ALT_STDOUT_TYPE "altera_avalon_jtag_uart"
-#define ALT_SYSTEM_NAME "first_nios2_system"
-
-
-/*
- * esl_bus_demo_0 configuration
- *
- */
-
-#define ALT_MODULE_CLASS_esl_bus_demo_0 esl_bus_demo
-#define ESL_BUS_DEMO_0_BASE 0x11000
-#define ESL_BUS_DEMO_0_IRQ -1
-#define ESL_BUS_DEMO_0_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define ESL_BUS_DEMO_0_NAME "/dev/esl_bus_demo_0"
-#define ESL_BUS_DEMO_0_SPAN 1024
-#define ESL_BUS_DEMO_0_TYPE "esl_bus_demo"
+#define ALT_SYSTEM_NAME "ESL_NIOS_II_system"
 
 
 /*
@@ -197,7 +197,7 @@
  */
 
 #define ALT_MODULE_CLASS_jtag_uart altera_avalon_jtag_uart
-#define JTAG_UART_BASE 0x11438
+#define JTAG_UART_BASE 0x11428
 #define JTAG_UART_IRQ 16
 #define JTAG_UART_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_NAME "/dev/jtag_uart"
@@ -221,7 +221,7 @@
 #define ONCHIP_MEM_CONTENTS_INFO ""
 #define ONCHIP_MEM_DUAL_PORT 0
 #define ONCHIP_MEM_GUI_RAM_BLOCK_TYPE "AUTO"
-#define ONCHIP_MEM_INIT_CONTENTS_FILE "first_nios2_system_onchip_mem"
+#define ONCHIP_MEM_INIT_CONTENTS_FILE "ESL_NIOS_II_system_onchip_mem"
 #define ONCHIP_MEM_INIT_MEM_CONTENT 1
 #define ONCHIP_MEM_INSTANCE_ID "NONE"
 #define ONCHIP_MEM_IRQ -1
@@ -270,13 +270,13 @@
  */
 
 #define ALT_MODULE_CLASS_sysid altera_avalon_sysid_qsys
-#define SYSID_BASE 0x11430
+#define SYSID_BASE 0x11420
 #define SYSID_ID 0
 #define SYSID_IRQ -1
 #define SYSID_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SYSID_NAME "/dev/sysid"
 #define SYSID_SPAN 8
-#define SYSID_TIMESTAMP 1620134087
+#define SYSID_TIMESTAMP 1620631055
 #define SYSID_TYPE "altera_avalon_sysid_qsys"
 
 #endif /* __SYSTEM_H_ */

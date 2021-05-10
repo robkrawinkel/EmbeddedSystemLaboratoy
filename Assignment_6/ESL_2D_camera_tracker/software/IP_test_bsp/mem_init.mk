@@ -162,7 +162,7 @@ RESET_ADDRESS ?= 0x00008000
 #-------------------------------------
 
 # Memory: onchip_mem
-MEM_0 := first_nios2_system_onchip_mem
+MEM_0 := ESL_NIOS_II_system_onchip_mem
 $(MEM_0)_NAME := onchip_mem
 $(MEM_0)_MEM_INIT_FILE_PARAM_NAME := INIT_FILE
 HEX_FILES += $(MEM_INIT_DIR)/$(MEM_0).hex

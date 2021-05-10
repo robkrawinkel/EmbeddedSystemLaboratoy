@@ -38,12 +38,13 @@ int main()
 
 	// Now loop forever ...
 	while(1){
-		nReadOut = IORD(ESL_BUS_DEMO_0_BASE, 0x00);
+		nReadOut = IORD(ESL_NIOS_II_IP_0_BASE, 0x00);
 
 		stepCount0 = nReadOut >> 16;
 		stepCount1 = nReadOut & 0x0000FFFF;
 
 		//printf("%x \n\r", nReadOut);
+		printf("nReadOut: %x \t", nReadOut);
 		printf("stepCount0: %d\t stepCount1: %d \n\r", stepCount0, stepCount1);
 	}
 
