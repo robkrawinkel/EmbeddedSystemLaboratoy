@@ -399,3 +399,5 @@ restart; do quadrature_testbench.do
 add wave -position end  sim:/quadratureencoder/stepCount
 restart all
 restart; do quadrature_testbench.do
+# End time: 19:05:35 on May 06,2021, Elapsed time: 3:49:57
+# Errors: 0, Warnings: 0
