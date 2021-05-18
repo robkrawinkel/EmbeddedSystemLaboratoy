@@ -28,7 +28,7 @@ static gboolean bus_call (GstBus *bus, GstMessage *msg, gpointer data){
 		break;
 	}
 	default:
-		g_print ("%s\n",msg);
+		g_print ("Message received!\n");
 		break;
 	}
 
@@ -53,7 +53,6 @@ static void on_pad_added (GstElement *element, GstPad *pad, gpointer data){
 /* The appsink has received a buffer */
 static GstFlowReturn new_sample (GstElement *sink) {
 	GstSample *sample;
-	g_print (".");
 	/* Retrieve the buffer */
 	g_signal_emit_by_name (sink, "pull-sample", &sample);
 	if (sample) {
@@ -88,7 +87,7 @@ int main (int   argc, char *argv[]){
 	filter	 = gst_element_factory_make("capsfilter", 	"filter");
 	sink     = gst_element_factory_make("appsink",    	"app_sink");
 
-	if (!pipeline || !source || !sink) {
+	if (!pipeline || !source || !filter || !sink) {
 		g_printerr ("One element could not be created. Exiting.\n");
 		return -1;
 	}
@@ -96,6 +95,7 @@ int main (int   argc, char *argv[]){
 	/* Set up the pipeline */
 	// We set the paramters of the objects, like location of output file, device for input, settings for filter
 	g_object_set (G_OBJECT (sink), "emit-signals", TRUE, NULL);
+	g_object_set (G_OBJECT (sink), "enable-last-sample", 0, NULL);
 	g_object_set (G_OBJECT (source), "device", "/dev/video0", NULL);
 
 	g_signal_connect(sink, "new-sample", G_CALLBACK(new_sample), NULL);
