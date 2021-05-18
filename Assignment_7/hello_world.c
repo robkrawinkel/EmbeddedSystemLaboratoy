@@ -82,6 +82,7 @@ int main (int   argc, char *argv[])
 	pipeline = gst_pipeline_new ("video-storer");
 	source   = gst_element_factory_make ("v4l2src",       "video-source");
 	//demuxer  = gst_element_factory_make ("oggdemux",      "ogg-demuxer");
+	filter	 = gst_element_factory_make ("capsfilter", "video-format");
 	encoder  = gst_element_factory_make ("avimux",        "video-encoder");
 	//conv     = gst_element_factory_make ("audioconvert",  "converter");
 	sink     = gst_element_factory_make ("filesink",      "video-output");
@@ -96,6 +97,7 @@ int main (int   argc, char *argv[])
 	/* we set the input filename to the source element */
 	g_object_set (G_OBJECT (sink), "location", argv[1], NULL);
 	g_object_set (G_OBJECT (source), "device", "/dev/video0", NULL);
+	g_object_set (G_OBJECT (filter), "caps", "", NULL);
 
 	/* we add a message handler */
 	bus = gst_pipeline_get_bus (GST_PIPELINE (pipeline));
@@ -105,11 +107,12 @@ int main (int   argc, char *argv[])
 	/* we add all elements into the pipeline */
 	/* file-source | ogg-demuxer | vorbis-encoder | converter | alsa-output */
 	gst_bin_add_many (GST_BIN (pipeline),
-						source, encoder, sink, NULL);
+						source, filter, encoder, sink, NULL);
 
 	/* we link the elements together */
 	/* file-source -> ogg-demuxer ~> vorbis-encoder -> converter -> alsa-output */
-	gst_element_link (source, encoder);
+	gst_element_link (source, filter);
+	gst_element_link (filter, encoder);
 	gst_element_link (encoder, sink);
 	//gst_element_link_many (encoder, conv, sink, NULL);
 	//g_signal_connect (demuxer, "pad-added", G_CALLBACK (on_pad_added), encoder);
