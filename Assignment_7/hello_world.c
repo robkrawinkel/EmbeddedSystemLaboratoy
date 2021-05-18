@@ -1,5 +1,7 @@
 #include <gst/gst.h>
 #include <glib.h>
+#include <stdio.h>
+
 
 
 static gboolean
@@ -57,8 +59,9 @@ int main (int   argc, char *argv[])
 {
 	GMainLoop *loop;
 
-	GstElement *pipeline, *source, *filter, *encoder, *sink;
+	GstElement *pipeline, *source, *filter, *sink;
 	GstBus *bus;
+	GstCaps *filtercaps;
 	guint bus_watch_id;
 
 	/* Initialisation */
@@ -77,11 +80,10 @@ int main (int   argc, char *argv[])
 	/* Create gstreamer elements */
 	pipeline = gst_pipeline_new("video-storer");
 	source   = gst_element_factory_make("v4l2src",		"video-source");
-	filter	 = gst_element_factory_make("capsfilter", 	"video-format");
-	encoder  = gst_element_factory_make("avimux",     	"video-encoder");
+	filter	 = gst_element_factory_make("capsfilter", 	"filter");
 	sink     = gst_element_factory_make("filesink",    	"video-output");
 
-	if (!pipeline || !source || !filter || !encoder || !sink) {
+	if (!pipeline || !source || !sink) {
 		g_printerr ("One element could not be created. Exiting.\n");
 		return -1;
 	}
@@ -90,7 +92,17 @@ int main (int   argc, char *argv[])
 	// We set the paramters of the objects, like location of output file, device for input, settings for filter
 	g_object_set (G_OBJECT (sink), "location", argv[1], NULL);
 	g_object_set (G_OBJECT (source), "device", "/dev/video0", NULL);
-	g_object_set (G_OBJECT (filter), "caps", "", NULL);
+
+	// Set caps
+	filtercaps = gst_caps_new_simple(
+		"video/x-raw", 
+		"format", G_TYPE_STRING, "YUY2",
+		"width", G_TYPE_INT, 160,
+		"height", G_TYPE_INT, 120,
+		"framerate", GST_TYPE_FRACTION, 30, 1,
+		NULL);
+	g_object_set (G_OBJECT (filter), "caps", filtercaps, NULL);
+	gst_caps_unref(filtercaps);
 
 	/* we add a message handler */
 	bus = gst_pipeline_get_bus (GST_PIPELINE (pipeline));
@@ -99,13 +111,12 @@ int main (int   argc, char *argv[])
 
 	/* we add all elements into the pipeline */
 	/* video source | caps filter | encoder | sink */
-	gst_bin_add_many (GST_BIN (pipeline), source, filter, encoder, sink, NULL);
+	gst_bin_add_many (GST_BIN (pipeline), source, filter, sink, NULL);
 
 	/* we link the elements together */
 	/* video source -> caps filter ~> encoder -> sink */
 	gst_element_link (source, filter);
-	gst_element_link (filter, encoder);
-	gst_element_link (encoder, sink);
+	gst_element_link (filter, sink);
 
 
 	/* Set the pipeline to "playing" state*/
