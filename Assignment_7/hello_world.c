@@ -3,13 +3,11 @@
 
 
 static gboolean
-bus_call (GstBus     *bus,
-		  GstMessage *msg,
-		  gpointer    data)
+bus_call (GstBus *bus, GstMessage *msg, gpointer data)
 {
-  GMainLoop *loop = (GMainLoop *) data;
+	GMainLoop *loop = (GMainLoop *) data;
 
-  switch (GST_MESSAGE_TYPE (msg)) {
+	switch (GST_MESSAGE_TYPE (msg)) {
 
 	case GST_MESSAGE_EOS:
 		g_print ("End of stream\n");
@@ -31,16 +29,14 @@ bus_call (GstBus     *bus,
 	}
 	default:
 		break;
-  }
+	}
 
-  return TRUE;
+	return TRUE;
 }
 
 
 static void
-on_pad_added (GstElement *element,
-			  GstPad     *pad,
-			  gpointer    data)
+on_pad_added (GstElement *element, GstPad *pad, gpointer data)
 {
 	GstPad *sinkpad;
 	GstElement *encoder = (GstElement *) data;
@@ -61,7 +57,7 @@ int main (int   argc, char *argv[])
 {
 	GMainLoop *loop;
 
-	GstElement *pipeline, *source, *encoder, *sink;
+	GstElement *pipeline, *source, *filter, *encoder, *sink;
 	GstBus *bus;
 	guint bus_watch_id;
 
@@ -79,22 +75,19 @@ int main (int   argc, char *argv[])
 
 
 	/* Create gstreamer elements */
-	pipeline = gst_pipeline_new ("video-storer");
-	source   = gst_element_factory_make ("v4l2src",       "video-source");
-	//demuxer  = gst_element_factory_make ("oggdemux",      "ogg-demuxer");
-	filter	 = gst_element_factory_make ("capsfilter", "video-format");
-	encoder  = gst_element_factory_make ("avimux",        "video-encoder");
-	//conv     = gst_element_factory_make ("audioconvert",  "converter");
-	sink     = gst_element_factory_make ("filesink",      "video-output");
+	pipeline = gst_pipeline_new("video-storer");
+	source   = gst_element_factory_make("v4l2src",		"video-source");
+	filter	 = gst_element_factory_make("capsfilter", 	"video-format");
+	encoder  = gst_element_factory_make("avimux",     	"video-encoder");
+	sink     = gst_element_factory_make("filesink",    	"video-output");
 
-	if (!pipeline || !source || !encoder || !sink) {
+	if (!pipeline || !source || !filter || !encoder || !sink) {
 		g_printerr ("One element could not be created. Exiting.\n");
 		return -1;
 	}
 
 	/* Set up the pipeline */
-
-	/* we set the input filename to the source element */
+	// We set the paramters of the objects, like location of output file, device for input, settings for filter
 	g_object_set (G_OBJECT (sink), "location", argv[1], NULL);
 	g_object_set (G_OBJECT (source), "device", "/dev/video0", NULL);
 	g_object_set (G_OBJECT (filter), "caps", "", NULL);
@@ -105,24 +98,14 @@ int main (int   argc, char *argv[])
 	gst_object_unref (bus);
 
 	/* we add all elements into the pipeline */
-	/* file-source | ogg-demuxer | vorbis-encoder | converter | alsa-output */
-	gst_bin_add_many (GST_BIN (pipeline),
-						source, filter, encoder, sink, NULL);
+	/* video source | caps filter | encoder | sink */
+	gst_bin_add_many (GST_BIN (pipeline), source, filter, encoder, sink, NULL);
 
 	/* we link the elements together */
-	/* file-source -> ogg-demuxer ~> vorbis-encoder -> converter -> alsa-output */
+	/* video source -> caps filter ~> encoder -> sink */
 	gst_element_link (source, filter);
 	gst_element_link (filter, encoder);
 	gst_element_link (encoder, sink);
-	//gst_element_link_many (encoder, conv, sink, NULL);
-	//g_signal_connect (demuxer, "pad-added", G_CALLBACK (on_pad_added), encoder);
-
-	/* note that the demuxer will be linked to the encoder dynamically.
-		The reason is that Ogg may contain various streams (for example
-		audio and video). The source pad(s) will be created at run time,
-		by the demuxer when it detects the amount and nature of streams.
-		Therefore we connect a callback function which will be executed
-		when the "pad-added" is emitted.*/
 
 
 	/* Set the pipeline to "playing" state*/
@@ -132,12 +115,6 @@ int main (int   argc, char *argv[])
 
 	/* Iterate */
 	g_print ("Running...\n");
-
-	// for (int i = 0; i < 5000; i++) {
-	// 	g_main_loop_ref(loop);
-	// }
-		
-	
 
 	g_main_loop_run (loop);
 
