@@ -23,10 +23,11 @@ ENTITY ESL_NIOS_II_IP IS
 		-- Signals to connect to custom user logic
 		LED				: OUT std_logic_vector(LED_WIDTH-1 downto 0);
 		GPIO_0			: INOUT std_logic_vector(33 downto 0);
-		GPIO_1			: INOUT std_logic_vector(33 downto 0);
+		--GPIO_1			: INOUT std_logic_vector(33 downto 0);
 		KEY				: IN std_logic_vector(1 downto 0);
 		SW				: IN std_logic_vector(3 downto 0)
-
+		--GPIO_1[0]		: INOUT std_logic;
+		--GPIO_1[1]		: INOUT std_logic
 	);
 END ENTITY;
 
@@ -171,7 +172,7 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 		
 	
 	-- Output to the leds a 1 and the step count of encoder 0 in 7 bits signed
-	LED <= '1' & std_logic_vector(to_signed(stepCount0, 7));
+	LED <= '1' & std_logic_vector(to_signed(stepCount1, 7));
 	
 
 	-- Process to handle PWM generation

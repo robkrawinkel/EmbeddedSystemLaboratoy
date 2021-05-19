@@ -2,7 +2,7 @@ set_global_assignment -entity "ESL_NIOS_II_system" -library "ESL_NIOS_II_system"
 set_global_assignment -entity "ESL_NIOS_II_system" -library "ESL_NIOS_II_system" -name IP_TOOL_VERSION "13.1"
 set_global_assignment -entity "ESL_NIOS_II_system" -library "ESL_NIOS_II_system" -name IP_TOOL_ENV "Qsys"
 set_global_assignment -library "ESL_NIOS_II_system" -name SOPCINFO_FILE [file join $::quartus(qip_path) "../../ESL_NIOS_II_system.sopcinfo"]
-set_global_assignment -entity "ESL_NIOS_II_system" -library "ESL_NIOS_II_system" -name SLD_INFO "QSYS_NAME ESL_NIOS_II_system HAS_SOPCINFO 1 GENERATION_ID 1620631055"
+set_global_assignment -entity "ESL_NIOS_II_system" -library "ESL_NIOS_II_system" -name SLD_INFO "QSYS_NAME ESL_NIOS_II_system HAS_SOPCINFO 1 GENERATION_ID 1621420542"
 set_global_assignment -library "ESL_NIOS_II_system" -name MISC_FILE [file join $::quartus(qip_path) "../../ESL_NIOS_II_system.cmp"]
 set_global_assignment -library "ESL_NIOS_II_system" -name SLD_FILE [file join $::quartus(qip_path) "ESL_NIOS_II_system.regmap"]
 set_global_assignment -library "ESL_NIOS_II_system" -name SLD_FILE [file join $::quartus(qip_path) "ESL_NIOS_II_system.debuginfo"]
@@ -37,6 +37,7 @@ set_global_assignment -library "ESL_NIOS_II_system" -name SYSTEMVERILOG_FILE [fi
 set_global_assignment -library "ESL_NIOS_II_system" -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_merlin_master_agent.sv"]
 set_global_assignment -library "ESL_NIOS_II_system" -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_merlin_slave_translator.sv"]
 set_global_assignment -library "ESL_NIOS_II_system" -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_merlin_master_translator.sv"]
+set_global_assignment -library "ESL_NIOS_II_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_uart_0.v"]
 set_global_assignment -library "ESL_NIOS_II_system" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_IP.vhdl"]
 set_global_assignment -library "ESL_NIOS_II_system" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/QuadratureEncoder.vhdl"]
 set_global_assignment -library "ESL_NIOS_II_system" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/timer.vhdl"]
@@ -122,6 +123,9 @@ set_global_assignment -entity "altera_merlin_slave_translator" -library "ESL_NIO
 set_global_assignment -entity "altera_merlin_master_translator" -library "ESL_NIOS_II_system" -name IP_TOOL_NAME "altera_merlin_master_translator"
 set_global_assignment -entity "altera_merlin_master_translator" -library "ESL_NIOS_II_system" -name IP_TOOL_VERSION "13.1"
 set_global_assignment -entity "altera_merlin_master_translator" -library "ESL_NIOS_II_system" -name IP_TOOL_ENV "Qsys"
+set_global_assignment -entity "ESL_NIOS_II_system_uart_0" -library "ESL_NIOS_II_system" -name IP_TOOL_NAME "altera_avalon_uart"
+set_global_assignment -entity "ESL_NIOS_II_system_uart_0" -library "ESL_NIOS_II_system" -name IP_TOOL_VERSION "13.1"
+set_global_assignment -entity "ESL_NIOS_II_system_uart_0" -library "ESL_NIOS_II_system" -name IP_TOOL_ENV "Qsys"
 set_global_assignment -entity "ESL_NIOS_II_system_sysid" -library "ESL_NIOS_II_system" -name IP_TOOL_NAME "altera_avalon_sysid_qsys"
 set_global_assignment -entity "ESL_NIOS_II_system_sysid" -library "ESL_NIOS_II_system" -name IP_TOOL_VERSION "13.1"
 set_global_assignment -entity "ESL_NIOS_II_system_sysid" -library "ESL_NIOS_II_system" -name IP_TOOL_ENV "Qsys"

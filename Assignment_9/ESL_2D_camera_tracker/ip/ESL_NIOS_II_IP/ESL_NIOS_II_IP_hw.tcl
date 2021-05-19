@@ -123,7 +123,7 @@ add_interface user_interface conduit end
 add_interface_port user_interface LED export Output 1
 
 add_interface_port user_interface GPIO_0 export Bidir 1
-add_interface_port user_interface GPIO_1 export Bidir 1
+#add_interface_port user_interface GPIO_1 export Bidir 1
 
 add_interface_port user_interface KEY export Input 1
 add_interface_port user_interface SW export Input 1
@@ -146,7 +146,7 @@ proc elaborate_me {}  {
   ## Set data with for the custom logic
   set_port_property LED       WIDTH $the_led_width
   set_port_property GPIO_0 		WIDTH 34
-  set_port_property GPIO_1 		WIDTH 34
+  #set_port_property GPIO_1 		WIDTH 34
   set_port_property KEY 		  WIDTH 2
   set_port_property SW 		    WIDTH 4
   
