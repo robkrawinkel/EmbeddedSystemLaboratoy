@@ -39,6 +39,7 @@ unsigned char TX;
 
 void UARTReceive(void* context) {
 	RX = IORD_ALTERA_AVALON_UART_RXDATA(UART_0_BASE);
+	//RX = IORD(UART_0_BASE, 0);
 	printf("message received\n");
 
 	RXReceived = 1;
@@ -63,17 +64,18 @@ int main()
 
 
 	//setup for serial communication
-    char *p;
     alt_ic_isr_register(UART_0_IRQ_INTERRUPT_CONTROLLER_ID,
                         UART_0_IRQ,
                         UARTReceive,
-                        p,
-                        0);
+                        NULL,
+                        NULL);
 
-	IOWR_ALTERA_AVALON_UART_STATUS(UART_0_BASE, 0x0); //Clear status register
-	IORD_ALTERA_AVALON_UART_RXDATA(UART_0_BASE); //Read the useless value in the empty receive register
-	IOWR_ALTERA_AVALON_UART_DIVISOR(UART_0_BASE, UART_0_FREQ/9600-1);//Set the baud rate to 115200
-	IOWR_ALTERA_AVALON_UART_CONTROL(UART_0_BASE, 0x80); //Enable receive interrupt
+	//IOWR_ALTERA_AVALON_UART_STATUS(UART_0_BASE, 0x0); 					//Clear status register
+	//IORD_ALTERA_AVALON_UART_RXDATA(UART_0_BASE); 						//Read the useless value in the empty receive register
+	//IOWR_ALTERA_AVALON_UART_DIVISOR(UART_0_BASE, UART_0_FREQ/9600-1);	//Set the baud rate to 115200
+	//IOWR_ALTERA_AVALON_UART_CONTROL(UART_0_BASE, 0x80); 				//Enable receive interrupt
+
+	alt_ic_irq_enable(UART_0_IRQ_INTERRUPT_CONTROLLER_ID, UART_0_IRQ);
 
 	// Now loop forever ...
 	while (1) {
