@@ -142,7 +142,8 @@ ACDS_VERSION := 13.1
 ELF := UART_test.elf
 
 # Paths to C, C++, and assembly source files.
-C_SRCS := main.c
+C_SRCS += main.c
+C_SRCS += InterruptHandlerForUart.c
 CXX_SRCS :=
 ASM_SRCS :=
 

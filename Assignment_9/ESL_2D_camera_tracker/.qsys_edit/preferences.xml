@@ -3,18 +3,18 @@
  <debug showDebugMenu="0" />
  <systemtable filter="All Interfaces">
   <columns>
-   <connections preferredWidth="47" />
+   <connections preferredWidth="143" />
    <irq preferredWidth="34" />
   </columns>
  </systemtable>
  <clocktable>
   <columns>
-   <clockname preferredWidth="303" />
-   <clocksource preferredWidth="304" />
-   <frequency preferredWidth="293" />
+   <clockname preferredWidth="401" />
+   <clocksource preferredWidth="402" />
+   <frequency preferredWidth="392" />
   </columns>
  </clocktable>
  <window width="1680" height="1030" x="-9" y="-8" />
- <library expandedCategories="Library,Project" />
+ <library expandedCategories="Project,Library" />
  <generation synthesis="VHDL" />
 </preferences>
