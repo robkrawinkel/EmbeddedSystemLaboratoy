@@ -1,0 +1,236 @@
+# -------------------------------------------------------------------------- #
+#
+# Copyright (C) 1991-2013 Altera Corporation
+# Your use of Altera Corporation's design tools, logic functions 
+# and other software and tools, and its AMPP partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Altera Program License 
+# Subscription Agreement, Altera MegaCore Function License 
+# Agreement, or other applicable license agreement, including, 
+# without limitation, that your use is for the sole purpose of 
+# programming logic devices manufactured by Altera and sold by 
+# Altera or its authorized distributors.  Please refer to the 
+# applicable agreement for further details.
+#
+# -------------------------------------------------------------------------- #
+#
+# Quartus II 32-bit
+# Version 13.1.0 Build 162 10/23/2013 SJ Web Edition
+# Date created = 12:48:53  June 02, 2021
+#
+# -------------------------------------------------------------------------- #
+#
+# Notes:
+#
+# 1) The default values for assignments are stored in the file:
+#		setup_control_assignment_defaults.qdf
+#    If this file doesn't exist, see file:
+#		assignment_defaults.qdf
+#
+# 2) Altera recommends that you do not modify this file. This
+#    file is updated automatically by the Quartus II software
+#    and any changes you make may be lost or overwritten.
+#
+# -------------------------------------------------------------------------- #
+
+
+set_global_assignment -name FAMILY "Cyclone III"
+set_global_assignment -name DEVICE EP3C40Q240C8
+set_global_assignment -name TOP_LEVEL_ENTITY setup_control
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 13.1
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "12:48:53  JUNE 02, 2021"
+set_global_assignment -name LAST_QUARTUS_VERSION 13.1
+set_global_assignment -name SOURCE_FILE gpmc_fpga_template/fpga/ramstix_pin.qsf
+set_global_assignment -name VHDL_FILE gpmc_fpga_template/fpga/ramstix_gpmc_driver.vhd
+set_global_assignment -name VHDL_FILE gpmc_fpga_template/fpga/setup_control.vhd
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
+set_global_assignment -name NOMINAL_CORE_SUPPLY_VOLTAGE 1.2V
+set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (VHDL)"
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT VHDL -section_id eda_simulation
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
+set_location_assignment PIN_139 -to GPMC_ADDR[10]
+set_location_assignment PIN_137 -to GPMC_ADDR[9]
+set_location_assignment PIN_135 -to GPMC_ADDR[8]
+set_location_assignment PIN_134 -to GPMC_ADDR[7]
+set_location_assignment PIN_133 -to GPMC_ADDR[6]
+set_location_assignment PIN_132 -to GPMC_ADDR[5]
+set_location_assignment PIN_131 -to GPMC_ADDR[4]
+set_location_assignment PIN_128 -to GPMC_ADDR[3]
+set_location_assignment PIN_127 -to GPMC_ADDR[2]
+set_location_assignment PIN_126 -to GPMC_ADDR[1]
+set_location_assignment PIN_149 -to GPMC_CLK
+set_location_assignment PIN_118 -to GPMC_DATA[15]
+set_location_assignment PIN_117 -to GPMC_DATA[14]
+set_location_assignment PIN_114 -to GPMC_DATA[13]
+set_location_assignment PIN_113 -to GPMC_DATA[12]
+set_location_assignment PIN_112 -to GPMC_DATA[11]
+set_location_assignment PIN_111 -to GPMC_DATA[10]
+set_location_assignment PIN_110 -to GPMC_DATA[9]
+set_location_assignment PIN_107 -to GPMC_DATA[8]
+set_location_assignment PIN_106 -to GPMC_DATA[7]
+set_location_assignment PIN_103 -to GPMC_DATA[6]
+set_location_assignment PIN_100 -to GPMC_DATA[5]
+set_location_assignment PIN_99 -to GPMC_DATA[4]
+set_location_assignment PIN_98 -to GPMC_DATA[3]
+set_location_assignment PIN_95 -to GPMC_DATA[2]
+set_location_assignment PIN_94 -to GPMC_DATA[1]
+set_location_assignment PIN_93 -to GPMC_DATA[0]
+set_location_assignment PIN_145 -to GPMC_FPGA_IRQ
+set_location_assignment PIN_146 -to GPMC_nCS6
+set_location_assignment PIN_142 -to GPMC_nOE
+set_location_assignment PIN_143 -to GPMC_nPWE
+set_location_assignment PIN_184 -to F_OUT[14]
+set_location_assignment PIN_185 -to F_OUT[13]
+set_location_assignment PIN_186 -to F_OUT[12]
+set_location_assignment PIN_187 -to F_OUT[11]
+set_location_assignment PIN_188 -to F_OUT[10]
+set_location_assignment PIN_189 -to F_OUT[9]
+set_location_assignment PIN_194 -to F_OUT[8]
+set_location_assignment PIN_195 -to F_OUT[7]
+set_location_assignment PIN_196 -to F_OUT[6]
+set_location_assignment PIN_200 -to F_OUT[4]
+set_location_assignment PIN_201 -to F_OUT[3]
+set_location_assignment PIN_202 -to F_OUT[2]
+set_location_assignment PIN_203 -to F_OUT[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_OUT[14]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_OUT[13]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_OUT[12]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_OUT[11]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_OUT[10]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_OUT[9]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_OUT[8]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_OUT[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_OUT[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_OUT[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_OUT[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_OUT[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_OUT[1]
+set_location_assignment PIN_207 -to F_OUT[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_OUT[0]
+set_location_assignment PIN_216 -to F_IN[14]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_IN[14]
+set_location_assignment PIN_218 -to F_IN[12]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_IN[12]
+set_location_assignment PIN_221 -to F_IN[10]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_IN[10]
+set_location_assignment PIN_224 -to F_IN[8]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_IN[8]
+set_location_assignment PIN_230 -to F_IN[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_IN[6]
+set_location_assignment PIN_232 -to F_IN[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_IN[4]
+set_location_assignment PIN_236 -to F_IN[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_IN[2]
+set_location_assignment PIN_240 -to F_IN[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_IN[0]
+set_location_assignment PIN_214 -to F_IN[15]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_IN[15]
+set_location_assignment PIN_217 -to F_IN[13]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_IN[13]
+set_location_assignment PIN_223 -to F_IN[9]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_IN[9]
+set_location_assignment PIN_219 -to F_IN[11]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_IN[11]
+set_location_assignment PIN_231 -to F_IN[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_IN[5]
+set_location_assignment PIN_239 -to F_IN[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_IN[1]
+set_location_assignment PIN_197 -to F_OUT[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_OUT[5]
+set_location_assignment PIN_226 -to F_IN[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_IN[7]
+set_location_assignment PIN_235 -to F_IN[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_IN[3]
+set_location_assignment PIN_183 -to F_OUT[15]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to F_OUT[15]
+set_location_assignment PIN_161 -to ENC1A
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENC1A
+set_location_assignment PIN_162 -to ENC1B
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENC1B
+set_location_assignment PIN_164 -to ENC2A
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENC2A
+set_location_assignment PIN_166 -to ENC2B
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENC2B
+set_location_assignment PIN_169 -to ENC3A
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENC3A
+set_location_assignment PIN_171 -to ENC3B
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENC3B
+set_location_assignment PIN_173 -to ENC4A
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENC4A
+set_location_assignment PIN_177 -to ENC4B
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENC4B
+set_location_assignment PIN_63 -to DA1_nCS
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DA1_nCS
+set_location_assignment PIN_68 -to DA1_SCK
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DA1_SCK
+set_location_assignment PIN_69 -to DA1_SDI
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DA1_SDI
+set_location_assignment PIN_70 -to DA1_nLDAC
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DA1_nLDAC
+set_location_assignment PIN_73 -to DA2_nCS
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DA2_nCS
+set_location_assignment PIN_76 -to DA2_SCK
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DA2_SCK
+set_location_assignment PIN_78 -to DA2_SDI
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DA2_SDI
+set_location_assignment PIN_80 -to DA2_nLDAC
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DA2_nLDAC
+set_location_assignment PIN_81 -to AD1_SDO
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD1_SDO
+set_location_assignment PIN_82 -to AD1_SCK
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD1_SCK
+set_location_assignment PIN_83 -to AD1_CONV
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD1_CONV
+set_location_assignment PIN_84 -to AD2_SDO
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD2_SDO
+set_location_assignment PIN_87 -to AD2_SCK
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD2_SCK
+set_location_assignment PIN_88 -to AD2_CONV
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD2_CONV
+set_location_assignment PIN_6 -to ENC1I
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENC1I
+set_location_assignment PIN_9 -to ENC2I
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENC2I
+set_location_assignment PIN_13 -to ENC3I
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENC3I
+set_location_assignment PIN_18 -to ENC4I
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENC4I
+set_location_assignment PIN_21 -to DA1_RELAY
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DA1_RELAY
+set_location_assignment PIN_22 -to DA2_RELAY
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DA2_RELAY
+set_location_assignment PIN_37 -to PWM1A
+set_location_assignment PIN_38 -to PWM1B
+set_location_assignment PIN_39 -to PWM1C
+set_location_assignment PIN_41 -to PWM2A
+set_location_assignment PIN_43 -to PWM2B
+set_location_assignment PIN_44 -to PWM2C
+set_location_assignment PIN_45 -to PWM3A
+set_location_assignment PIN_46 -to PWM3B
+set_location_assignment PIN_49 -to PWM3C
+set_location_assignment PIN_50 -to PWM4A
+set_location_assignment PIN_51 -to PWM4B
+set_location_assignment PIN_52 -to PWM4C
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to PWM1A
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to PWM1B
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to PWM1C
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to PWM2A
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to PWM2B
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to PWM2C
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to PWM3A
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to PWM3B
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to PWM3C
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to PWM4A
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to PWM4B
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to PWM4C
+set_location_assignment PIN_33 -to CLOCK_50
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLOCK_50
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

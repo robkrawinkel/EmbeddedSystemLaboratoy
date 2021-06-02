@@ -142,12 +142,15 @@ InitUart();
 
 while(1) {
 	//IOWR_ALTERA_AVALON_UART_CONTROL(UART_0_BASE, 'A');
-	PutUart1('a');
-	usleep(10000);
+	//PutUart1('a');
+	//usleep(10000);
 	if(!EmptyUart1()){
-		printf("received message");
 		ch = GetUart1();
+		printf("received message: %c\n",ch);
+		PutUart1(':');
 		PutUart1(ch);
+		PutUart1('\r');
+		PutUart1('\n');
 	}
 	/*
     if(!EmptyUart1()) {

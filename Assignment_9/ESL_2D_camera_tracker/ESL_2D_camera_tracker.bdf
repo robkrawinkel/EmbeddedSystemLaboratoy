@@ -111,7 +111,7 @@ applicable agreement for further details.
 	(bidir)
 	(rect 728 504 904 520)
 	(text "BIDIR" (rect 148 0 175 9)(font "Arial" (font_size 6)))
-	(text "GPIO_1[10]" (rect 5 0 62 10)(font "Arial" ))
+	(text "GPIO_1[24]" (rect 5 0 62 10)(font "Arial" ))
 	(pt 176 8)
 	(drawing
 		(line (pt 120 4)(pt 98 4))
@@ -130,7 +130,7 @@ applicable agreement for further details.
 	(bidir)
 	(rect 728 520 904 536)
 	(text "BIDIR" (rect 148 0 175 9)(font "Arial" (font_size 6)))
-	(text "GPIO_1[11]" (rect 5 0 62 10)(font "Arial" ))
+	(text "GPIO_1[25]" (rect 5 0 62 10)(font "Arial" ))
 	(pt 176 8)
 	(drawing
 		(line (pt 120 4)(pt 98 4))
