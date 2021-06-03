@@ -88,7 +88,9 @@ XXDouble u [3 + 1];
 		nReadOut = IORD(ESL_NIOS_II_IP_0_BASE, 0x00);
 
 		stepCount0 = nReadOut >> 32-11;
-		stepCount1 = (nReadOut << 11 ) >> 32-11;
+		int32_t temp32 = 0;
+		temp32 = nReadOut << 11
+		stepCount1 = temp32 >> 32-11;
 
 		if(stepCount0 != stepCount0Old || stepCount1 != stepCount1Old)
 			printf("stepCount0: %d\t stepCount1: %d \n\r", stepCount0, stepCount1);
@@ -107,8 +109,9 @@ XXDouble u [3 + 1];
 		
 		XXCalculateSubmodel (u, y, xx_time);
 		PWM0 = y[0]*100;
-		int16_t temp = 0;
+		int16_t temp16 = 0;
 		avalondSend = PWM0 & PWM1 & temp;
+		IOWR(ESL_BUS_DEMO_0_BASE, 0x00,avalondSend);
 		
 		if(!EmptyUart1()){
 			ch = GetUart1();
