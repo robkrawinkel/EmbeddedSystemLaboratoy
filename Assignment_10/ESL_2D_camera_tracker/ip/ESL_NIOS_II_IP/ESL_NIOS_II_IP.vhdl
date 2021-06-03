@@ -117,8 +117,48 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 	VARIABLE calibrate_stepCount0_old : integer;
 	VARIABLE calibrate_stepCount1_old : integer;
 	VARIABLE calibrate_clockCounter : integer;
+------------------------------------------------------------------------------ ARCHITECTURE - Communication ------------------------------------------------------------------------------
+	SIGNAL COMM_dutycycle0 	: integer range 0 to 100;
+	SIGNAL COMM_dutycycle1 	: integer range 0 to 100;
+	SIGNAL COMM_CW0			: std_logic;
+	SIGNAL COMM_CW1			: std_logic;
+	SIGNAL COMM_enable0		: std_logic;
+	SIGNAL COMM_enable1		: std_logic;
+	
+	
+	COMPONENT Communication
+		PORT (
+			-- CLOCK and reset
+			reset		: IN std_logic;
+			CLOCK_50	: IN std_logic;
+			
 
+			-- Signals to connect to an Avalon-MM slave INterface
+			slave_address		: IN  std_logic_vector(7 downto 0);
+			slave_read			: IN  std_logic;
+			slave_write			: IN  std_logic;
+			slave_readdata		: OUT std_logic_vector(DATA_WIDTH-1 downto 0);
+			slave_writedata		: IN  std_logic_vector(DATA_WIDTH-1 downto 0);
+			slave_byteenable	: IN  std_logic_vector((DATA_WIDTH/8)-1 downto 0);
+
+			-- Output signals for the PWM signal of PWM blocks
+			dutycycle0	: OUT integer range 0 to 100; 		--dutycycle of the signal in percentage
+			CW0			: OUT std_logic; 					--rotational direction of the signal
+			enable0     : OUT std_logic;					--enable for the PMW module
+			dutycycle1	: OUT integer range 0 to 100; 		--dutycycle of the signal in percentage
+			CW1			: OUT std_logic; 					--rotational direction of the signal
+			enable1     : OUT std_logic;					--enable for the PMW module
+			
+			-- Input signals from the encoder
+			stepCount0 	: IN integer;					--stepcount of the motor
+			stepCount1	: IN integer
+
+			);
+	END COMPONENT;
+	
+	
 ------------------------------------------------------------------------------ ARCHITECTURE - begin ------------------------------------------------------------------------------
+
 
 BEGIN
 	
@@ -188,6 +228,33 @@ BEGIN
 			enable		=> PWM_enable1
 			);
 		
+	-- Initialize Communication IP
+	Communication: Communication
+			PORT MAP(
+			-- CLOCK and reset
+			reset		=> reset,
+			CLOCK_50	=> clk,
+			
+			-- Signals to connect to an Avalon-MM slave INterface
+			slave_address	=> slave_address,	
+			slave_read		=> slave_read,
+			slave_write		=> slave_write,
+			slave_readdata	=> slave_readdata,
+			slave_writedata	=> slave_writedata,
+			slave_byteenable=> slave_byteenable,
+
+			-- Output signals for the PWM signal of PWM blocks
+			dutycycle0	=> COMM_dutycycle0,
+			CW0			=> COMM_CW0,
+			enable0     => COMM_enable0,
+			dutycycle1	=> COMM_dutycycle1,
+			CW1			=> COMM_CW1,
+			enable1     => COMM_enable1,
+			
+			-- Input signals from the encoder
+			stepCount0 	=> stepCount0,
+			stepCount1	=> stepCount1
+			);
 	
 	-- Output to the leds a 1 and the step count of encoder 0 in 7 bits signed
 	LED <= '1' & std_logic_vector(to_signed(stepCount1, 7));
@@ -294,7 +361,13 @@ BEGIN
 
 				END CASE;
 			ELSE
-
+				-- communication control
+				PWM_dutycycle0 	<= COMM_dutycycle0;
+				PWM_dutycycle1 	<= COMM_dutycycle1;
+				PWM_CW0 		<= COMM_CW0;
+				PWM_CW1			<= COMM_CW1;
+				PWM_enable0		<= COMM_enable0;
+				PWM_enable1		<= COMM_enable1;
 			END IF;
 
 
@@ -325,27 +398,27 @@ BEGIN
 		END IF;
 	END PROCESS;
 
-
-	-- Communication with the bus process
-	p_avalon : PROCESS(clk, reset)
-	BEGIN
-		IF (reset = '1') THEN
-			mem <= (others => '0');
-			memSEND <= (others => '0');
-		ELSIF (rising_edge(clk)) THEN
-
-			-- Send the step counter data in 16 bit signed, concatenated to get 32 bits
-			memSEND <= std_logic_vector(to_signed(stepcount0,16)) & std_logic_vector(to_signed(stepCount1,16));
-			
-			IF (slave_read = '1') THEN
-				slave_readdata <= memSEND;
-			END IF;
-			
-			IF (slave_write = '1') THEN
-				mem <= slave_writedata;
-			END IF;
-		END IF;
-	END PROCESS;
+	
+	---- Communication with the bus process
+	--p_avalon : PROCESS(clk, reset)
+	--BEGIN
+	--	IF (reset = '1') THEN
+	--		mem <= (others => '0');
+	--		memSEND <= (others => '0');
+	--	ELSIF (rising_edge(clk)) THEN
+    --
+	--		-- Send the step counter data in 16 bit signed, concatenated to get 32 bits
+	--		memSEND <= std_logic_vector(to_signed(stepcount0,16)) & std_logic_vector(to_signed(stepCount1,16));
+	--		
+	--		IF (slave_read = '1') THEN
+	--			slave_readdata <= memSEND;
+	--		END IF;
+	--		
+	--		IF (slave_write = '1') THEN
+	--			mem <= slave_writedata;
+	--		END IF;
+	--	END IF;
+	--END PROCESS;
 	
 END ARCHITECTURE;
 
