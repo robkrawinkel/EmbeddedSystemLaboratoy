@@ -97,12 +97,30 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 			enable		: IN std_logic
 			);
 	END COMPONENT;
-	
 
+------------------------------------------------------------------------------ ARCHITECTURE - Calibrate ------------------------------------------------------------------------------
+
+	-- Calibration happens in 3 states for both motors
+	-- 	0:	Reset stepcounters to 0
+	--	1:	Rotate motors with fixed dutycycle in the negative direction until step count has not changed significantly (more than 10) for 100ms
+	--	2: 	Reset stepcounters to 0
+	--	3: 	Rotate to half the max step count (predefined per motor)
+
+	CONSTANT stepCount0_max : integer := 1115;
+	CONSTANT stepCount1_max : integer := 221;
+	CONSTANT calibrate_clockTimeout : integer := 5000000;	-- 5.000.000 clock pulses for 100ms
+	CONSTANT calibrate_stepCount_driftMax : integer := 10;
+
+	SIGNAL calibrate_enable	: std_logic;
+
+	VARIABLE calibrate_state : integer;
+	VARIABLE calibrate_stepCount0_old : integer;
+	VARIABLE calibrate_stepCount1_old : integer;
+	VARIABLE calibrate_clockCounter : integer;
 
 ------------------------------------------------------------------------------ ARCHITECTURE - begin ------------------------------------------------------------------------------
 
-	BEGIN
+BEGIN
 	
 	-- Initialize encoder 0
 	encoder0 : QuadratureEncoder
@@ -176,7 +194,7 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 	
 
 	-- Process to handle PWM generation
-	PWM_process : PROCESS(clk,reset,KEY)
+	PWM_process : PROCESS(clk,reset)
 	BEGIN
 		IF (reset = '1') THEN
 			PWM_enable0 <= '0';
@@ -187,32 +205,123 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 			PWM_CW1 <= '0';
 			PWM_frequency  <= 20000;
 
+			calibrate_enable <= '1';
+			calibrate_state := 0;
+
 		ELSIF rising_edge(clk) THEN
+			IF (calibrate_enable = '1') THEN
+				CASE calibrate_state IS
+					WHEN 0 =>										
+						-- Reset all calibrate variables to start calibration
+						stepCount0 <= 0;
+						stepCount1 <= 0;
 
-			PWM_frequency <= 20000;
-			PWM_dutycycle1 <= 50;
-			PWM_dutycycle0 <= 10;
+						calibrate_stepCount0_old := 0;
+						calibrate_stepCount1_old := 0;
 
-			-- If key0 is pressed rotate both motors counter clockwise
-			IF KEY(0) = '0' THEN
-				PWM_CW0 <= '0';
-				PWM_CW1 <= '0';
-				PWM_enable0 <= '1';
-				PWM_enable1 <= '1';
+						calibrate_clockCounter := 0;
 
-			-- If key1 is pressed rotate both motors clockwise
-			ELSIF KEY(1) = '0' THEN
-				PWM_CW0 <= '1';
-				PWM_CW1 <= '1';
-				PWM_enable0 <= '1';
-				PWM_enable1 <= '1';
+						calibrate_state := 1;
 
-			-- If none of the buttons are pressed stop the PWM generation
+					WHEN 1 =>
+						-- Start moving to maximum position
+						-- Start both motors with a fixed dutycycle										
+						PWM_dutycycle0 <= 20;
+						PWM_dutycycle1 <= 20;
+
+						PWM_CW0 <= '0';
+						PWM_CW1 <= '0';
+
+						PWM_enable0 <= '1';
+						PWM_enable1 <= '1';
+
+						-- Check the stepCount variables on a timeout to see if they have changed since the last check
+						-- Increase timer while timeout has not been reached yet
+						IF (calibrate_clockCounter < calibrate_clockTimeout) THEN
+							calibrate_clockCounter := calibrate_clockCounter + 1;
+
+						ELSE
+							-- Check to see if either of the step counts has changed more than the set amount since the last timeout
+							IF ((ABS(stepCount0 - calibrate_stepCount0_old) > calibrate_stepCount_driftMax) OR
+								(ABS(stepCount1 - calibrate_stepCount1_old) > calibrate_stepCount_driftMax)) THEN
+								
+								-- If one of them has changed substatially, update the old values and reset the clock counter
+								calibrate_stepCount0_old := stepCount0;
+								calibrate_stepCount1_old := stepCount1;
+								calibrate_clockCounter := 0;
+
+							ELSE
+								-- If neither changed substantially, they have reached their end stop and the next stage is reached
+								calibrate_state := 2;
+
+							END IF;
+
+						END IF;
+
+					WHEN 2 =>
+						-- Set the stepcounts to 0 now that the end position has been reached
+						stepCount0 <= 0;
+						stepCount1 <= 0;
+
+						calibrate_state := 3;
+
+					WHEN 3 =>
+						-- Now move the motors until the half way point of the encoders has been reached
+						PWM_dutycycle0 <= 20;
+						PWM_dutycycle1 <= 20;
+
+						PWM_CW0 <= '1';
+						PWM_CW1 <= '1';
+
+						-- If motor 0 is not at its half way point yet
+						IF (stepCount0 < stepCount0_max / 2) THEN
+							PWM_enable0 <= '1';
+						ELSE
+							PWM_enable0 <= '0';
+						END IF;
+
+						-- If motor 1 is not at its half way point yet
+						IF (stepCount1 < stepCount1_max / 2) THEN
+							PWM_enable1 <= '1';
+						ELSE
+							PWM_enable1 <= '0';
+						END IF;
+
+						-- If both are at their half way point (the motors have been disabled), calibration is complete
+						IF (PWM_enable0 = '0' AND PWM_enable1 = '1') THEN
+							calibrate_enable <= '0';
+						END IF;
+
+				END CASE;
 			ELSE
-				PWM_enable0 <= '0';
-				PWM_enable1 <= '0';
 
 			END IF;
+
+
+			-- PWM_frequency <= 20000;
+			-- PWM_dutycycle1 <= 50;
+			-- PWM_dutycycle0 <= 10;
+
+			-- -- If key0 is pressed rotate both motors counter clockwise
+			-- IF KEY(0) = '0' THEN
+			-- 	PWM_CW0 <= '0';
+			-- 	PWM_CW1 <= '0';
+			-- 	PWM_enable0 <= '1';
+			-- 	PWM_enable1 <= '1';
+
+			-- -- If key1 is pressed rotate both motors clockwise
+			-- ELSIF KEY(1) = '0' THEN
+			-- 	PWM_CW0 <= '1';
+			-- 	PWM_CW1 <= '1';
+			-- 	PWM_enable0 <= '1';
+			-- 	PWM_enable1 <= '1';
+
+			-- -- If none of the buttons are pressed stop the PWM generation
+			-- ELSE
+			-- 	PWM_enable0 <= '0';
+			-- 	PWM_enable1 <= '0';
+
+			-- END IF;
 		END IF;
 	END PROCESS;
 
