@@ -27,7 +27,6 @@
 
 //uart baudrate
 #define BAUD_RATE_0 115200
-#define BAUD_RATE_1 115200
 
 
 /* 20-sim include files */
@@ -35,13 +34,12 @@
 
 void InitUart()
 {
-    int context_uart1,context_uart2;
+    int context_uart0;
 
-    InitUart1(BAUD_RATE_0);
-    //InitUart2(BAUD_RATE_1);
+    InitUart0(BAUD_RATE_0);
 
     //alt_ic_isr_register(UART_0_IRQ_INTERRUPT_CONTROLLER_ID,UART_0_IRQ,&context_uart1,IsrUart1,NULL); // install UART1 ISR
-    alt_irq_register(UART_0_IRQ,&context_uart1,IsrUart1 ); // install UART1 ISR
+    alt_irq_register(UART_0_IRQ,&context_uart0,IsrUart0); // install UART0 ISR
 
     //alt_ic_irq_enable (UART_0_IRQ_INTERRUPT_CONTROLLER_ID,UART_0_IRQ);
     alt_irq_enable (UART_0_IRQ);
@@ -50,13 +48,13 @@ void InitUart()
 
 int main()
 {
-unsigned char ch;
-printf("\n\nHello NiosII!!!!!\n");
+	unsigned char ch;
+	printf("\n\nHello NiosII!!!!!\n");
 
-InitUart();
+	InitUart();
 
-//initialize 20-sim
-XXDouble u [3 + 1];
+	//initialize 20-sim
+	XXDouble u [3 + 1];
 	XXDouble y [1 + 1];
 
 	/* Initialize the inputs and outputs with correct initial values */
@@ -113,12 +111,12 @@ XXDouble u [3 + 1];
 		avalondSend = PWM0 & PWM1 & temp;
 		IOWR(ESL_BUS_DEMO_0_BASE, 0x00,avalondSend);
 		
-		if(!EmptyUart1()){
-			ch = GetUart1();
+		if(!EmptyUart0()){
+			ch = GetUart0();
 			printf("received message: %c\n",ch);
-			PutUart1(ch);
-			PutUart1('\r');
-			PutUart1('\n');
+			PutUart0(ch);
+			PutUart0('\r');
+			PutUart0('\n');
 			
 			
 		}
