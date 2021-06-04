@@ -51,6 +51,7 @@ add_file ESL_NIOS_II_IP.vhdl {SYNTHESIS SIMULATION}
 add_file QuadratureEncoder.vhdl {SYNTHESIS SIMULATION}
 add_file timer.vhdl {SYNTHESIS SIMULATION}
 add_file PWM.vhdl {SYNTHESIS SIMULATION}
+add_file Communication.vhdl {SYNTHESIS SIMULATION}
 
 
 ## 
