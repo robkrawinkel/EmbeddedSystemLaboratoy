@@ -28,7 +28,10 @@ ENTITY QuadratureEncoder IS
 	signalB		: IN std_logic;
 	
 	-- Output step counter in 32 bits signed
-	stepCount 	: INOUT integer
+	stepCount 	: INOUT integer;
+
+	--Reset stepcount to 0
+	stepReset : IN std_logic
 
 	);
 END ENTITY;
@@ -57,6 +60,11 @@ BEGIN
 			
 		-- If A is detected
 		ELSIF rising_edge(CLOCK_50) THEN
+
+			IF stepReset = '1' THEN
+				stepCount <= 0;
+			END IF;
+
 			inputSignals <= signalA & signalB;
 			
 			IF state = 4 THEN

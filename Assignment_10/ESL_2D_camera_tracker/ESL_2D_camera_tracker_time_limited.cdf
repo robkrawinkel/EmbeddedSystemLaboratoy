@@ -4,7 +4,7 @@ JedecChain;
 	DefaultMfr(6E);
 
 	P ActionCode(Cfg)
-		Device PartName(EP4CE22F17) Path("/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_9/ESL_2D_camera_tracker/") File("ESL_2D_camera_tracker_time_limited.sof") MfrSpec(OpMask(1));
+		Device PartName(EP4CE22F17) Path("/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_10/ESL_2D_camera_tracker/") File("ESL_2D_camera_tracker_time_limited.sof") MfrSpec(OpMask(1));
 
 ChainEnd;
 
