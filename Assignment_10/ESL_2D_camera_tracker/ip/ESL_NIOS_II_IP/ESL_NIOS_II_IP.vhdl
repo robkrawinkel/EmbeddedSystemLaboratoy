@@ -47,6 +47,11 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 	SIGNAL stepCount0 		: integer;
 	SIGNAL stepCount1 		: integer;
 
+	SIGNAL stepCount0_min	: integer RANGE -8192 TO 0;
+	SIGNAL stepCount0_max	: integer RANGE 0 TO 8191;
+	SIGNAL stepCount1_min	: integer RANGE -8192 TO 0;
+	SIGNAL stepCount1_max	: integer RANGE 0 TO 8191;
+
 	signal stepReset		: std_logic;
 
 	-- Define the quadrature encoder module
@@ -62,6 +67,10 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 
 			-- OUTput step counter IN 32 bits signed
 			stepCount : INOUT integer;
+
+			-- Input stepCount min and max value
+			stepCount_min	: IN integer RANGE -8192 TO 0;
+			stepCount_max	: IN integer RANGE 0 TO 8191;
 
 			--Reset stepcount to 0
 			stepReset : IN std_logic
@@ -119,10 +128,6 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 
 	SIGNAL calibrate_enable	: std_logic;
 
-	-- Signals to store the calibrated stepcount max values
-	SIGNAL stepCount0_max : integer;
-	SIGNAL stepCount1_max : integer;
-
 ------------------------------------------------------------------------------ ARCHITECTURE - Communication ------------------------------------------------------------------------------
 	SIGNAL COMM_dutycycle0 	: integer range 0 to 100;
 	SIGNAL COMM_dutycycle1 	: integer range 0 to 100;
@@ -169,18 +174,21 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 BEGIN
 	
 	-- Initialize encoder 0
-	encoder0 : QuadratureEncoder
+	encoder0: QuadratureEncoder
 		PORT MAP (
 			-- CLOCK and reset
 			reset		=> reset,
 			CLOCK_50	=> clk,
 
-			-- SIGNALs from the encoder
+			-- Signals from the encoder
 			SIGNALA	=> GPIO_0(20),
 			SIGNALB	=> GPIO_0(22),
 			
-			-- OUTput step count
+			-- Output step count
 			stepCount => stepCount0,
+
+			stepCount_min => stepCount0_min,
+			stepCount_max => stepCount0_max,
 
 			--Reset stepcount to 0
 			stepReset => stepReset
@@ -199,6 +207,9 @@ BEGIN
 
 			-- OUTput step count
 			stepCount => stepCount1,
+
+			stepCount_min => stepCount1_min,
+			stepCount_max => stepCount1_max,
 
 			--Reset stepcount to 0
 			stepReset => stepReset
@@ -269,7 +280,7 @@ BEGIN
 			);
 	
 	
-			-- Output to the leds a 1 and the step count of encoder 0 in 7 bits signed
+	-- Output to the leds a 1 and the step count of encoder 0 in 7 bits signed
 	LED <= '1' & std_logic_vector(to_signed(stepCount1, 7));
 	
 
@@ -313,6 +324,12 @@ BEGIN
 						calibrate_clockCounter := 0;
 
 						stepReset <= '1';
+
+						-- Set the stepcount limits very high such that they can be recalibrated
+						stepCount0_min <= -8192;
+						stepCount0_max <= 8191;
+						stepCount1_min <= -8192;
+						stepCount1_max <= 8191;
 
 						-- Setup the motors
 						PWM_dutycycle0 <= calibrate_PWM_dutyCycle;
@@ -364,6 +381,10 @@ BEGIN
 					WHEN 2 =>
 						-- Set the stepcounts to 0 now that the end position has been reached
 						stepReset <= '1';
+
+						-- Set the stepcount minimums to 0
+						stepCount0_min <= 0;
+						stepCount1_min <= 0;
 
 						-- Reset the calibrate variables to prepare for next step
 						calibrate_stepCount0_old := 0;
@@ -452,8 +473,9 @@ BEGIN
 							-- It should not be possible to get to another state but if so, move back to the first step
 							calibrate_state := 0;
 				END CASE;
-				
+
 			ELSE
+				-- If not calibrating, the motors are controlled by the communication process
 				stepReset <= '0';
 
 				-- communication control
@@ -463,6 +485,7 @@ BEGIN
 				PWM_CW1			<= COMM_CW1;
 				PWM_enable0		<= COMM_enable0;
 				PWM_enable1		<= COMM_enable1;
+
 			END IF;
 
 
