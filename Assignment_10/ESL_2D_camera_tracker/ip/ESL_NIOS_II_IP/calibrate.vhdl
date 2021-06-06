@@ -1,7 +1,7 @@
 -- Calibration happens in 5 states for both motors simultaneously
 	-- 	0:	Reset stepcounters to 0
 	--	1:	Rotate motors with fixed dutycycle in the negative direction until step count has not changed significantly (more than x) for 100ms
-	--	2: 	Reset stepcounters to 0
+	--	2: 	Reset stepcounters to 0 and update min stepCount
 	--	3:	Rotate motors with fixed dutycycle in the positive direction until step count has not changed significantly (mroe than x) for 100ms
 	--	4: 	Update max stepcount
 	--	5: 	Rotate to half the max step count (predefined per motor)
