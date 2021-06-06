@@ -68,6 +68,11 @@ BEGIN
 			calibrate_running <= '0';
 
 			calibrate_enable_old := '0';
+
+			stepCount0_min <= -8192;
+			stepCount0_max <= 8191;
+			stepCount1_min <= -8192;
+			stepCount1_max <= 8191;
 			
 		ELSIF rising_edge(CLOCK_50) THEN
 
