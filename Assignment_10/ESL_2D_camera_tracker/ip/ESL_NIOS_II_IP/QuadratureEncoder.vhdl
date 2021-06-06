@@ -98,18 +98,40 @@ BEGIN
 						CW := '1';
 					ELSIF state = 0 AND oldState = 3 THEN
 						CW := '1';
-						stepCount <= minimum(stepCount + 1, stepCount_max);
+
+						IF stepCount < stepCount_max THEN
+							stepCount <= stepCount + 1;
+						ELSE
+							stepCount <= stepCount_max;
+						END IF;
+
 					ELSIF state = oldState - 1 THEN
 						CW := '0';
 					ELSIF state = 3 AND oldState = 0 THEN
 						CW := '0';
-						stepCount <= maximum(stepCount - 1, stepCount_min);
+
+						IF stepCount > stepCount_min THEN
+							stepCount <= stepCount - 1;
+						ELSE
+							stepCount <= stepCount_min;
+						END IF;
+
 					ELSE
 						-- if it is not an increase or decrease of one step, assume the rotational direction didn't change and check if the counter should be increased
 						IF state < oldState AND CW = '1' THEN
-							stepCount <= minimum(stepCount + 1, stepCount_max);
+							IF stepCount < stepCount_max THEN
+								stepCount <= stepCount + 1;
+							ELSE
+								stepCount <= stepCount_max;
+							END IF;
+
 						ELSIF state > oldState AND CW = '0' THEN
-							stepCount <= maximum(stepCount - 1, stepCount_min);
+							IF stepCount > stepCount_min THEN
+								stepCount <= stepCount - 1;
+							ELSE
+								stepCount <= stepCount_min;
+							END IF;
+							
 						END IF;
 					END IF;
 				END IF;

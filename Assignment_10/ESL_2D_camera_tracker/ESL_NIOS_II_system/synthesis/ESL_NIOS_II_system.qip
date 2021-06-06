@@ -2,7 +2,7 @@ set_global_assignment -entity "ESL_NIOS_II_system" -library "ESL_NIOS_II_system"
 set_global_assignment -entity "ESL_NIOS_II_system" -library "ESL_NIOS_II_system" -name IP_TOOL_VERSION "13.1"
 set_global_assignment -entity "ESL_NIOS_II_system" -library "ESL_NIOS_II_system" -name IP_TOOL_ENV "Qsys"
 set_global_assignment -library "ESL_NIOS_II_system" -name SOPCINFO_FILE [file join $::quartus(qip_path) "../../ESL_NIOS_II_system.sopcinfo"]
-set_global_assignment -entity "ESL_NIOS_II_system" -library "ESL_NIOS_II_system" -name SLD_INFO "QSYS_NAME ESL_NIOS_II_system HAS_SOPCINFO 1 GENERATION_ID 1622808225"
+set_global_assignment -entity "ESL_NIOS_II_system" -library "ESL_NIOS_II_system" -name SLD_INFO "QSYS_NAME ESL_NIOS_II_system HAS_SOPCINFO 1 GENERATION_ID 1623001895"
 set_global_assignment -library "ESL_NIOS_II_system" -name MISC_FILE [file join $::quartus(qip_path) "../../ESL_NIOS_II_system.cmp"]
 set_global_assignment -library "ESL_NIOS_II_system" -name SLD_FILE [file join $::quartus(qip_path) "ESL_NIOS_II_system.regmap"]
 set_global_assignment -library "ESL_NIOS_II_system" -name SLD_FILE [file join $::quartus(qip_path) "ESL_NIOS_II_system.debuginfo"]
@@ -43,23 +43,24 @@ set_global_assignment -library "ESL_NIOS_II_system" -name VHDL_FILE [file join $
 set_global_assignment -library "ESL_NIOS_II_system" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/timer.vhdl"]
 set_global_assignment -library "ESL_NIOS_II_system" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/PWM.vhdl"]
 set_global_assignment -library "ESL_NIOS_II_system" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/Communication.vhdl"]
+set_global_assignment -library "ESL_NIOS_II_system" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/calibrate.vhdl"]
 set_global_assignment -library "ESL_NIOS_II_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_sysid.v"]
 set_global_assignment -library "ESL_NIOS_II_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_sys_clock_timer.v"]
 set_global_assignment -library "ESL_NIOS_II_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_jtag_uart.v"]
 set_global_assignment -library "ESL_NIOS_II_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu.v"]
+set_global_assignment -library "ESL_NIOS_II_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu_jtag_debug_module_tck.v"]
+set_global_assignment -library "ESL_NIOS_II_system" -name SOURCE_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu_ociram_default_contents.mif"]
 set_global_assignment -library "ESL_NIOS_II_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu_jtag_debug_module_wrapper.v"]
 set_global_assignment -library "ESL_NIOS_II_system" -name SDC_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu.sdc"]
-set_global_assignment -library "ESL_NIOS_II_system" -name SOURCE_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu_ociram_default_contents.mif"]
-set_global_assignment -library "ESL_NIOS_II_system" -name SOURCE_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu_rf_ram_a.mif"]
-set_global_assignment -library "ESL_NIOS_II_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu_oci_test_bench.v"]
 set_global_assignment -library "ESL_NIOS_II_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu_test_bench.v"]
-set_global_assignment -library "ESL_NIOS_II_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu_jtag_debug_module_tck.v"]
+set_global_assignment -library "ESL_NIOS_II_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu_oci_test_bench.v"]
 set_global_assignment -library "ESL_NIOS_II_system" -name SOURCE_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu_ic_tag_ram.mif"]
-set_global_assignment -library "ESL_NIOS_II_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu_jtag_debug_module_sysclk.v"]
 set_global_assignment -library "ESL_NIOS_II_system" -name SOURCE_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu.ocp"]
 set_global_assignment -library "ESL_NIOS_II_system" -name SOURCE_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu_rf_ram_b.mif"]
-set_global_assignment -library "ESL_NIOS_II_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_onchip_mem.v"]
+set_global_assignment -library "ESL_NIOS_II_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu_jtag_debug_module_sysclk.v"]
+set_global_assignment -library "ESL_NIOS_II_system" -name SOURCE_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_cpu_rf_ram_a.mif"]
 set_global_assignment -library "ESL_NIOS_II_system" -name SOURCE_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_onchip_mem.hex"]
+set_global_assignment -library "ESL_NIOS_II_system" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/ESL_NIOS_II_system_onchip_mem.v"]
 
 set_global_assignment -entity "altera_reset_controller" -library "ESL_NIOS_II_system" -name IP_TOOL_NAME "altera_reset_controller"
 set_global_assignment -entity "altera_reset_controller" -library "ESL_NIOS_II_system" -name IP_TOOL_VERSION "13.1"

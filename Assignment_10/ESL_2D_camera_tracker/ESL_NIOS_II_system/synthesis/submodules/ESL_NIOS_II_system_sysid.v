@@ -36,7 +36,7 @@ module ESL_NIOS_II_system_sysid (
 
   wire    [ 31: 0] readdata;
   //control_slave, which is an e_avalon_slave
-  assign readdata = address ? 1622808225 : 0;
+  assign readdata = address ? 1623001895 : 0;
 
 endmodule
 

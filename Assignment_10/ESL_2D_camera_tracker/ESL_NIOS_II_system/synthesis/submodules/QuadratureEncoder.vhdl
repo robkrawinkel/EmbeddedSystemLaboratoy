@@ -28,7 +28,11 @@ ENTITY QuadratureEncoder IS
 	signalB		: IN std_logic;
 	
 	-- Output step counter in 32 bits signed
-	stepCount 	: INOUT integer;
+	stepCount 	: INOUT integer RANGE -8192 TO 8191;
+
+	-- Input stepCount min and max value
+	stepCount_min	: IN integer RANGE -8192 TO 0;
+	stepCount_max	: IN integer RANGE 0 TO 8191;
 
 	--Reset stepcount to 0
 	stepReset : IN std_logic
@@ -50,6 +54,7 @@ BEGIN
 		
 		-- Variables to keep track of previous states
 		VARIABLE oldState : integer range 0 to 4;
+
 	BEGIN
 		
 		-- Reset everything
@@ -93,18 +98,40 @@ BEGIN
 						CW := '1';
 					ELSIF state = 0 AND oldState = 3 THEN
 						CW := '1';
-						stepCount <= stepCount + 1;
+
+						IF stepCount < stepCount_max THEN
+							stepCount <= stepCount + 1;
+						ELSE
+							stepCount <= stepCount_max;
+						END IF;
+
 					ELSIF state = oldState - 1 THEN
 						CW := '0';
 					ELSIF state = 3 AND oldState = 0 THEN
 						CW := '0';
-						stepCount <= stepCount - 1;
+
+						IF stepCount > stepCount_min THEN
+							stepCount <= stepCount - 1;
+						ELSE
+							stepCount <= stepCount_min;
+						END IF;
+
 					ELSE
 						-- if it is not an increase or decrease of one step, assume the rotational direction didn't change and check if the counter should be increased
 						IF state < oldState AND CW = '1' THEN
-							stepCount <= stepCount + 1;
+							IF stepCount < stepCount_max THEN
+								stepCount <= stepCount + 1;
+							ELSE
+								stepCount <= stepCount_max;
+							END IF;
+
 						ELSIF state > oldState AND CW = '0' THEN
-							stepCount <= stepCount - 1;
+							IF stepCount > stepCount_min THEN
+								stepCount <= stepCount - 1;
+							ELSE
+								stepCount <= stepCount_min;
+							END IF;
+							
 						END IF;
 					END IF;
 				END IF;

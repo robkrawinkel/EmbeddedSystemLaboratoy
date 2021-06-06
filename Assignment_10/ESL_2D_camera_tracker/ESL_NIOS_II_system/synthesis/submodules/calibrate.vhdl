@@ -17,8 +17,7 @@ ENTITY calibrate IS
 		CLOCK_50	: IN std_logic;
 
 		-- Enable calibration
-		calibrate_enable	: IN std_logic;
-		calibrate_running	: OUT std_logic;
+		calibrate_enable	: INOUT std_logic;
 
 		-- Motor control
 		dutycycle0			: OUT integer RANGE 0 TO 100;
@@ -57,32 +56,16 @@ BEGIN
 		VARIABLE calibrate_stepCount1_old 	: integer RANGE -8192 TO 8191;
 		VARIABLE calibrate_clockCounter 	: integer;
 
-		VARIABLE calibrate_enable_old		: std_logic;
-
 	BEGIN
 		
 		-- Reset everything
 		IF reset = '1' THEN
 			
 			calibrate_state := 0;
-			calibrate_running <= '0';
-
-			calibrate_enable_old := '0';
 			
 		ELSIF rising_edge(CLOCK_50) THEN
 
-			-- If calibrate enable changed to being on, start calibration
-			IF calibrate_enable /= calibrate_enable_old AND calibrate_enable = '1' THEN
-				calibrate_running := '1';
-				calibrate_state := 0;
-
-				calibrate_enable_old = calibrate_enable;
-			ELSE
-				calibrate_enable_old = calibrate_enable;
-			END IF;
-
-			-- If calibration is running
-			IF (calibrate_running = '1') THEN
+			IF (calibrate_enable = '1') THEN
 				CASE calibrate_state IS
 					WHEN 0 =>		
 
@@ -234,7 +217,7 @@ BEGIN
 
 						-- If both are at their half way point (the motors have been disabled), calibration is complete
 						IF (PWM_enable0 = '0' AND PWM_enable1 = '0') THEN
-							calibrate_running <= '0';
+							calibrate_enable <= '0';
 							calibrate_state := 0;
 						END IF;
 

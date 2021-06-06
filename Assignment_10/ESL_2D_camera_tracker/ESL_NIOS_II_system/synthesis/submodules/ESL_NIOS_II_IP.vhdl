@@ -44,10 +44,15 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 
 
 	-- Signals for quadrature encoder
-	SIGNAL stepCount0 		: integer;
-	SIGNAL stepCount1 		: integer;
+	SIGNAL stepCount0 		: integer RANGE -8192 TO 8191;
+	SIGNAL stepCount1 		: integer RANGE -8192 TO 8191;
 
-	signal stepReset		: std_logic;
+	SIGNAL stepCount0_min	: integer RANGE -8192 TO 0;
+	SIGNAL stepCount0_max	: integer RANGE 0 TO 8191;
+	SIGNAL stepCount1_min	: integer RANGE -8192 TO 0;
+	SIGNAL stepCount1_max	: integer RANGE 0 TO 8191;
+
+	SIGNAL stepReset		: std_logic;
 
 	-- Define the quadrature encoder module
 	COMPONENT QuadratureEncoder		
@@ -61,7 +66,11 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 			SIGNALB	: IN std_logic;
 
 			-- OUTput step counter IN 32 bits signed
-			stepCount : INOUT integer;
+			stepCount : INOUT integer RANGE -8192 TO 8191;
+
+			-- Input stepCount min and max value
+			stepCount_min	: IN integer RANGE -8192 TO 0;
+			stepCount_max	: IN integer RANGE 0 TO 8191;
 
 			--Reset stepcount to 0
 			stepReset : IN std_logic
@@ -105,18 +114,45 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 
 ------------------------------------------------------------------------------ ARCHITECTURE - Calibrate ------------------------------------------------------------------------------
 
-	-- Calibration happens in 3 states for both motors
-	-- 	0:	Reset stepcounters to 0
-	--	1:	Rotate motors with fixed dutycycle in the negative direction until step count has not changed significantly (more than 10) for 100ms
-	--	2: 	Reset stepcounters to 0
-	--	3: 	Rotate to half the max step count (predefined per motor)
+	SIGNAL CALL_calibrate_enable	: std_logic;
+	SIGNAL CALL_dutycycle0			: integer RANGE 0 TO 100;
+	SIGNAL CALL_dutycycle1			: integer RANGE 0 TO 100;
+	SIGNAL CALL_CW0					: std_logic;
+	SIGNAL CALL_CW1					: std_logic;
+	SIGNAL CALL_enable0				: std_logic;
+	SIGNAL CALL_enable1				: std_logic;
+	SIGNAL CALL_stepReset			: std_logic;
 
-	CONSTANT stepCount0_max : integer := 1115;
-	CONSTANT stepCount1_max : integer := 221;
-	CONSTANT calibrate_clockTimeout : integer := 5000000;	-- 5.000.000 clock pulses for 100ms
-	CONSTANT calibrate_stepCount_driftMax : integer := 10;
+	-- Define calibrate component
+	COMPONENT calibrate
+		PORT (
+			-- CLOCK and reset
+			reset		: IN std_logic;
+			CLOCK_50	: IN std_logic;
 
-	SIGNAL calibrate_enable	: std_logic;
+			-- Enable calibration
+			calibrate_enable	: IN std_logic;
+
+			-- Motor control
+			dutycycle0			: OUT integer RANGE 0 TO 100;
+			dutycycle1			: OUT integer RANGE 0 TO 100;
+			CW0					: OUT std_logic;
+			CW1					: OUT std_logic;
+			PWM_enable0			: OUT std_logic;
+			PWM_enable1			: OUT std_logic;
+
+			-- Stepcount control
+			stepCount0			: IN integer RANGE -8192 TO 8191;
+			stepCount0_min		: OUT integer RANGE -8192 TO 0;
+			stepCount0_max		: OUT integer RANGE 0 TO 8191;
+			stepCount1			: IN integer RANGE -8192 TO 8191;
+			stepCount1_min		: OUT integer RANGE -8192 TO 0;
+			stepCount1_max		: OUT integer RANGE 0 TO 8191;
+			stepReset			: OUT std_logic
+
+		);
+	END COMPONENT;
+
 ------------------------------------------------------------------------------ ARCHITECTURE - Communication ------------------------------------------------------------------------------
 	SIGNAL COMM_dutycycle0 	: integer range 0 to 100;
 	SIGNAL COMM_dutycycle1 	: integer range 0 to 100;
@@ -163,18 +199,21 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 BEGIN
 	
 	-- Initialize encoder 0
-	encoder0 : QuadratureEncoder
+	encoder0: QuadratureEncoder
 		PORT MAP (
 			-- CLOCK and reset
 			reset		=> reset,
 			CLOCK_50	=> clk,
 
-			-- SIGNALs from the encoder
+			-- Signals from the encoder
 			SIGNALA	=> GPIO_0(20),
 			SIGNALB	=> GPIO_0(22),
 			
-			-- OUTput step count
+			-- Output step count
 			stepCount => stepCount0,
+
+			stepCount_min => stepCount0_min,
+			stepCount_max => stepCount0_max,
 
 			--Reset stepcount to 0
 			stepReset => stepReset
@@ -193,6 +232,9 @@ BEGIN
 
 			-- OUTput step count
 			stepCount => stepCount1,
+
+			stepCount_min => stepCount1_min,
+			stepCount_max => stepCount1_max,
 
 			--Reset stepcount to 0
 			stepReset => stepReset
@@ -262,18 +304,47 @@ BEGIN
 			stepCount1	=> stepCount1
 			);
 	
+
+	CalibrateIP: calibrate
+		PORT MAP(
+			-- CLOCK and reset
+			reset				=> reset,
+			CLOCK_50			=> clk,
+
+			-- Enable calibration
+			calibrate_enable	=> CALL_calibrate_enable,
+
+			-- Motor control
+			dutycycle0			=> CALL_dutycycle0,
+			dutycycle1			=> CALL_dutycycle1,
+			CW0					=> CALL_CW0,
+			CW1					=> CALL_CW1,
+			PWM_enable0			=> CALL_enable0,
+			PWM_enable1			=> CALL_enable1,
+
+			-- Stepcount control
+			stepCount0			=> stepCount0,
+			stepCount0_min		=> stepCount0_min,
+			stepCount0_max		=> stepCount0_max,
+			stepCount1			=> stepCount1,
+			stepCount1_min		=> stepCount1_min,
+			stepCount1_max		=> stepCount1_max,
+			stepReset			=> CALL_stepReset
+
+		);	
+	
 	-- Output to the leds a 1 and the step count of encoder 0 in 7 bits signed
 	LED <= '1' & std_logic_vector(to_signed(stepCount1, 7));
 	
 
 	-- Process to handle PWM generation
 	PWM_process : PROCESS(clk,reset)
-		VARIABLE calibrate_state : integer RANGE 0 TO 4;
-		VARIABLE calibrate_stepCount0_old : integer;
-		VARIABLE calibrate_stepCount1_old : integer;
-		VARIABLE calibrate_clockCounter : integer;
+
 	BEGIN
+		-- Reset the PWM process
 		IF (reset = '1') THEN
+
+			-- Change all PWM parameters back to default
 			PWM_enable0 <= '0';
 			PWM_enable1 <= '0';
 			PWM_dutycycle0 <= 0;
@@ -282,100 +353,27 @@ BEGIN
 			PWM_CW1 <= '0';
 			PWM_frequency  <= 20000;
 
-			calibrate_enable <= '1';
-			calibrate_state := 0;
-			stepReset <= '1';
+			-- Start calibration of the motors after reset
+			CALL_calibrate_enable <= '1';
+			stepReset <= '1';		-- Reset the stepcount
 
 		ELSIF rising_edge(clk) THEN
-			IF (calibrate_enable = '1') THEN
-				CASE calibrate_state IS
-					WHEN 0 =>										
-						-- Reset all calibrate variables to start calibration
 
-						calibrate_stepCount0_old := 0;
-						calibrate_stepCount1_old := 0;
+			IF (CALL_calibrate_enable = '1') THEN
+				-- If calibrating, its process controlls the motors
+				stepReset <= CALL_stepReset;
 
-						calibrate_clockCounter := 0;
+				PWM_dutycycle0 	<= CALL_dutycycle0;
+				PWM_dutycycle1 	<= CALL_dutycycle1;
+				PWM_CW0 		<= CALL_CW0;
+				PWM_CW1			<= CALL_CW1;
+				PWM_enable0		<= CALL_enable0;
+				PWM_enable1		<= CALL_enable1;
 
-						calibrate_state := 1;
 
-					WHEN 1 =>
-						-- Start moving to maximum position
-						-- Start both motors with a fixed dutycycle		
-						
-						stepReset <= '0';
-
-						PWM_dutycycle0 <= 20;
-						PWM_dutycycle1 <= 20;
-
-						PWM_CW0 <= '0';
-						PWM_CW1 <= '0';
-
-						PWM_enable0 <= '1';
-						PWM_enable1 <= '1';
-
-						-- Check the stepCount variables on a timeout to see if they have changed since the last check
-						-- Increase timer while timeout has not been reached yet
-						IF (calibrate_clockCounter < calibrate_clockTimeout) THEN
-							calibrate_clockCounter := calibrate_clockCounter + 1;
-
-						ELSE
-							-- Check to see if either of the step counts has changed more than the set amount since the last timeout
-							IF ((ABS(stepCount0 - calibrate_stepCount0_old) > calibrate_stepCount_driftMax) OR
-								(ABS(stepCount1 - calibrate_stepCount1_old) > calibrate_stepCount_driftMax)) THEN
-								
-								-- If one of them has changed substatially, update the old values and reset the clock counter
-								calibrate_stepCount0_old := stepCount0;
-								calibrate_stepCount1_old := stepCount1;
-								calibrate_clockCounter := 0;
-
-							ELSE
-								-- If neither changed substantially, they have reached their end stop and the next stage is reached
-								calibrate_state := 2;
-								
-
-							END IF;
-
-						END IF;
-
-					WHEN 2 =>
-						-- Set the stepcounts to 0 now that the end position has been reached
-						stepReset <= '1';
-
-						calibrate_state := 3;
-
-					WHEN 3 =>
-						-- Now move the motors until the half way point of the encoders has been reached
-						stepReset <= '0';
-
-						PWM_dutycycle0 <= 20;
-						PWM_dutycycle1 <= 20;
-
-						PWM_CW0 <= '1';
-						PWM_CW1 <= '1';
-
-						-- If motor 0 is not at its half way point yet
-						IF (stepCount0 < stepCount0_max / 2) THEN
-							PWM_enable0 <= '1';
-						ELSE
-							PWM_enable0 <= '0';
-						END IF;
-
-						-- If motor 1 is not at its half way point yet
-						IF (stepCount1 < stepCount1_max / 2) THEN
-							PWM_enable1 <= '1';
-						ELSE
-							PWM_enable1 <= '0';
-						END IF;
-
-						-- If both are at their half way point (the motors have been disabled), calibration is complete
-						IF (PWM_enable0 = '0' AND PWM_enable1 = '0') THEN
-							calibrate_enable <= '0';
-						END IF;
-					WHEN OTHERS =>
-
-				END CASE;
 			ELSE
+				-- If not calibrating, the motors are controlled by the communication process
+
 				stepReset <= '0';
 
 				-- communication control
@@ -385,6 +383,7 @@ BEGIN
 				PWM_CW1			<= COMM_CW1;
 				PWM_enable0		<= COMM_enable0;
 				PWM_enable1		<= COMM_enable1;
+
 			END IF;
 
 
