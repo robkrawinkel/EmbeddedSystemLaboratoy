@@ -388,8 +388,24 @@ BEGIN
 				PWM_dutycycle1 	<= COMM_dutycycle1;
 				PWM_CW0 		<= COMM_CW0;
 				PWM_CW1			<= COMM_CW1;
-				PWM_enable0		<= COMM_enable0;
-				PWM_enable1		<= COMM_enable1;
+
+				-- Check if Motor 0 is at its min or max, if so, stop it from rotating any further
+				IF (stepCount0 = stepCount0_min AND COMM_CW0 = '0') OR
+				   (stepCount0 = stepCount0_max AND COMM_CW0 = '1') THEN
+
+					PWM_enable0 <= '0';
+				ELSE
+					PWM_enable0		<= COMM_enable0;
+				END IF;
+
+				-- Check if Motor 1 is at its min or max, if so, stop it from rotating any further
+				IF (stepCount1 = stepCount1_min AND COMM_CW1 = '0') OR
+				   (stepCount1 = stepCount1_max AND COMM_CW1 = '1') THEN
+
+					PWM_enable1 <= '0';
+				ELSE
+					PWM_enable1		<= COMM_enable1;
+				END IF;
 
 			END IF;
 
