@@ -115,6 +115,7 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 ------------------------------------------------------------------------------ ARCHITECTURE - Calibrate ------------------------------------------------------------------------------
 
 	SIGNAL CALL_calibrate_enable	: std_logic;
+	SIGNAL CALL_calibrate_running	: std_logic;
 	SIGNAL CALL_dutycycle0			: integer RANGE 0 TO 100;
 	SIGNAL CALL_dutycycle1			: integer RANGE 0 TO 100;
 	SIGNAL CALL_CW0					: std_logic;
@@ -132,6 +133,7 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 
 			-- Enable calibration
 			calibrate_enable	: IN std_logic;
+			calibrate_running	: INOUT std_logic;
 
 			-- Motor control
 			dutycycle0			: OUT integer RANGE 0 TO 100;
@@ -313,6 +315,7 @@ BEGIN
 
 			-- Enable calibration
 			calibrate_enable	=> CALL_calibrate_enable,
+			calibrate_running	=> CALL_calibrate_running,
 
 			-- Motor control
 			dutycycle0			=> CALL_dutycycle0,
@@ -359,7 +362,7 @@ BEGIN
 
 		ELSIF rising_edge(clk) THEN
 
-			IF (CALL_calibrate_enable = '1') THEN
+			IF (CALL_calibrate_running = '1') THEN
 				-- If calibrating, its process controlls the motors
 				stepReset <= CALL_stepReset;
 
@@ -374,6 +377,10 @@ BEGIN
 			ELSE
 				-- If not calibrating, the motors are controlled by the communication process
 
+				-- Turn off calibration now that it is finished
+				CALL_calibrate_enable <= '0';
+
+				-- Don't reset the step counter
 				stepReset <= '0';
 
 				-- communication control

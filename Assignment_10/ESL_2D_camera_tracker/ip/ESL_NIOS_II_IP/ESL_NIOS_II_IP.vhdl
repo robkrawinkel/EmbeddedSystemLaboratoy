@@ -133,6 +133,7 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 
 			-- Enable calibration
 			calibrate_enable	: IN std_logic;
+			calibrate_running	: INOUT std_logic;
 
 			-- Motor control
 			dutycycle0			: OUT integer RANGE 0 TO 100;

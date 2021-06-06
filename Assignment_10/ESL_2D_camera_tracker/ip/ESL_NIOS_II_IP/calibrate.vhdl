@@ -18,7 +18,7 @@ ENTITY calibrate IS
 
 		-- Enable calibration
 		calibrate_enable	: IN std_logic;
-		calibrate_running	: OUT std_logic;
+		calibrate_running	: INOUT std_logic;
 
 		-- Motor control
 		dutycycle0			: OUT integer RANGE 0 TO 100;
@@ -73,12 +73,12 @@ BEGIN
 
 			-- If calibrate enable changed to being on, start calibration
 			IF calibrate_enable /= calibrate_enable_old AND calibrate_enable = '1' THEN
-				calibrate_running := '1';
+				calibrate_running <= '1';
 				calibrate_state := 0;
 
-				calibrate_enable_old = calibrate_enable;
+				calibrate_enable_old := calibrate_enable;
 			ELSE
-				calibrate_enable_old = calibrate_enable;
+				calibrate_enable_old := calibrate_enable;
 			END IF;
 
 			-- If calibration is running

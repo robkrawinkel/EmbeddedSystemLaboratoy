@@ -2,7 +2,7 @@ set_global_assignment -entity "ESL_NIOS_II_system" -library "ESL_NIOS_II_system"
 set_global_assignment -entity "ESL_NIOS_II_system" -library "ESL_NIOS_II_system" -name IP_TOOL_VERSION "13.1"
 set_global_assignment -entity "ESL_NIOS_II_system" -library "ESL_NIOS_II_system" -name IP_TOOL_ENV "Qsys"
 set_global_assignment -library "ESL_NIOS_II_system" -name SOPCINFO_FILE [file join $::quartus(qip_path) "../../ESL_NIOS_II_system.sopcinfo"]
-set_global_assignment -entity "ESL_NIOS_II_system" -library "ESL_NIOS_II_system" -name SLD_INFO "QSYS_NAME ESL_NIOS_II_system HAS_SOPCINFO 1 GENERATION_ID 1623001895"
+set_global_assignment -entity "ESL_NIOS_II_system" -library "ESL_NIOS_II_system" -name SLD_INFO "QSYS_NAME ESL_NIOS_II_system HAS_SOPCINFO 1 GENERATION_ID 1623004008"
 set_global_assignment -library "ESL_NIOS_II_system" -name MISC_FILE [file join $::quartus(qip_path) "../../ESL_NIOS_II_system.cmp"]
 set_global_assignment -library "ESL_NIOS_II_system" -name SLD_FILE [file join $::quartus(qip_path) "ESL_NIOS_II_system.regmap"]
 set_global_assignment -library "ESL_NIOS_II_system" -name SLD_FILE [file join $::quartus(qip_path) "ESL_NIOS_II_system.debuginfo"]
