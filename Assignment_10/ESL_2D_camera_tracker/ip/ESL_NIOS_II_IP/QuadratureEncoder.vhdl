@@ -28,7 +28,7 @@ ENTITY QuadratureEncoder IS
 	signalB		: IN std_logic;
 	
 	-- Output step counter in 32 bits signed
-	stepCount 	: INOUT integer;
+	stepCount 	: INOUT integer RANGE -8192 TO 8191;
 
 	-- Input stepCount min and max value
 	stepCount_min	: IN integer RANGE -8192 TO 0;
