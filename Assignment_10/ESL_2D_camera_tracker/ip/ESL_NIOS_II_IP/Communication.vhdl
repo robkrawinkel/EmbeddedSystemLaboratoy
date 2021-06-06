@@ -31,7 +31,14 @@ ENTITY Communication IS
 	
 	-- Input signals from the encoder
 	stepCount0 	: IN integer;					--stepcount of the motor
-	stepCount1	: IN integer
+	stepCount1	: IN integer;
+	
+	-- Maximum stepcount values
+	stepCount0Max : IN integer;					-- Maximum value the stepcount can reach.
+	stepCount1Max : IN integer;
+	
+	--flag to recalibrate
+	doRecalibrate : OUT std_logic
 
 	);
 END ENTITY;
@@ -52,6 +59,8 @@ BEGIN
 		-- Variables that store the amount of clock cycles to count based on the set frequency and dutycycle
 		VARIABLE PWM_0 : integer range -128 to 128;
 		VARIABLE PWM_1 : integer range -128 to 128;
+		VARIABLE counter : integer range 0 to 5000000;
+		VARIABLE sendID : integer range 0 to 7;
 		
 	BEGIN
 		
@@ -62,71 +71,93 @@ BEGIN
 			enable1 <= '0';
 			memSend <= (others => '0');
 			memREAD <= (others => '0');
+			counter := 0;
+			doRecalibrate <= '0';
+			sendID := 1;
 			
 			
 		ELSIF rising_edge(CLOCK_50) THEN
-			memSEND <= std_logic_vector(to_signed(stepcount0,11)) & std_logic_vector(to_signed(stepCount1,11)) & std_logic_vector(to_signed(0,32-11-11));
-			--sending data
+			------------------------------------------------------- Sending data
+			CASE sendID IS
+				WHEN 1 => 
+					memSend <= std_logic_vector(to_signed(sendID,3)) & std_logic_vector(to_signed(stepcount0,11)) & std_logic_vector(to_signed(stepCount1,11)) & std_logic_vector(to_signed(0,32-11-11-3));
+					sendID := 2;
+				WHEN 2 => 
+					memSend <= std_logic_vector(to_signed(sendID,3)) & std_logic_vector(to_signed(stepcount0Max,11)) & std_logic_vector(to_signed(stepCount1Max,11)) & std_logic_vector(to_signed(0,32-11-11-3));
+					sendId := 1;
+				WHEN OTHERS => 
+					memSend <= (others => '0') ;
+					sendID := 1;
+			END CASE;
 			IF (slave_read = '1') THEN
 				slave_readdata <= memSEND;
 			END IF;
 			
-			--reading data
-			IF (slave_write = '1') THEN
-				memRead <= slave_writedata;
-				
-				--Control the PWM signals depending on the input signal
-				PWM_0 := to_integer(signed(memRead(31 downto 24)));
-				PWM_1 := to_integer(signed(memRead(23 downto 16)));
-				
-				--If there is no control, so the PWM module should not be enabled
-				IF (PWM_0 = 0) THEN
-					enable0 <= '0';
+			---------------------------------------------------- Reading data
+			IF counter < 5000000 THEN --check if a message was received in the last 100ms
+				IF (slave_write = '1') THEN
+					memRead <= slave_writedata;
 					
-				--If the Input signal is negative, so it should turn counter clockwise. Also inverts the PWM input signal so it is positive
-				ELSIF (PWM_0 < 0) THEN
-					enable0 <= '1';
-					CW0 <= '0';
-					--protection
-					IF (PWM_0 < -MAX_PWM) THEN
-						PWM_0 := -MAX_PWM;
-					END IF;
-					dutycycle0 <= -PWM_0;
-				ELSE
-					enable0 <= '1';
-					CW0 <= '1';
-					--protection
-					IF (PWM_0 > MAX_PWM) THEN
-						PWM_0 := MAX_PWM;
-					END IF;
-					dutycycle0 <= PWM_0;
-				END IF;
-				
-				
-				--If there is no control, so the PWM module should not be enabled
-				IF (PWM_1 = 0) THEN
-					enable1 <= '0';
+					--Control the PWM signals depending on the input signal
+					PWM_0 := to_integer(signed(memRead(31 downto 24)));
+					PWM_1 := to_integer(signed(memRead(23 downto 16)));
+					doRecalibrate <= memRead(15);
 					
-				--If the Input signal is negative, so it should turn counter clockwise. Also inverts the PWM input signal so it is positive
-				ELSIF (PWM_1 < 0) THEN
-					enable1 <= '1';
-					CW1 <= '0';
-					--protection
-					IF (PWM_1 < -MAX_PWM) THEN
-						PWM_1 := -MAX_PWM;
+					--If there is no control, so the PWM module should not be enabled
+					IF (PWM_0 = 0) THEN
+						enable0 <= '0';
+						
+					--If the Input signal is negative, so it should turn counter clockwise. Also inverts the PWM input signal so it is positive
+					ELSIF (PWM_0 < 0) THEN
+						enable0 <= '1';
+						CW0 <= '0';
+						--protection
+						IF (PWM_0 < -MAX_PWM) THEN
+							PWM_0 := -MAX_PWM;
+						END IF;
+						dutycycle0 <= -PWM_0;
+					ELSE
+						enable0 <= '1';
+						CW0 <= '1';
+						--protection
+						IF (PWM_0 > MAX_PWM) THEN
+							PWM_0 := MAX_PWM;
+						END IF;
+						dutycycle0 <= PWM_0;
 					END IF;
-					dutycycle1 <= -PWM_1;
-				ELSE
-					enable1 <= '1';
-					CW1 <= '1';
-					--protection
-					IF (PWM_1 > MAX_PWM) THEN
-						PWM_1 := MAX_PWM;
+					
+					
+					--If there is no control, so the PWM module should not be enabled
+					IF (PWM_1 = 0) THEN
+						enable1 <= '0';
+						
+					--If the Input signal is negative, so it should turn counter clockwise. Also inverts the PWM input signal so it is positive
+					ELSIF (PWM_1 < 0) THEN
+						enable1 <= '1';
+						CW1 <= '0';
+						--protection
+						IF (PWM_1 < -MAX_PWM) THEN
+							PWM_1 := -MAX_PWM;
+						END IF;
+						dutycycle1 <= -PWM_1;
+					ELSE
+						enable1 <= '1';
+						CW1 <= '1';
+						--protection
+						IF (PWM_1 > MAX_PWM) THEN
+							PWM_1 := MAX_PWM;
+						END IF;
+						dutycycle1 <= PWM_1;
 					END IF;
-					dutycycle1 <= PWM_1;
+					
+					
 				END IF;
-				
-				
+				counter := counter + 1;
+			ELSE --counter overflow, not enough messages received
+				counter := 0;
+				enable1 <= '0';
+				enable0 <= '0';
+				doRecalibrate <= '0';
 			END IF;
 		END IF;
 		
