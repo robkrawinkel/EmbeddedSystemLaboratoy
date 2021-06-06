@@ -78,24 +78,26 @@ BEGIN
 			
 		ELSIF rising_edge(CLOCK_50) THEN
 			------------------------------------------------------- Sending data
-			CASE sendID IS
-				WHEN 1 => 
-					memSend <= std_logic_vector(to_signed(sendID,3)) & std_logic_vector(to_signed(stepcount0,11)) & std_logic_vector(to_signed(stepCount1,11)) & std_logic_vector(to_signed(0,32-11-11-3));
-					sendID := 2;
-				WHEN 2 => 
-					memSend <= std_logic_vector(to_signed(sendID,3)) & std_logic_vector(to_signed(stepcount0Max,11)) & std_logic_vector(to_signed(stepCount1Max,11)) & std_logic_vector(to_signed(0,32-11-11-3));
-					sendId := 1;
-				WHEN OTHERS => 
-					memSend <= (others => '0') ;
-					sendID := 1;
-			END CASE;
+
 			IF (slave_read = '1') THEN
+				CASE sendID IS
+					WHEN 1 => 
+						memSend <= std_logic_vector(to_signed(sendID,3)) & std_logic_vector(to_signed(stepcount0,11)) & std_logic_vector(to_signed(stepCount1,11)) & std_logic_vector(to_signed(0,32-11-11-3));
+						sendID := 2;
+					WHEN 2 => 
+						memSend <= std_logic_vector(to_signed(sendID,3)) & std_logic_vector(to_signed(stepcount0Max,11)) & std_logic_vector(to_signed(stepCount1Max,11)) & std_logic_vector(to_signed(0,32-11-11-3));
+						sendId := 1;
+					WHEN OTHERS => 
+						memSend <= (others => '0') ;
+						sendID := 1;
+				END CASE;
 				slave_readdata <= memSEND;
 			END IF;
 			
 			---------------------------------------------------- Reading data
 			IF counter < 5000000 THEN --check if a message was received in the last 100ms
 				IF (slave_write = '1') THEN
+					counter := 0;
 					memRead <= slave_writedata;
 					
 					--Control the PWM signals depending on the input signal
@@ -149,7 +151,6 @@ BEGIN
 						END IF;
 						dutycycle1 <= PWM_1;
 					END IF;
-					
 					
 				END IF;
 				counter := counter + 1;
