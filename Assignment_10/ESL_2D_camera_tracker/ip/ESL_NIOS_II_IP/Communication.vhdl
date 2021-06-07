@@ -59,7 +59,7 @@ BEGIN
 		-- Variables that store the amount of clock cycles to count based on the set frequency and dutycycle
 		VARIABLE PWM_0 : integer range -128 to 128;
 		VARIABLE PWM_1 : integer range -128 to 128;
-		VARIABLE counter : integer range 0 to 5000000;
+		VARIABLE counter : integer;
 		VARIABLE sendID : integer range 0 to 7;
 		
 	BEGIN
@@ -95,66 +95,65 @@ BEGIN
 			END IF;
 			
 			---------------------------------------------------- Reading data
-			IF counter < 5000000 THEN --check if a message was received in the last 100ms
-				IF (slave_write = '1') THEN
-					counter := 0;
-					memRead <= slave_writedata;
+
+			IF (slave_write = '1') THEN
+				counter := 0;
+				memRead <= slave_writedata;
+				
+				--Control the PWM signals depending on the input signal
+				PWM_0 := to_integer(signed(memRead(31 downto 24)));
+				PWM_1 := to_integer(signed(memRead(23 downto 16)));
+				doRecalibrate <= memRead(15);
+				
+				--If there is no control, so the PWM module should not be enabled
+				IF (PWM_0 = 0) THEN
+					enable0 <= '0';
 					
-					--Control the PWM signals depending on the input signal
-					PWM_0 := to_integer(signed(memRead(31 downto 24)));
-					PWM_1 := to_integer(signed(memRead(23 downto 16)));
-					doRecalibrate <= memRead(15);
-					
-					--If there is no control, so the PWM module should not be enabled
-					IF (PWM_0 = 0) THEN
-						enable0 <= '0';
-						
-					--If the Input signal is negative, so it should turn counter clockwise. Also inverts the PWM input signal so it is positive
-					ELSIF (PWM_0 < 0) THEN
-						enable0 <= '1';
-						CW0 <= '0';
-						--protection
-						IF (PWM_0 < -MAX_PWM) THEN
-							PWM_0 := -MAX_PWM;
-						END IF;
-						dutycycle0 <= -PWM_0;
-					ELSE
-						enable0 <= '1';
-						CW0 <= '1';
-						--protection
-						IF (PWM_0 > MAX_PWM) THEN
-							PWM_0 := MAX_PWM;
-						END IF;
-						dutycycle0 <= PWM_0;
+				--If the Input signal is negative, so it should turn counter clockwise. Also inverts the PWM input signal so it is positive
+				ELSIF (PWM_0 < 0) THEN
+					enable0 <= '1';
+					CW0 <= '0';
+					--protection
+					IF (PWM_0 < -MAX_PWM) THEN
+						PWM_0 := -MAX_PWM;
 					END IF;
-					
-					
-					--If there is no control, so the PWM module should not be enabled
-					IF (PWM_1 = 0) THEN
-						enable1 <= '0';
-						
-					--If the Input signal is negative, so it should turn counter clockwise. Also inverts the PWM input signal so it is positive
-					ELSIF (PWM_1 < 0) THEN
-						enable1 <= '1';
-						CW1 <= '0';
-						--protection
-						IF (PWM_1 < -MAX_PWM) THEN
-							PWM_1 := -MAX_PWM;
-						END IF;
-						dutycycle1 <= -PWM_1;
-					ELSE
-						enable1 <= '1';
-						CW1 <= '1';
-						--protection
-						IF (PWM_1 > MAX_PWM) THEN
-							PWM_1 := MAX_PWM;
-						END IF;
-						dutycycle1 <= PWM_1;
+					dutycycle0 <= -PWM_0;
+				ELSE
+					enable0 <= '1';
+					CW0 <= '1';
+					--protection
+					IF (PWM_0 > MAX_PWM) THEN
+						PWM_0 := MAX_PWM;
 					END IF;
-					
+					dutycycle0 <= PWM_0;
 				END IF;
-				counter := counter + 1;
-			ELSE --counter overflow, not enough messages received
+				
+				
+				--If there is no control, so the PWM module should not be enabled
+				IF (PWM_1 = 0) THEN
+					enable1 <= '0';
+					
+				--If the Input signal is negative, so it should turn counter clockwise. Also inverts the PWM input signal so it is positive
+				ELSIF (PWM_1 < 0) THEN
+					enable1 <= '1';
+					CW1 <= '0';
+					--protection
+					IF (PWM_1 < -MAX_PWM) THEN
+						PWM_1 := -MAX_PWM;
+					END IF;
+					dutycycle1 <= -PWM_1;
+				ELSE
+					enable1 <= '1';
+					CW1 <= '1';
+					--protection
+					IF (PWM_1 > MAX_PWM) THEN
+						PWM_1 := MAX_PWM;
+					END IF;
+					dutycycle1 <= PWM_1;
+				END IF;
+			END IF;
+			counter := counter + 1;
+			IF counter >= 5000000 THEN --check if a message was received in the last 100ms
 				counter := 0;
 				enable1 <= '0';
 				enable0 <= '0';
