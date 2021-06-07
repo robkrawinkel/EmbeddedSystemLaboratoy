@@ -22,23 +22,24 @@ ENTITY Communication IS
 	slave_byteenable	: IN  std_logic_vector((DATA_WIDTH/8)-1 downto 0);
 
 	-- Output signals for the PWM signal of PWM blocks
-	dutycycle0	: OUT integer range 0 to 100; 		--dutycycle of the signal in percentage
-	CW0			: OUT std_logic; 					--rotational direction of the signal
-	enable0     : OUT std_logic;					--enable for the PMW module
-	dutycycle1	: OUT integer range 0 to 100; 		--dutycycle of the signal in percentage
-	CW1			: OUT std_logic; 					--rotational direction of the signal
-	enable1     : OUT std_logic;					--enable for the PMW module
+	dutycycle0			: OUT integer range 0 to 100; 		--dutycycle of the signal in percentage
+	CW0					: OUT std_logic; 					--rotational direction of the signal
+	enable0     		: OUT std_logic;					--enable for the PMW module
+	dutycycle1			: OUT integer range 0 to 100; 		--dutycycle of the signal in percentage
+	CW1					: OUT std_logic; 					--rotational direction of the signal
+	enable1     		: OUT std_logic;					--enable for the PMW module
 	
 	-- Input signals from the encoder
-	stepCount0 	: IN integer;					--stepcount of the motor
-	stepCount1	: IN integer;
+	stepCount0 			: IN integer;					--stepcount of the motor
+	stepCount1			: IN integer;
 	
 	-- Maximum stepcount values
-	stepCount0Max : IN integer;					-- Maximum value the stepcount can reach.
-	stepCount1Max : IN integer;
+	stepCount0Max 		: IN integer;					-- Maximum value the stepcount can reach.
+	stepCount1Max 		: IN integer;
 	
 	--flag to recalibrate
-	doRecalibrate : OUT std_logic
+	doRecalibrate 		: OUT std_logic;
+	calibrate_running	: IN std_logic
 
 	);
 END ENTITY;
@@ -61,6 +62,7 @@ BEGIN
 		VARIABLE PWM_1 : integer range -128 to 128;
 		VARIABLE counter : integer;
 		VARIABLE sendID : integer range 0 to 7;
+		VARIABLE calibrate_running_old : std_logic;
 		
 	BEGIN
 		
@@ -73,20 +75,31 @@ BEGIN
 			memREAD <= (others => '0');
 			counter := 0;
 			doRecalibrate <= '0';
+			calibrate_running_old := '0';
 			sendID := 1;
+
 			
 			
 		ELSIF rising_edge(CLOCK_50) THEN
 			------------------------------------------------------- Sending data
 
+			-- Only send the max values on the falling edge of the calibrate_running signal (when calibration is finished)
+			IF calibrate_running /= calibrate_running_old AND calibrate_running = '0' THEN
+				sendID := 2;
+				calibrate_running_old := calibrate_running;
+			ELSE
+				calibrate_running_old := calibrate_running;
+			END IF;
+
+			-- Send data
 			IF (slave_read = '1') THEN
+
 				CASE sendID IS
 					WHEN 1 => 
-						memSend <= std_logic_vector(to_signed(sendID,3)) & std_logic_vector(to_signed(stepcount0,11)) & std_logic_vector(to_signed(stepCount1,11)) & std_logic_vector(to_signed(0,32-11-11-3));
-						sendID := 2;
+						memSend <= std_logic_vector(to_unsigned(sendID,3)) & std_logic_vector(to_unsigned(stepcount0,11)) & std_logic_vector(to_unsigned(stepCount1,11)) & std_logic_vector(to_signed(0,32-11-11-3));
 					WHEN 2 => 
-						memSend <= std_logic_vector(to_signed(sendID,3)) & std_logic_vector(to_signed(stepcount0Max,11)) & std_logic_vector(to_signed(stepCount1Max,11)) & std_logic_vector(to_signed(0,32-11-11-3));
-						sendId := 1;
+						memSend <= std_logic_vector(to_unsigned(sendID,3)) & std_logic_vector(to_unsigned(stepcount0Max,11)) & std_logic_vector(to_unsigned(stepCount1Max,11)) & std_logic_vector(to_signed(0,32-11-11-3));
+						sendID := 1;
 					WHEN OTHERS => 
 						memSend <= (others => '0') ;
 						sendID := 1;
@@ -151,14 +164,21 @@ BEGIN
 					END IF;
 					dutycycle1 <= PWM_1;
 				END IF;
+
+			ELSE
+
+				counter := counter + 1;
+				IF counter >= 50000000 THEN --check if a message was received in the last 100ms
+					counter := 0;
+					enable1 <= '0';
+					enable0 <= '0';
+					doRecalibrate <= '0';
+				END IF;
+				
 			END IF;
-			counter := counter + 1;
-			IF counter >= 5000000 THEN --check if a message was received in the last 100ms
-				counter := 0;
-				enable1 <= '0';
-				enable0 <= '0';
-				doRecalibrate <= '0';
-			END IF;
+
+			
+
 		END IF;
 		
 	END PROCESS;

@@ -1,0 +1,41 @@
+		Contents:
+
+example_code:
+contains c and cpp code for a device driver + example that can run on the ramstix in order to demonstrate communication with the fpga over GPMC
+
+fpga:
+contains vhdl code aswell as a constraints file to help setup a quartus project and to start communicating with the gumstix processor over GPMC.
+
+kernal_module:
+contains the kernal object that should be loaded on the gumstix processor before starting communication over GPMC.
+
+
+
+		1. Linux Kernal Module
+
+before getting started with commucation you should load the kernal module for GPMC onto your gumstix device. In order to do this first copy the gpmc_fpga.ko located in the kernal_module folder to your gumstix (e.g. using scp) and then execute the following command on the gumstix:
+
+insmod gpmc_fpga.ko
+
+you should see a message that the kernal module has been correctly loaded.
+
+
+
+		2. Device driver and Example code
+
+A driver along with example code in both C and C++ have been provided for communicating with the fpga along GPMC in the example_code folder.
+
+in order to compile the code open a terminal in the example_code folder and either type:
+make c
+or 
+make cpp
+
+After copying the code to the gumstix it can be executing by typing:
+./gpmc_example_c(pp) /dev/gpmc_fpga
+
+		
+
+		3. FPGA code
+some VHDL files have been provided in the fpga folder that can help you get started with communication over GPMC. If you choose to do the final demonstrator on the Ramstix board it is likely that you will have to create a NIOS2 IP core that can connect the GPMC and the avalon bus.
+
+

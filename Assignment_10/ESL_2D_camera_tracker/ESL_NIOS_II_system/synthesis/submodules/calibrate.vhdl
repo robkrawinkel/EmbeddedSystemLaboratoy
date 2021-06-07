@@ -44,7 +44,9 @@ ARCHITECTURE bhv OF calibrate IS
 	
 	CONSTANT calibrate_clockTimeout 		: integer := 5000000;	-- 5.000.000 clock pulses for 100ms
 	CONSTANT calibrate_stepCount_driftMax 	: integer := 5;			-- The maximum amount of steps a stepCount may drift at the end position
-	CONSTANT calibrate_dutyCycle			: integer := 20;		-- Dutycycle that powers the motors during calibration
+	CONSTANT calibrate0_dutyCycle			: integer := 50;		-- Dutycycle that powers the motors during calibration
+	CONSTANT calibrate1_dutyCycle			: integer := 25;		-- Dutycycle that powers the motors during calibration
+	CONSTANT calibrateR_dutyCycle			: integer := 20;		-- Dutycycle when moving to final position
 
 BEGIN
 
@@ -68,6 +70,11 @@ BEGIN
 			calibrate_running <= '0';
 
 			calibrate_enable_old := '0';
+
+			stepCount0_min <= -8192;
+			stepCount0_max <= 8191;
+			stepCount1_min <= -8192;
+			stepCount1_max <= 8191;
 			
 		ELSIF rising_edge(CLOCK_50) THEN
 
@@ -101,8 +108,8 @@ BEGIN
 						stepCount1_max <= 8191;
 
 						-- Setup the motors
-						dutycycle0 <= calibrate_dutyCycle;
-						dutycycle1 <= calibrate_dutyCycle;
+						dutycycle0 <= calibrate0_dutyCycle;
+						dutycycle1 <= calibrate1_dutyCycle;
 
 						-- Update state
 						calibrate_state := 1;
@@ -218,6 +225,10 @@ BEGIN
 						CW0 <= '0';
 						CW1 <= '0';
 
+						-- Setup the motors
+						dutycycle0 <= calibrateR_dutyCycle;
+						dutycycle1 <= calibrateR_dutyCycle;
+
 						-- If motor 0 is not at its half way point yet
 						IF (stepCount0 > stepCount0_max / 2) THEN
 							PWM_enable0 <= '1';
@@ -233,7 +244,7 @@ BEGIN
 						END IF;
 
 						-- If both are at their half way point (the motors have been disabled), calibration is complete
-						IF (PWM_enable0 = '0' AND PWM_enable1 = '0') THEN
+						IF (stepCount0 <= stepCount0_max / 2 AND stepCount1 <= stepCount1_max / 2) THEN
 							calibrate_running <= '0';
 							calibrate_state := 0;
 						END IF;

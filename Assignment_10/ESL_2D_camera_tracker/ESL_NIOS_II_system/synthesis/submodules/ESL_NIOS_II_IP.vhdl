@@ -103,7 +103,7 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 			dutycycle	: IN integer range 0 to 100; 		--dutycycle OF the SIGNAL IN percentage
 			CW			: IN std_logic; 					--rotational direction OF the SIGNAL
 
-			-- Output pwm_SIGNAL and rotation direction
+			-- Output pwm_SIGNAL and rotationstepCount1_max direction
 			PWM_SIGNAL 	: OUT std_logic;
 			INA 		: OUT std_logic;
 			INB			: OUT std_logic;
@@ -162,10 +162,7 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 	SIGNAL COMM_CW1			: std_logic;
 	SIGNAL COMM_enable0		: std_logic;
 	SIGNAL COMM_enable1		: std_logic;
-	SIGNAL COMM_doRecalibrate: std_logic;
-	SIGNAL COMM_max0 : integer := 0;
-	SIGNAL COMM_max1 : integer := 0;
-	
+	SIGNAL COMM_recalibrate : std_logic;
 	
 	COMPONENT Communication
 		PORT (
@@ -183,24 +180,24 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 			slave_byteenable	: IN  std_logic_vector((DATA_WIDTH/8)-1 downto 0);
 
 			-- Output signals for the PWM signal of PWM blocks
-			dutycycle0	: OUT integer range 0 to 100; 		--dutycycle of the signal in percentage
-			CW0			: OUT std_logic; 					--rotational direction of the signal
-			enable0     : OUT std_logic;					--enable for the PMW module
-			dutycycle1	: OUT integer range 0 to 100; 		--dutycycle of the signal in percentage
-			CW1			: OUT std_logic; 					--rotational direction of the signal
-			enable1     : OUT std_logic;					--enable for the PMW module
+			dutycycle0			: OUT integer range 0 to 100; 		--dutycycle of the signal in percentage
+			CW0					: OUT std_logic; 					--rotational direction of the signal
+			enable0     		: OUT std_logic;					--enable for the PMW module
+			dutycycle1			: OUT integer range 0 to 100; 		--dutycycle of the signal in percentage
+			CW1					: OUT std_logic; 					--rotational direction of the signal
+			enable1     		: OUT std_logic;					--enable for the PMW module
 			
 			-- Input signals from the encoder
-			stepCount0 	: IN integer;					--stepcount of the motor
-			stepCount1	: IN integer;
+			stepCount0 			: IN integer;					--stepcount of the motor
+			stepCount1			: IN integer;
 			
-				-- Maximum stepcount values
-	stepCount0Max : IN integer;					-- Maximum value the stepcount can reach.
-	stepCount1Max : IN integer;
-	
-	--flag to recalibrate
-	doRecalibrate : OUT std_logic
-
+			-- Maximum stepcount values
+			stepCount0Max 		: IN integer;					-- Maximum value the stepcount can reach.
+			stepCount1Max 		: IN integer;
+			
+			--flag to recalibrate
+			doRecalibrate 		: OUT std_logic;
+			calibrate_running	: IN std_logic
 
 			);
 	END COMPONENT;
@@ -291,7 +288,7 @@ BEGIN
 		
 	-- Initialize Communication IP
 	CommunicationIP: Communication
-			PORT MAP(
+		PORT MAP(
 			-- CLOCK and reset
 			reset		=> reset,
 			CLOCK_50	=> clk,
@@ -317,13 +314,14 @@ BEGIN
 			stepCount1	=> stepCount1,
 			
 				-- Maximum stepcount values
-			stepCount0Max => COMM_max0,					-- Maximum value the stepcount can reach.
-			stepCount1Max => COMM_max1,
+			stepCount0Max => stepCount0_max,					-- Maximum value the stepcount can reach.
+			stepCount1Max => stepCount1_max,
 	
 			--flag to recalibrate
-			doRecalibrate => COMM_doRecalibrate
+			doRecalibrate => COMM_recalibrate,
+			calibrate_running => CALL_calibrate_running
 
-			);
+		);
 	
 
 	CalibrateIP: calibrate
@@ -397,7 +395,7 @@ BEGIN
 				-- If not calibrating, the motors are controlled by the communication process
 
 				-- Turn off calibration now that it is finished
-				CALL_calibrate_enable <= '0';
+				CALL_calibrate_enable <= COMM_recalibrate;
 
 				-- Don't reset the step counter
 				stepReset <= '0';
@@ -407,8 +405,24 @@ BEGIN
 				PWM_dutycycle1 	<= COMM_dutycycle1;
 				PWM_CW0 		<= COMM_CW0;
 				PWM_CW1			<= COMM_CW1;
-				PWM_enable0		<= COMM_enable0;
-				PWM_enable1		<= COMM_enable1;
+
+				-- Check if Motor 0 is at its min or max, if so, stop it from rotating any further
+				IF (stepCount0 <= stepCount0_min + 1 AND COMM_CW0 = '0') OR
+				   (stepCount0 >= stepCount0_max - 1 AND COMM_CW0 = '1') THEN
+
+					PWM_enable0 <= '0';
+				ELSE
+					PWM_enable0		<= COMM_enable0;
+				END IF;
+
+				-- Check if Motor 1 is at its min or max, if so, stop it from rotating any further
+				IF (stepCount1 <= stepCount1_min + 1 AND COMM_CW1 = '0') OR
+				   (stepCount1 >= stepCount1_max - 1 AND COMM_CW1 = '1') THEN
+
+					PWM_enable1 <= '0';
+				ELSE
+					PWM_enable1		<= COMM_enable1;
+				END IF;
 
 			END IF;
 
