@@ -26,7 +26,7 @@ entity ramstix_gpmc_driver is
     clk           : in    std_logic;
     -- Input (data from fpga to gumstix) at IDX 0 and IDX 1
     in_reg0 : in std_logic_vector(DATA_WIDTH - 1 downto 0);
-	  in_reg1 : in std_logic_vector(DATA_WIDTH - 1 downto 0);
+	 in_reg1 : in std_logic_vector(DATA_WIDTH - 1 downto 0);
 
     -- Output (data from gumstix to fpga) at IDX 2 and IDX 3
     out_reg2      : out   std_logic_vector(DATA_WIDTH - 1 downto 0);
@@ -73,7 +73,10 @@ begin
     variable gpmc_ram_addr : integer;
   begin
     -- A negative chipselect (GPMC_nCS6) indicates a read- or write operation on the GPMC bus.
-    gpmc_ram_addr := to_i signal ram : mem_type; then
+    gpmc_ram_addr := to_integer(unsigned(gpmc_addr_in));
+
+    if (rising_edge(clk)) then
+      if (gpmc_ncs = '0') then
         if (gpmc_nwe = '0') then
           if (gpmc_ram_addr < RAM_SIZE) then
             ram(gpmc_ram_addr) <= gpmc_data_in;
@@ -92,7 +95,7 @@ begin
 			ram(1)   <= in_reg1(15 downto 0);
 			
 			-- example: you can write to idx 2 and idx 3 from gumstix to send your data to FPGA
-			out_reg2(15 downto  signal ram : mem_type;0) <= ram(2);
+			out_reg2(15 downto 0) <= ram(2);
 			out_reg3(15 downto 0) <= ram(3);
 
     end if;

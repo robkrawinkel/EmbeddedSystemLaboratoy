@@ -12,14 +12,14 @@ ENTITY ESL_NIOS_II_IP IS
 		clk				: IN  std_logic;
 		reset			: IN  std_logic;
 
-		-- Signals to connect to an Avalon-MM slave INterface
-		slave_address		: IN  std_logic_vector(7 downto 0);
-		slave_read			: IN  std_logic;
-		slave_write			: IN  std_logic;
-		slave_readdata		: OUT std_logic_vector(DATA_WIDTH-1 downto 0);
-		slave_writedata		: IN  std_logic_vector(DATA_WIDTH-1 downto 0);
-		slave_byteenable	: IN  std_logic_vector((DATA_WIDTH/8)-1 downto 0);
-
+		-- GPMC side
+		GPMC_DATA     : inout std_logic_vector(16 - 1 downto 0);
+		GPMC_ADDR     : in    std_logic_vector(GPMC_ADDR_WIDTH_HIGH downto GPMC_ADDR_WIDTH_LOW);
+		GPMC_nPWE     : in    std_logic;
+		GPMC_nOE      : in    std_logic;
+		GPMC_FPGA_IRQ : in    std_logic;
+		GPMC_nCS6     : in    std_logic;
+		GPMC_CLK      : in    std_logic;
 		-- Signals to connect to custom user logic
 		LED				: OUT std_logic_vector(LED_WIDTH-1 downto 0);
 		GPIO_0			: INOUT std_logic_vector(33 downto 0);
@@ -38,15 +38,6 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 	-- Internal memory for the system and a subset for the IP
 	SIGNAL mem        		: std_logic_vector(31 downto 0);
 	SIGNAL memSEND    		: std_logic_vector(31 downto 0);
-
-
------------------------------------------------------------------------------- ARCHITECTURE - Quadrature encoder ------------------------------------------------------------------------------
-
-
-	-- Signals for quadrature encoder
-	SIGNAL stepCount0 		: integer RANGE -8192 TO 8191;
-	SIGNAL stepCount1 		: integer RANGE -8192 TO 8191;
-
 	SIGNAL stepCount0_min	: integer RANGE -8192 TO 0;
 	SIGNAL stepCount0_max	: integer RANGE 0 TO 8191;
 	SIGNAL stepCount1_min	: integer RANGE -8192 TO 0;
@@ -80,7 +71,6 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 
 
 ------------------------------------------------------------------------------ ARCHITECTURE - PWM module ------------------------------------------------------------------------------
-
 
 	-- Signals for the PWM generation
 	SIGNAL PWM_frequency 	: integer range 0 to 50000000;
@@ -147,9 +137,6 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 			stepCount0			: IN integer RANGE -8192 TO 8191;
 			stepCount0_min		: OUT integer RANGE -8192 TO 0;
 			stepCount0_max		: OUT integer RANGE 0 TO 8191;
-			stepCount1			: IN integer RANGE -8192 TO 8191;
-			stepCount1_min		: OUT integer RANGE -8192 TO 0;
-			stepCount1_max		: OUT integer RANGE 0 TO 8191;
 			stepReset			: OUT std_logic
 
 		);
@@ -168,16 +155,17 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 		PORT (
 			-- CLOCK and reset
 			reset		: IN std_logic;
-			CLOCK_50	: IN std_logic;
+			CLOCK_50	: IN sDATA_WIDTHtd_logic;
 			
 
-			-- Signals to connect to an Avalon-MM slave INterface
-			slave_address		: IN  std_logic_vector(7 downto 0);
-			slave_read			: IN  std_logic;
-			slave_write			: IN  std_logic;
-			slave_readdata		: OUT std_logic_vector(DATA_WIDTH-1 downto 0);
-			slave_writedata		: IN  std_logic_vector(DATA_WIDTH-1 downto 0);
-			slave_byteenable	: IN  std_logic_vector((DATA_WIDTH/8)-1 downto 0);
+			-- GPMC side
+			GPMC_DATA     : inout std_logic_vector(16 - 1 downto 0);
+			GPMC_ADDR     : in    std_logic_vector(GPMC_ADDR_WIDTH_HIGH downto GPMC_ADDR_WIDTH_LOW);
+			GPMC_nPWE     : in    std_logic;
+			GPMC_nOE      : in    std_logic;
+			GPMC_FPGA_IRQ : in    std_logic;
+			GPMC_nCS6     : in    std_logic;
+			GPMC_CLK      : in    std_logic;
 
 			-- Output signals for the PWM signal of PWM blocks
 			dutycycle0			: OUT integer range 0 to 100; 		--dutycycle of the signal in percentage
@@ -230,7 +218,7 @@ BEGIN
 		);
 
 	-- Initialize encoder 1
-	encoder1: QuadratureEncoder
+	encoder1: QuaratureEncoder
 		PORT MAP (
 			-- CLOCK and reset
 			reset		=> reset,
@@ -293,23 +281,18 @@ BEGIN
 			reset		=> reset,
 			CLOCK_50	=> clk,
 			
-			-- Signals to connect to an Avalon-MM slave INterface
-			slave_address	=> slave_address,	
-			slave_read		=> slave_read,
-			slave_write		=> slave_write,
-			slave_readdata	=> slave_readdata,
-			slave_writedata	=> slave_writedata,
-			slave_byteenable=> slave_byteenable,
+			GPMC_DATA     => GPMC_DATA,
+			GPMC_ADDR     => GPMC_ADDR,
+			GPMC_nPWE     => GPMC_nPWE,
+			GPMC_nOE      => GPMC_nOE,
+			GPMC_FPGA_IRQ => GPMC_FPGA_IRQ,
+			GPMC_nCS6     => GPMC_nCS6,
+			GPMC_CLK      => GPMC_CLK,
 
 			-- Output signals for the PWM signal of PWM blocks
 			dutycycle0	=> COMM_dutycycle0,
 			CW0			=> COMM_CW0,
 			enable0     => COMM_enable0,
-			dutycycle1	=> COMM_dutycycle1,
-			CW1			=> COMM_CW1,
-			enable1     => COMM_enable1,
-			
-			-- Input signals from the encoder
 			stepCount0 	=> stepCount0,
 			stepCount1	=> stepCount1,
 			
