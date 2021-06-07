@@ -162,6 +162,9 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 	SIGNAL COMM_CW1			: std_logic;
 	SIGNAL COMM_enable0		: std_logic;
 	SIGNAL COMM_enable1		: std_logic;
+	SIGNAL COMM_doRecalibrate: std_logic;
+	SIGNAL COMM_max0 : integer := 0;
+	SIGNAL COMM_max1 : integer := 0;
 	
 	
 	COMPONENT Communication
@@ -189,7 +192,15 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 			
 			-- Input signals from the encoder
 			stepCount0 	: IN integer;					--stepcount of the motor
-			stepCount1	: IN integer
+			stepCount1	: IN integer;
+			
+				-- Maximum stepcount values
+	stepCount0Max : IN integer;					-- Maximum value the stepcount can reach.
+	stepCount1Max : IN integer;
+	
+	--flag to recalibrate
+	doRecalibrate : OUT std_logic
+
 
 			);
 	END COMPONENT;
@@ -303,7 +314,15 @@ BEGIN
 			
 			-- Input signals from the encoder
 			stepCount0 	=> stepCount0,
-			stepCount1	=> stepCount1
+			stepCount1	=> stepCount1,
+			
+				-- Maximum stepcount values
+			stepCount0Max => COMM_max0,					-- Maximum value the stepcount can reach.
+			stepCount1Max => COMM_max1,
+	
+			--flag to recalibrate
+			doRecalibrate => COMM_doRecalibrate
+
 			);
 	
 

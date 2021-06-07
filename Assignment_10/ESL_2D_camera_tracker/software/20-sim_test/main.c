@@ -42,6 +42,8 @@
 #include "xxsubmod.h"
 
 #define pi 3.1415926538
+uint16_t maxStepCount0 = 1115;
+uint16_t maxStepCount1 = 221;
 
 void InitUart()
 {
@@ -56,18 +58,17 @@ void InitUart()
     alt_irq_enable (UART_0_IRQ);
 }
 
-double StepcountTiltToSI(int16_t steps)
+double Stepcount1ToSI(int16_t steps)
 {
-	static double stepsPerRotation = 221/170*360;
+	double stepsPerRotation = maxStepCount1/170*360;
 	return steps/stepsPerRotation*2*pi;
 
 }
 
-double StepcountPanToSI(int16_t steps)
+double Stepcount0ToSI(int16_t steps)
 {
-	static double stepsPerRotation = 617/180*360;
+	double stepsPerRotation = maxStepCount0/325*360;
 	return steps/stepsPerRotation*2*pi;
-
 }
 
 int main()
@@ -107,11 +108,27 @@ int main()
 
 		//avalon bus communication
 		nReadOut = IORD(ESL_NIOS_II_IP_0_BASE, 0x00);
-
-		stepCount0 = nReadOut >> (32-11);
-		int32_t temp32 = 0;
-		temp32 = nReadOut << 11;
-		stepCount1 = temp32 >> (32-11);
+		unsigned int readID = nReadOut >> 29;
+		nReadOut = nReadOut << 3;
+		switch (readID)​{
+			case 1:
+				stepCount0 = nReadOut >> (32-11);
+				int32_t temp32 = 0;
+				temp32 = nReadOut << 11;
+				stepCount1 = temp32 >> (32-11);
+				break;
+			case 2:
+				maxStepCount0 = nReadOut >> (32-11);
+				int32_t temp32 = 0;
+				temp32 = nReadOut << 11;
+				maxStepCount1 = temp32 >> (32-11);
+				break;
+			default:
+				// default statements
+		}
+		
+		
+		
 
 		if(stepCount0 != stepCount0Old || stepCount1 != stepCount1Old)
 			printf("stepCount0: %d\t stepCount1: %d \n\r", stepCount0, stepCount1);
@@ -133,7 +150,7 @@ int main()
 		
 		
 		/* Call the 20-sim submodel to calculate the output */
-		u[2] = StepcountTiltToSI(stepCount0);
+		u[2] = Stepcount0ToSI(stepCount0);
 		double temp = y[0];
 		
 		printf("%f\n",temp);

@@ -31,7 +31,14 @@ ENTITY Communication IS
 	
 	-- Input signals from the encoder
 	stepCount0 	: IN integer;					--stepcount of the motor
-	stepCount1	: IN integer
+	stepCount1	: IN integer;
+	
+	-- Maximum stepcount values
+	stepCount0Max : IN integer;					-- Maximum value the stepcount can reach.
+	stepCount1Max : IN integer;
+	
+	--flag to recalibrate
+	doRecalibrate : OUT std_logic
 
 	);
 END ENTITY;
@@ -52,6 +59,8 @@ BEGIN
 		-- Variables that store the amount of clock cycles to count based on the set frequency and dutycycle
 		VARIABLE PWM_0 : integer range -128 to 128;
 		VARIABLE PWM_1 : integer range -128 to 128;
+		VARIABLE counter : integer;
+		VARIABLE sendID : integer range 0 to 7;
 		
 	BEGIN
 		
@@ -62,22 +71,39 @@ BEGIN
 			enable1 <= '0';
 			memSend <= (others => '0');
 			memREAD <= (others => '0');
+			counter := 0;
+			doRecalibrate <= '0';
+			sendID := 1;
 			
 			
 		ELSIF rising_edge(CLOCK_50) THEN
-			memSEND <= std_logic_vector(to_signed(stepcount0,11)) & std_logic_vector(to_signed(stepCount1,11)) & std_logic_vector(to_signed(0,32-11-11));
-			--sending data
+			------------------------------------------------------- Sending data
+
 			IF (slave_read = '1') THEN
+				CASE sendID IS
+					WHEN 1 => 
+						memSend <= std_logic_vector(to_signed(sendID,3)) & std_logic_vector(to_signed(stepcount0,11)) & std_logic_vector(to_signed(stepCount1,11)) & std_logic_vector(to_signed(0,32-11-11-3));
+						sendID := 2;
+					WHEN 2 => 
+						memSend <= std_logic_vector(to_signed(sendID,3)) & std_logic_vector(to_signed(stepcount0Max,11)) & std_logic_vector(to_signed(stepCount1Max,11)) & std_logic_vector(to_signed(0,32-11-11-3));
+						sendId := 1;
+					WHEN OTHERS => 
+						memSend <= (others => '0') ;
+						sendID := 1;
+				END CASE;
 				slave_readdata <= memSEND;
 			END IF;
 			
-			--reading data
+			---------------------------------------------------- Reading data
+
 			IF (slave_write = '1') THEN
+				counter := 0;
 				memRead <= slave_writedata;
 				
 				--Control the PWM signals depending on the input signal
 				PWM_0 := to_integer(signed(memRead(31 downto 24)));
 				PWM_1 := to_integer(signed(memRead(23 downto 16)));
+				doRecalibrate <= memRead(15);
 				
 				--If there is no control, so the PWM module should not be enabled
 				IF (PWM_0 = 0) THEN
@@ -125,8 +151,13 @@ BEGIN
 					END IF;
 					dutycycle1 <= PWM_1;
 				END IF;
-				
-				
+			END IF;
+			counter := counter + 1;
+			IF counter >= 5000000 THEN --check if a message was received in the last 100ms
+				counter := 0;
+				enable1 <= '0';
+				enable0 <= '0';
+				doRecalibrate <= '0';
 			END IF;
 		END IF;
 		
