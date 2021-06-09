@@ -23,7 +23,7 @@ static void on_trackbar(int, void*)
 
 int main( int argc, char** argv )
 {
-    VideoCapture cap("video.mp4"); //capture the video from file
+    VideoCapture cap(0); //capture the video from webcam
 
     if ( !cap.isOpened() )  // if not success, exit program
     {
@@ -33,13 +33,13 @@ int main( int argc, char** argv )
 
     namedWindow("Control", WINDOW_AUTOSIZE); //create a window called "Control"
 
-    int iLowH = 170;
-    int iHighH = 179;
+    int iLowH = 35;
+    int iHighH = 102;
 
-    int iLowS = 150; 
+    int iLowS = 131; 
     int iHighS = 255;
 
-    int iLowV = 60;
+    int iLowV = 0;
     int iHighV = 255;
 
     //Create trackbars in "Control" window

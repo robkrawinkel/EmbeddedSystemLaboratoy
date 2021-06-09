@@ -4,13 +4,13 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/esl/Documents/Red Object Tracking/main.cpp" "/home/esl/Documents/Red Object Tracking/CMakeFiles/main.dir/main.cpp.o"
+  "/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Red_Object_Tracking/main.cpp" "/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Red_Object_Tracking/CMakeFiles/main.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/usr/local/include/opencv4"
+  "/usr/include/opencv"
   )
 
 # Targets to which this target links.
