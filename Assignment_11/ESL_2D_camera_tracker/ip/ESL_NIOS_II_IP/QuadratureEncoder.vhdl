@@ -28,13 +28,13 @@ ENTITY QuadratureEncoder IS
 	signalB		: IN std_logic;
 	
 	-- Output step counter in 32 bits signed
-	stepCount 	: INOUT integer RANGE -8192 TO 8191;
+	stepCount 	: OUT integer RANGE -8192 TO 8191;
 
-	-- Input stepCount min and max value
+	-- Input stepCountInternal min and max value
 	stepCount_min	: IN integer RANGE -8192 TO 0;
 	stepCount_max	: IN integer RANGE 0 TO 8191;
 
-	--Reset stepcount to 0
+	--Reset stepCountInternal to 0
 	stepReset : IN std_logic
 
 	);
@@ -42,6 +42,7 @@ END ENTITY;
 
 ARCHITECTURE bhv OF QuadratureEncoder IS
 	SIGNAL inputSignals : std_logic_vector(1 downto 0);
+	SIGNAL stepCountInternal : integer RANGE -8192 TO 8191;
 
 BEGIN
 
@@ -59,7 +60,7 @@ BEGIN
 		
 		-- Reset everything
 		IF reset = '1' THEN
-			stepCount <= 0;
+			stepCountInternal <= 0;
 			state := 4;
 			CW := '0';
 			
@@ -67,7 +68,7 @@ BEGIN
 		ELSIF rising_edge(CLOCK_50) THEN
 
 			IF stepReset = '1' THEN
-				stepCount <= 0;
+				stepCountInternal <= 0;
 			END IF;
 
 			inputSignals <= signalA & signalB;
@@ -99,10 +100,10 @@ BEGIN
 					ELSIF state = 0 AND oldState = 3 THEN
 						CW := '1';
 
-						IF stepCount < stepCount_max THEN
-							stepCount <= stepCount + 1;
+						IF stepCountInternal < stepCount_max THEN
+							stepCountInternal <= stepCountInternal + 1;
 						ELSE
-							stepCount <= stepCount_max;
+							stepCountInternal <= stepCount_max;
 						END IF;
 
 					ELSIF state = oldState - 1 THEN
@@ -110,26 +111,26 @@ BEGIN
 					ELSIF state = 3 AND oldState = 0 THEN
 						CW := '0';
 
-						IF stepCount > stepCount_min THEN
-							stepCount <= stepCount - 1;
+						IF stepCountInternal > stepCount_min THEN
+							stepCountInternal <= stepCountInternal - 1;
 						ELSE
-							stepCount <= stepCount_min;
+							stepCountInternal <= stepCount_min;
 						END IF;
 
 					ELSE
 						-- if it is not an increase or decrease of one step, assume the rotational direction didn't change and check if the counter should be increased
 						IF state < oldState AND CW = '1' THEN
-							IF stepCount < stepCount_max THEN
-								stepCount <= stepCount + 1;
+							IF stepCountInternal < stepCount_max THEN
+								stepCountInternal <= stepCountInternal + 1;
 							ELSE
-								stepCount <= stepCount_max;
+								stepCountInternal <= stepCount_max;
 							END IF;
 
 						ELSIF state > oldState AND CW = '0' THEN
-							IF stepCount > stepCount_min THEN
-								stepCount <= stepCount - 1;
+							IF stepCountInternal > stepCount_min THEN
+								stepCountInternal <= stepCountInternal - 1;
 							ELSE
-								stepCount <= stepCount_min;
+								stepCountInternal <= stepCount_min;
 							END IF;
 							
 						END IF;
@@ -141,6 +142,7 @@ BEGIN
 			
 			--store old state for next loop
 			oldState := state;
+			stepCount <= stepCountInternal;
 			
 		END IF;
 		

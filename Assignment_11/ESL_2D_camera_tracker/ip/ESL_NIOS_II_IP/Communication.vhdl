@@ -5,7 +5,10 @@ USE IEEE.numeric_std.ALL;
 ENTITY Communication IS
 	GENERIC (
 		DATA_WIDTH 	: natural := 32;	-- word size OF each INput and OUTput regISter
-		MAX_PWM		: natural := 100	-- maximum speed for the motors
+		MAX_PWM		: natural := 100;	-- maximum speed for the motors
+		GPMC_ADDR_WIDTH_HIGH : integer := 10;
+		GPMC_ADDR_WIDTH_LOW  : integer := 1;
+		RAM_SIZE             : integer := 32
 	);
 	PORT (
 	-- CLOCK and reset

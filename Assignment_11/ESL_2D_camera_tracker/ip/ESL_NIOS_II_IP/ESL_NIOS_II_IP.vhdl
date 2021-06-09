@@ -5,12 +5,23 @@ USE IEEE.numeric_std.ALL;
 ENTITY ESL_NIOS_II_IP IS
 	GENERIC (
 		DATA_WIDTH : natural := 32;	-- word size OF each INput and OUTput regISter
-		LED_WIDTH  : natural := 8	-- numbers OF LEDs on the DE0-NANO
+		LED_WIDTH  : natural := 8;	-- numbers OF LEDs on the DE0-NANO
+		GPMC_ADDR_WIDTH_HIGH : integer := 10;
+		GPMC_ADDR_WIDTH_LOW  : integer := 1;
+		RAM_SIZE             : integer := 32
 	);
 	PORT (
 		-- Signals to connect to an Avalon clock source INterface
 		clk				: IN  std_logic;
 		reset			: IN  std_logic;
+		
+		-- Signals to connect to an Avalon-MM slave INterface
+		slave_address		: IN  std_logic_vector(7 downto 0);
+		slave_read			: IN  std_logic;
+		slave_write			: IN  std_logic;
+		slave_readdata		: OUT std_logic_vector(DATA_WIDTH-1 downto 0);
+		slave_writedata		: IN  std_logic_vector(DATA_WIDTH-1 downto 0);
+		slave_byteenable	: IN  std_logic_vector((DATA_WIDTH/8)-1 downto 0);
 
 		-- GPMC side
 		GPMC_DATA     : inout std_logic_vector(16 - 1 downto 0);
@@ -42,6 +53,8 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 	SIGNAL stepCount0_max	: integer RANGE 0 TO 8191;
 	SIGNAL stepCount1_min	: integer RANGE -8192 TO 0;
 	SIGNAL stepCount1_max	: integer RANGE 0 TO 8191;
+	signal stepCount0 : integer RANGE -8192 TO 8191;
+	signal stepCount1 : integer RANGE -8192 TO 8191;
 
 	SIGNAL stepReset		: std_logic;
 
@@ -57,7 +70,7 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 			SIGNALB	: IN std_logic;
 
 			-- OUTput step counter IN 32 bits signed
-			stepCount : INOUT integer RANGE -8192 TO 8191;
+			stepCount : OUT integer RANGE -8192 TO 8191;
 
 			-- Input stepCount min and max value
 			stepCount_min	: IN integer RANGE -8192 TO 0;
@@ -137,6 +150,9 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 			stepCount0			: IN integer RANGE -8192 TO 8191;
 			stepCount0_min		: OUT integer RANGE -8192 TO 0;
 			stepCount0_max		: OUT integer RANGE 0 TO 8191;
+			stepCount1			: IN integer RANGE -8192 TO 8191;
+			stepCount1_min		: OUT integer RANGE -8192 TO 0;
+			stepCount1_max		: OUT integer RANGE 0 TO 8191;
 			stepReset			: OUT std_logic
 
 		);
@@ -155,7 +171,7 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 		PORT (
 			-- CLOCK and reset
 			reset		: IN std_logic;
-			CLOCK_50	: IN sDATA_WIDTHtd_logic;
+			CLOCK_50	: IN std_logic;
 			
 
 			-- GPMC side
@@ -218,7 +234,7 @@ BEGIN
 		);
 
 	-- Initialize encoder 1
-	encoder1: QuaratureEncoder
+	encoder1: QuadratureEncoder
 		PORT MAP (
 			-- CLOCK and reset
 			reset		=> reset,
