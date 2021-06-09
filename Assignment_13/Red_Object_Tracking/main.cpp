@@ -6,19 +6,24 @@
 //#include "opencv2/highgui/highgui.hpp"
 //#include "opencv2/imgproc/imgproc.hpp"
 
+
+// Tweak the HSV values in that order:
+//  Set the ranges to maximum for all, try to narrow H first, don't create black spots in the tracked object
+//  Repeat for S and then V to find the ideal ranges
+
 using namespace cv;
 using namespace std;
 
 
 static void on_trackbar(int, void*)
 {
-
+    // Trackbar values don't need any processing so do nothing here
 }
 
 
 int main( int argc, char** argv )
 {
-    VideoCapture cap("video.mp4"); //capture the video from webcam
+    VideoCapture cap("video.mp4"); //capture the video from file
 
     if ( !cap.isOpened() )  // if not success, exit program
     {
