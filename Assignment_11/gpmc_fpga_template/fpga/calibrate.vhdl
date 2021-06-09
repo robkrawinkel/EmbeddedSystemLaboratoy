@@ -42,7 +42,7 @@ END ENTITY;
 
 ARCHITECTURE bhv OF calibrate IS
 	
-	CONSTANT calibrate_clockTimeout 		: integer := 5000000;	-- 5.000.000 clock pulses for 100ms
+	CONSTANT calibrate_clockTimeout 		: integer := 50000000;	-- 5.000.000 clock pulses for 100ms
 	CONSTANT calibrate_stepCount_driftMax 	: integer := 5;			-- The maximum amount of steps a stepCount may drift at the end position
 	CONSTANT calibrate0_dutyCycle			: integer := 50;		-- Dutycycle that powers the motors during calibration
 	CONSTANT calibrate1_dutyCycle			: integer := 25;		-- Dutycycle that powers the motors during calibration

@@ -36,12 +36,12 @@
 # -------------------------------------------------------------------------- #
 
 
-set_global_assignment -name FAMILY "Cyclone IV E"
-set_global_assignment -name DEVICE Auto
+set_global_assignment -name FAMILY "Cyclone III"
+set_global_assignment -name DEVICE EP3C40Q240C8
 set_global_assignment -name TOP_LEVEL_ENTITY setup_control
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 13.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "12:48:53  JUNE 02, 2021"
-set_global_assignment -name LAST_QUARTUS_VERSION "18.0.0 Lite Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION 13.1
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
@@ -232,7 +232,6 @@ set_location_assignment PIN_33 -to CLOCK_50
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLOCK_50
 set_global_assignment -name VHDL_FILE gpmc_fpga_template/fpga/QuadratureEncoder.vhdl
 set_global_assignment -name VHDL_FILE gpmc_fpga_template/fpga/PWM.vhdl
-set_global_assignment -name VHDL_FILE gpmc_fpga_template/fpga/ESL_NIOS_II_IP.vhdl
 set_global_assignment -name VHDL_FILE gpmc_fpga_template/fpga/Communication.vhdl
 set_global_assignment -name VHDL_FILE gpmc_fpga_template/fpga/calibrate.vhdl
 set_global_assignment -name SOURCE_FILE gpmc_fpga_template/fpga/ramstix_pin.qsf

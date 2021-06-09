@@ -1,0 +1,114 @@
+# do setup_control_run_msim_rtl_vhdl.do 
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Copying /opt/altera/13.1/modelsim_ase/linuxaloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# ** Warning: Copied /opt/altera/13.1/modelsim_ase/linuxaloem/../modelsim.ini to modelsim.ini.
+#          Updated modelsim.ini.
+# 
+# vcom -93 -work work {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/QuadratureEncoder.vhdl}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity QuadratureEncoder
+# -- Compiling architecture bhv of QuadratureEncoder
+# vcom -93 -work work {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/PWM.vhdl}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity PWM
+# -- Compiling architecture bhv of PWM
+# vcom -93 -work work {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/Communication.vhdl}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity Communication
+# -- Compiling architecture bhv of Communication
+# vcom -93 -work work {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/calibrate.vhdl}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity calibrate
+# -- Compiling architecture bhv of calibrate
+# vcom -93 -work work {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/ramstix_gpmc_driver.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity ramstix_gpmc_driver
+# -- Compiling architecture behavior of ramstix_gpmc_driver
+# vcom -93 -work work {/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/setup_control.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity setup_control
+# -- Compiling architecture structure of setup_control
+# 
+vsim work.setup_control
+# vsim work.setup_control 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.setup_control(structure)
+# Loading work.quadratureencoder(bhv)
+# Loading work.pwm(bhv)
+# Loading work.communication(bhv)
+# Loading work.ramstix_gpmc_driver(behavior)
+# Loading work.calibrate(bhv)
+# ** Failure: (vsim-3808) Incompatible modes for port "PWM_enable0".
+#    Time: 0 ps  Iteration: 0  Instance: /setup_control/CalibrateIP File: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/setup_control.vhd Line: 342
+# ** Failure: (vsim-3808) Incompatible modes for port "PWM_enable1".
+#    Time: 0 ps  Iteration: 0  Instance: /setup_control/CalibrateIP File: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/setup_control.vhd Line: 343
+# ** Failure: (vsim-3808) Incompatible modes for port "stepCount0_min".
+#    Time: 0 ps  Iteration: 0  Instance: /setup_control/CalibrateIP File: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/setup_control.vhd Line: 347
+# ** Failure: (vsim-3808) Incompatible modes for port "stepCount0_max".
+#    Time: 0 ps  Iteration: 0  Instance: /setup_control/CalibrateIP File: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/setup_control.vhd Line: 348
+# ** Failure: (vsim-3808) Incompatible modes for port "stepCount1_min".
+#    Time: 0 ps  Iteration: 0  Instance: /setup_control/CalibrateIP File: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/setup_control.vhd Line: 350
+# ** Failure: (vsim-3808) Incompatible modes for port "stepCount1_max".
+#    Time: 0 ps  Iteration: 0  Instance: /setup_control/CalibrateIP File: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/setup_control.vhd Line: 351
+# Fatal error at /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/setup_control.vhd line 351
+#  while elaborating region: /setup_control
+# Error loading design
+vsim work.setup_control
+# vsim work.setup_control 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.setup_control(structure)
+# Loading work.quadratureencoder(bhv)
+# Loading work.pwm(bhv)
+# Loading work.communication(bhv)
+# Loading work.ramstix_gpmc_driver(behavior)
+# Loading work.calibrate(bhv)
+# ** Failure: (vsim-3808) Incompatible modes for port "PWM_enable0".
+#    Time: 0 ps  Iteration: 0  Instance: /setup_control/CalibrateIP File: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/setup_control.vhd Line: 342
+# ** Failure: (vsim-3808) Incompatible modes for port "PWM_enable1".
+#    Time: 0 ps  Iteration: 0  Instance: /setup_control/CalibrateIP File: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/setup_control.vhd Line: 343
+# ** Failure: (vsim-3808) Incompatible modes for port "stepCount0_min".
+#    Time: 0 ps  Iteration: 0  Instance: /setup_control/CalibrateIP File: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/setup_control.vhd Line: 347
+# ** Failure: (vsim-3808) Incompatible modes for port "stepCount0_max".
+#    Time: 0 ps  Iteration: 0  Instance: /setup_control/CalibrateIP File: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/setup_control.vhd Line: 348
+# ** Failure: (vsim-3808) Incompatible modes for port "stepCount1_min".
+#    Time: 0 ps  Iteration: 0  Instance: /setup_control/CalibrateIP File: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/setup_control.vhd Line: 350
+# ** Failure: (vsim-3808) Incompatible modes for port "stepCount1_max".
+#    Time: 0 ps  Iteration: 0  Instance: /setup_control/CalibrateIP File: /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/setup_control.vhd Line: 351
+# Fatal error at /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_11/gpmc_fpga_template/fpga/setup_control.vhd line 351
+#  while elaborating region: /setup_control
+# Error loading design

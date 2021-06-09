@@ -29,16 +29,18 @@ entity setup_control is
     GPMC_CLK      : in    std_logic;
 	
 	-- control ports
-	ENC3A : IN std_logic;
-	ENC3B : IN std_logic;
-	ENC4A : IN std_logic;
-	ENC4B : IN std_logic;
-	PWM3A : OUT std_logic;
-	PWM3B : OUT std_logic;
-	PWM3C : OUT std_logic;
-	PWM4A : OUT std_logic;
-	PWM4B : OUT std_logic;
-	PWM4C : OUT std_logic
+	ENC3A : INOUT std_logic;
+	ENC3B : INOUT std_logic;
+	ENC4A : INOUT std_logic;
+	ENC4B : INOUT std_logic;
+	PWM3A : INOUT  std_logic;
+	PWM3B : INOUT  std_logic;
+	PWM3C : INOUT  std_logic;
+	PWM4A : INOUT  std_logic;
+	PWM4B : INOUT  std_logic;
+	PWM4C : INOUT  std_logic;
+
+	ENC1A : INOUT std_logic
 	
 	
 
@@ -49,7 +51,7 @@ end setup_control;
 
 architecture structure of setup_control is
 	-- RESET signal
-	SIGNAL reset : std_logic := '1';
+	SIGNAL reset : std_logic := '0';
   -- Internal memory for the system and a subset for the IP
 	SIGNAL mem        		: std_logic_vector(31 downto 0);
 	SIGNAL memSEND    		: std_logic_vector(31 downto 0);
@@ -121,7 +123,7 @@ architecture structure of setup_control is
 
 ------------------------------------------------------------------------------ ARCHITECTURE - Calibrate ------------------------------------------------------------------------------
 
-	SIGNAL CALL_calibrate_enable	: std_logic;
+	SIGNAL CALL_calibrate_enable	: std_logic := '1';
 	SIGNAL CALL_calibrate_running	: std_logic;
 	SIGNAL CALL_dutycycle0			: integer RANGE 0 TO 100;
 	SIGNAL CALL_dutycycle1			: integer RANGE 0 TO 100;
@@ -314,10 +316,9 @@ begin
 			stepCount0 	=> stepCount0,
 			stepCount1	=> stepCount1,
 			
-				-- Maximum stepcount values
+			-- Maximum stepcount values
 			stepCount0Max => stepCount0_max,					-- Maximum value the stepcount can reach.
 			stepCount1Max => stepCount1_max,
-	
 			--flag to recalibrate
 			doRecalibrate => COMM_recalibrate,
 			calibrate_running => CALL_calibrate_running
@@ -354,6 +355,25 @@ begin
 
 		);	
 	
+	--process to force reset
+	RESET_process : PROCESS(CLOCK_50)
+		VARIABLE counter : integer := 0;
+	BEGIN
+		if(rising_edge(CLOCK_50)) THEN
+			IF(counter >= 5000000) THEN
+				reset <= '0';
+			ELSIF counter >= 2500000 THEN
+				reset <= '1';
+				counter := counter + 1;
+			ELSE
+				counter := counter + 1;
+				reset <= '0';
+			END IF;
+		END IF;
+		ENC1A <= reset;
+	END process;
+
+
 
 	-- Process to handle PWM generation
 	PWM_process : PROCESS(CLOCK_50)
@@ -374,7 +394,6 @@ begin
 			-- Start calibration of the motors after reset
 			CALL_calibrate_enable <= '1';
 			stepReset <= '1';		-- Reset the stepcount
-			reset <= '0';
 
 		ELSIF rising_edge(CLOCK_50) THEN
 
