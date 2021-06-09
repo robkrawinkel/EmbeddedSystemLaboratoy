@@ -167,16 +167,16 @@ BEGIN
 						memSend <= (others => '0') ;
 						sendID := 1;
 				END CASE;
-				out_reg2(15 downto 0) <= memSEND(31 downto 16);
-				out_reg3(15 downto 0) <= memSend(15 downto 0);
+				in_reg0(15 downto 0) <= memSend(31 downto 16);
+				in_reg1(15 downto 0) <= memSend(15 downto 0);
 
 			
 			---------------------------------------------------- Reading data
 
 			
 				counter := 0;
-				memRead(31 downto 16) <= in_reg0(15 downto 0);
-				memRead(15 downto 0) <= in_reg1(15 downto 0);
+				memRead(31 downto 16) <= out_reg2(15 downto 0);
+				memRead(15 downto 0) <= out_reg3(15 downto 0);
 				
 				--Control the PWM signals depending on the input signal
 				PWM_0 := to_integer(signed(memRead(31 downto 24)));
