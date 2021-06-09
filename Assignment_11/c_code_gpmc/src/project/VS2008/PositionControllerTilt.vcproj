@@ -200,40 +200,44 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\EulerAngles.c"
+				RelativePath="..\..\PositionControllerTilt.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\motionprofiles.c"
+				RelativePath="..\..\test_PositionControllerTilt.cpp"
 				>
-			</File>
-			<File
-				RelativePath="..\..\xxfuncs.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\xxinteg.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\xxinverse.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\xxmain.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\xxmatrix.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\xxmodel.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\xxsubmod.c"
-				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -241,37 +245,171 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\..\EulerAngles.h"
+				RelativePath="..\..\PositionControllerTilt.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Support Files"
+			Filter="*.cpp;*.h"
+			>
+			<File
+				RelativePath="..\..\common\EulerAngles.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\common\EulerAngles.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\motionprofiles.h"
+				RelativePath="..\..\common\MotionProfiles.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\common\MotionProfiles.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\xxfuncs.h"
+				RelativePath="..\..\common\xxfuncs.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\common\xxfuncs.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\xxinteg.h"
+				RelativePath="..\..\common\xxinteg.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\common\xxinteg.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\xxmatrix.h"
+				RelativePath="..\..\common\xxinverse.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\common\xxinverse.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\xxmodel.h"
+				RelativePath="..\..\common\xxmatrix.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\common\xxmatrix.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\xxsubmod.h"
+				RelativePath="..\..\common\xxmodel.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\xxtypes.h"
+				RelativePath="..\..\common\xxtypes.h"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="Resource Files"
+			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+			>
 		</Filter>
 	</Files>
 	<Globals>

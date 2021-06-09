@@ -12,7 +12,7 @@ KERNEL_MODULE_DIR=$(PWD)/../kernel_module
 # Source files
 #
 SOURCE_FILES_C=$(SOURCE_DIR)/main.c $(SOURCE_DIR)/gpmc_driver_c.c
-SOURCE_FILES_CPP=$(SOURCE_DIR)/example_cpp.cpp $(SOURCE_DIR)/gpmc_driver_cpp.cpp
+SOURCE_FILES_CPP=$(SOURCE_DIR)/main.cpp $(SOURCE_DIR)/gpmc_driver_cpp.cpp
 
 #
 # Object files

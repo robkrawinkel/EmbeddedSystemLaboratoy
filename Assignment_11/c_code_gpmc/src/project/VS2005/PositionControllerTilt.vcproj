@@ -175,39 +175,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\EulerAngles.c"
+				RelativePath="..\..\PositionControllerTilt.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\MotionProfiles.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\xxfuncs.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\xxinteg.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\xxinverse.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\xxmain.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\xxmatrix.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\xxmodel.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\xxsubmod.c"
+				RelativePath="..\..\test_PositionControllerTilt.cpp"
 				>
 			</File>
 		</Filter>
@@ -217,35 +189,73 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\EulerAngles.h"
+				RelativePath="..\..\PositionControllerTilt.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Resource Files"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			>
+		</Filter>
+		<Filter
+			Name="Support Files"
+			>
+			<File
+				RelativePath="..\..\common\EulerAngles.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\MotionProfiles.h"
+				RelativePath="..\..\common\EulerAngles.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\xxfuncs.h"
+				RelativePath="..\..\common\MotionProfiles.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\xxinteg.h"
+				RelativePath="..\..\common\MotionProfiles.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\xxmatrix.h"
+				RelativePath="..\..\common\xxfuncs.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\xxmodel.h"
+				RelativePath="..\..\common\xxfuncs.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\xxsubmod.h"
+				RelativePath="..\..\common\xxinteg.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\xxtypes.h"
+				RelativePath="..\..\common\xxinteg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\xxinverse.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\xxinverse.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\xxmatrix.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\xxmatrix.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\xxmodel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\xxtypes.h"
 				>
 			</File>
 		</Filter>
