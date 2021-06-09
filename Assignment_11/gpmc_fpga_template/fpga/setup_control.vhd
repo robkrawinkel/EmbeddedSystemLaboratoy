@@ -29,16 +29,16 @@ entity setup_control is
     GPMC_CLK      : in    std_logic;
 	
 	-- control ports
-	ENC1A : IN std_logic;
-	ENC1B : IN std_logic;
-	ENC2A : IN std_logic;
-	ENC2B : IN std_logic;
-	PWM1A : OUT std_logic;
-	PWM1B : OUT std_logic;
-	PWM1C : OUT std_logic;
-	PWM2A : OUT std_logic;
-	PWM2B : OUT std_logic;
-	PWM2C : OUT std_logic
+	ENC3A : IN std_logic;
+	ENC3B : IN std_logic;
+	ENC4A : IN std_logic;
+	ENC4B : IN std_logic;
+	PWM3A : OUT std_logic;
+	PWM3B : OUT std_logic;
+	PWM3C : OUT std_logic;
+	PWM4A : OUT std_logic;
+	PWM4B : OUT std_logic;
+	PWM4C : OUT std_logic
 	
 	
 
@@ -222,8 +222,8 @@ begin
 			CLOCK_50	=> CLOCK_50,
 
 			-- Signals from the encoder
-			SIGNALA	=> ENC1A,
-			SIGNALB	=> ENC1B,
+			SIGNALA	=> ENC3A,
+			SIGNALB	=> ENC3B,
 			
 			-- Output step count
 			stepCount => stepCount0,
@@ -243,8 +243,8 @@ begin
 			CLOCK_50	=> CLOCK_50,
 
 			-- SIGNALs from the encoder
-			SIGNALA	=> ENC2A,
-			SIGNALB	=> ENC2B,
+			SIGNALA	=> ENC4A,
+			SIGNALB	=> ENC4B,
 
 			-- OUTput step count
 			stepCount => stepCount1,
@@ -267,9 +267,9 @@ begin
 			dutycycle	=> PWM_dutycycle0,
 			CW			=> PWM_CW0,
 			-- OUTput pwm_SIGNAL and rotation direction
-			PWM_SIGNAL 	=> PWM1C,
-			INA 		=> PWM1A,
-			INB			=> PWM1B,
+			PWM_SIGNAL 	=> PWM3C,
+			INA 		=> PWM3A,
+			INB			=> PWM3B,
 			
 			enable		=> PWM_enable0
 			);
@@ -285,9 +285,9 @@ begin
 			dutycycle	=> PWM_dutycycle1,
 			CW			=> PWM_CW1,
 			-- OUTput pwm_SIGNAL and rotation direction
-			PWM_SIGNAL 	=> PWM2C,
-			INA 		=> PWM2A,
-			INB			=> PWM2B,
+			PWM_SIGNAL 	=> PWM4C,
+			INA 		=> PWM4A,
+			INB			=> PWM4B,
 			
 			enable		=> PWM_enable1
 			);
