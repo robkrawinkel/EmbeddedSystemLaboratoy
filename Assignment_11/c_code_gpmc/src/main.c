@@ -31,6 +31,11 @@
 #include <fcntl.h>      // open()
 #include <unistd.h>     // close()
 #include <time.h>
+
+#define pi 3.1415926538
+uint16_t maxStepCount0 = 1115;
+uint16_t maxStepCount1 = 221;
+
 double Stepcount1ToSI(int16_t steps)
 {
 	double stepsPerRotation = maxStepCount1/170*360;
