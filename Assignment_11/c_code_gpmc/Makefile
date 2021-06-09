@@ -11,7 +11,7 @@ KERNEL_MODULE_DIR=$(PWD)/../kernel_module
 #
 # Source files
 #
-SOURCE_FILES_C=$(SOURCE_DIR)/main.c $(SOURCE_DIR)/gpmc_driver_c.c
+SOURCE_FILES_C=$(SOURCE_DIR)/main.c $(SOURCE_DIR)/gpmc_driver_c.c $(SOURCE_DIR)/xxsubmod.c $(SOURCE_DIR)/EulerAngles.c $(SOURCE_DIR)/motionprofiles.c $(SOURCE_DIR)/xxfuncs.c $(SOURCE_DIR)/xxinteg.c $(SOURCE_DIR)/xxinverse.c $(SOURCE_DIR)/xxmatrix.c $(SOURCE_DIR)/xxmodel.c
 SOURCE_FILES_CPP=$(SOURCE_DIR)/main.cpp $(SOURCE_DIR)/gpmc_driver_cpp.cpp
 
 #

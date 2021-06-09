@@ -30,6 +30,7 @@
 
 #include <fcntl.h>      // open()
 #include <unistd.h>     // close()
+#include <stdint.h>
 #include <time.h>
 
 #define pi 3.1415926538
@@ -61,7 +62,7 @@ int main(int argc, char* argv[])
 	
 	// open connection to device.
   printf("Opening gpmc_fpga...\n");
-  fd = open(argv[1], 0);
+  int fd = open(argv[1], 0);
   if (0 > fd)
   {
     printf("Error, could not open device: %s.\n", argv[1]);
