@@ -1,56 +1,52 @@
---
--- @file setup_control.vhd
--- @brief Toplevel file template file which can be used as a reference for implementing gpmc communication.
--- @author Jan Jaap Kempenaar, Sander Grimm, University of Twente 2014
---
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
+USE IEEE.numeric_std.ALL;
 
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+ENTITY ESL_NIOS_II_IP IS
+	GENERIC (
+		DATA_WIDTH : natural := 32;	-- word size OF each INput and OUTput regISter
+		LED_WIDTH  : natural := 8;	-- numbers OF LEDs on the DE0-NANO
+		GPMC_ADDR_WIDTH_HIGH : integer := 10;
+		GPMC_ADDR_WIDTH_LOW  : integer := 1;
+		RAM_SIZE             : integer := 32
+	);
+	PORT (
+		-- Signals to connect to an Avalon clock source INterface
+		clk				: IN  std_logic;
+		reset			: IN  std_logic;
+		
+		-- Signals to connect to an Avalon-MM slave INterface
+		slave_address		: IN  std_logic_vector(7 downto 0);
+		slave_read			: IN  std_logic;
+		slave_write			: IN  std_logic;
+		slave_readdata		: OUT std_logic_vector(DATA_WIDTH-1 downto 0);
+		slave_writedata		: IN  std_logic_vector(DATA_WIDTH-1 downto 0);
+		slave_byteenable	: IN  std_logic_vector((DATA_WIDTH/8)-1 downto 0);
 
-entity setup_control is
-  generic(
-    DATA_WIDTH           : integer := 16;
-    GPMC_ADDR_WIDTH_HIGH : integer := 10;
-    GPMC_ADDR_WIDTH_LOW  : integer := 1;
-    -- RAM_SIZE should be a power of 2
-    RAM_SIZE             : integer := 32
-  );
-  port (
-    CLOCK_50      : in    std_logic;
-	
-    -- GPMC side
-    GPMC_DATA     : inout std_logic_vector(DATA_WIDTH - 1 downto 0);
-    GPMC_ADDR     : in    std_logic_vector(GPMC_ADDR_WIDTH_HIGH downto GPMC_ADDR_WIDTH_LOW);
-    GPMC_nPWE     : in    std_logic;
-    GPMC_nOE      : in    std_logic;
-    GPMC_FPGA_IRQ : in    std_logic;
-    GPMC_nCS6     : in    std_logic;
-    GPMC_CLK      : in    std_logic;
-	
-	-- control ports
-	ENC1A : IN std_logic;
-	ENC1B : IN std_logic;
-	ENC2A : IN std_logic;
-	ENC2B : IN std_logic;
-	PWM1A : OUT std_logic;
-	PWM1B : OUT std_logic;
-	PWM1C : OUT std_logic;
-	PWM2A : OUT std_logic;
-	PWM2B : OUT std_logic;
-	PWM2C : OUT std_logic
-	
-	
+		-- GPMC side
+		GPMC_DATA     : inout std_logic_vector(16 - 1 downto 0);
+		GPMC_ADDR     : in    std_logic_vector(GPMC_ADDR_WIDTH_HIGH downto GPMC_ADDR_WIDTH_LOW);
+		GPMC_nPWE     : in    std_logic;
+		GPMC_nOE      : in    std_logic;
+		GPMC_FPGA_IRQ : in    std_logic;
+		GPMC_nCS6     : in    std_logic;
+		GPMC_CLK      : in    std_logic;
+		-- Signals to connect to custom user logic
+		LED				: OUT std_logic_vector(LED_WIDTH-1 downto 0);
+		GPIO_0			: INOUT std_logic_vector(33 downto 0);
+		--GPIO_1			: INOUT std_logic_vector(33 downto 0);
+		KEY				: IN std_logic_vector(1 downto 0);
+		SW				: IN std_logic_vector(3 downto 0)
+		--GPIO_1[0]		: INOUT std_logic;
+		--GPIO_1[1]		: INOUT std_logic
+	);
+END ENTITY;
 
- 
-  );
-end setup_control;
+ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 
+------------------------------------------------------------------------------ ARCHITECTURE - Avalon bus ------------------------------------------------------------------------------
 
-architecture structure of setup_control is
-	-- RESET signal
-	SIGNAL reset : std_logic := '1';
-  -- Internal memory for the system and a subset for the IP
+	-- Internal memory for the system and a subset for the IP
 	SIGNAL mem        		: std_logic_vector(31 downto 0);
 	SIGNAL memSEND    		: std_logic_vector(31 downto 0);
 	SIGNAL stepCount0_min	: integer RANGE -8192 TO 0;
@@ -209,21 +205,23 @@ architecture structure of setup_control is
 
 			);
 	END COMPONENT;
-
-
-
-begin
 	
--- Initialize encoder 0
+	
+------------------------------------------------------------------------------ ARCHITECTURE - begin ------------------------------------------------------------------------------
+
+
+BEGIN
+	
+	-- Initialize encoder 0
 	encoder0: QuadratureEncoder
 		PORT MAP (
 			-- CLOCK and reset
 			reset		=> reset,
-			CLOCK_50	=> CLOCK_50,
+			CLOCK_50	=> clk,
 
 			-- Signals from the encoder
-			SIGNALA	=> ENC1A,
-			SIGNALB	=> ENC1B,
+			SIGNALA	=> GPIO_0(20),
+			SIGNALB	=> GPIO_0(22),
 			
 			-- Output step count
 			stepCount => stepCount0,
@@ -240,11 +238,11 @@ begin
 		PORT MAP (
 			-- CLOCK and reset
 			reset		=> reset,
-			CLOCK_50	=> CLOCK_50,
+			CLOCK_50	=> clk,
 
 			-- SIGNALs from the encoder
-			SIGNALA	=> ENC2A,
-			SIGNALB	=> ENC2B,
+			SIGNALA	=> GPIO_0(21),
+			SIGNALB	=> GPIO_0(23),
 
 			-- OUTput step count
 			stepCount => stepCount1,
@@ -261,15 +259,15 @@ begin
 		PORT MAP (
 			-- CLOCK and reset
 			reset		=> reset,
-			CLOCK_50	=> CLOCK_50,
+			CLOCK_50	=> clk,
 			-- INput SIGNALs module
 			frequency	=> PWM_frequency,
 			dutycycle	=> PWM_dutycycle0,
 			CW			=> PWM_CW0,
 			-- OUTput pwm_SIGNAL and rotation direction
-			PWM_SIGNAL 	=> PWM1C,
-			INA 		=> PWM1A,
-			INB			=> PWM1B,
+			PWM_SIGNAL 	=> GPIO_0(8),
+			INA 		=> GPIO_0(10),
+			INB			=> GPIO_0(12),
 			
 			enable		=> PWM_enable0
 			);
@@ -279,15 +277,15 @@ begin
 		PORT MAP (
 			-- CLOCK and reset
 			reset		=> reset,
-			CLOCK_50	=> CLOCK_50,
+			CLOCK_50	=> clk,
 			-- INput SIGNALs module
 			frequency	=> PWM_frequency,
 			dutycycle	=> PWM_dutycycle1,
 			CW			=> PWM_CW1,
 			-- OUTput pwm_SIGNAL and rotation direction
-			PWM_SIGNAL 	=> PWM2C,
-			INA 		=> PWM2A,
-			INB			=> PWM2B,
+			PWM_SIGNAL 	=> GPIO_0(9),
+			INA 		=> GPIO_0(11),
+			INB			=> GPIO_0(13),
 			
 			enable		=> PWM_enable1
 			);
@@ -297,7 +295,7 @@ begin
 		PORT MAP(
 			-- CLOCK and reset
 			reset		=> reset,
-			CLOCK_50	=> CLOCK_50,
+			CLOCK_50	=> clk,
 			
 			GPMC_DATA     => GPMC_DATA,
 			GPMC_ADDR     => GPMC_ADDR,
@@ -329,7 +327,7 @@ begin
 		PORT MAP(
 			-- CLOCK and reset
 			reset				=> reset,
-			CLOCK_50			=> CLOCK_50,
+			CLOCK_50			=> clk,
 
 			-- Enable calibration
 			calibrate_enable	=> CALL_calibrate_enable,
@@ -354,9 +352,12 @@ begin
 
 		);	
 	
+	-- Output to the leds a 1 and the step count of encoder 0 in 7 bits signed
+	LED <= '1' & std_logic_vector(to_signed(stepCount1, 7));
+	
 
 	-- Process to handle PWM generation
-	PWM_process : PROCESS(CLOCK_50)
+	PWM_process : PROCESS(clk,reset)
 
 	BEGIN
 		-- Reset the PWM process
@@ -374,9 +375,8 @@ begin
 			-- Start calibration of the motors after reset
 			CALL_calibrate_enable <= '1';
 			stepReset <= '1';		-- Reset the stepcount
-			reset <= '0';
 
-		ELSIF rising_edge(CLOCK_50) THEN
+		ELSIF rising_edge(clk) THEN
 
 			IF (CALL_calibrate_running = '1') THEN
 				-- If calibrating, its process controlls the motors
@@ -476,5 +476,4 @@ begin
 	--END PROCESS;
 	
 END ARCHITECTURE;
-
 
