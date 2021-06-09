@@ -10,6 +10,27 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\EulerAngles.h" />
+    <ClInclude Include="..\..\motionprofiles.h" />
+    <ClInclude Include="..\..\xxfuncs.h" />
+    <ClInclude Include="..\..\xxinteg.h" />
+    <ClInclude Include="..\..\xxmatrix.h" />
+    <ClInclude Include="..\..\xxmodel.h" />
+    <ClInclude Include="..\..\xxsubmod.h" />
+    <ClInclude Include="..\..\xxtypes.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\EulerAngles.c" />
+    <ClCompile Include="..\..\motionprofiles.c" />
+    <ClCompile Include="..\..\xxfuncs.c" />
+    <ClCompile Include="..\..\xxinteg.c" />
+    <ClCompile Include="..\..\xxinverse.c" />
+    <ClCompile Include="..\..\xxmain.c" />
+    <ClCompile Include="..\..\xxmatrix.c" />
+    <ClCompile Include="..\..\xxmodel.c" />
+    <ClCompile Include="..\..\xxsubmod.c" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{354D6039-7E0B-4A7A-813B-0AE84DE22941}</ProjectGuid>
     <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VSVersion)' == '' and $(VisualStudioVersion) == ''">$(VCTargetsPath11)</VCTargetsPath>
@@ -125,51 +146,6 @@
       <OutputFile>.\Release/PositionControllerTilt.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\PositionControllerTilt.cpp">
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <ClCompile Include="..\..\test_PositionControllerTilt.cpp">
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <ClCompile Include="..\..\common\EulerAngles.cpp">
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <ClCompile Include="..\..\common\MotionProfiles.cpp">
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <ClCompile Include="..\..\common\xxfuncs.cpp">
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <ClCompile Include="..\..\common\xxinteg.cpp">
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <ClCompile Include="..\..\common\xxinverse.cpp">
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <ClCompile Include="..\..\common\xxmatrix.cpp">
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\PositionControllerTilt.h" />
-    <ClInclude Include="..\..\common\EulerAngles.h" />
-    <ClInclude Include="..\..\common\MotionProfiles.h" />
-    <ClInclude Include="..\..\common\xxfuncs.h" />
-    <ClInclude Include="..\..\common\xxinteg.h" />
-    <ClInclude Include="..\..\common\xxinverse.h" />
-    <ClInclude Include="..\..\common\xxmatrix.h" />
-    <ClInclude Include="..\..\common\xxmodel.h" />
-    <ClInclude Include="..\..\common\xxtypes.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

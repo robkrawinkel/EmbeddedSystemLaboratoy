@@ -4,8 +4,8 @@
  *  file:  xxmodel.c
  *  model: PositionControllerTilt
  *  expmt: Jiwy
- *  date:  June 3, 2021
- *  time:  10:13:42 AM
+ *  date:  June 9, 2021
+ *  time:  2:40:23 PM
  *  user:  20-sim 4.8 Campus License
  *  from:  Universiteit Twente
  *  build: 4.8.3.10415
@@ -44,7 +44,7 @@
 /* the global variables */
 XXDouble xx_start_time = 0.0;
 XXDouble xx_finish_time = 20.0;
-XXDouble xx_step_size = 0.001;
+XXDouble xx_step_size = 0.01;
 XXDouble xx_time = 0.0;
 XXInteger xx_steps = 0;
 XXBoolean xx_initialize = XXTRUE;

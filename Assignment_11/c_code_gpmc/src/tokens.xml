@@ -126,9 +126,9 @@ SignalLimiter2\input
 	<token name="FINAL_EQUATIONS"><![CDATA[]]></token>
 	<token name="FINISH_TIME"><![CDATA[20.0]]></token>
 	<token name="GENERATION_BUILD"><![CDATA[4.8.3.10415]]></token>
-	<token name="GENERATION_DATE"><![CDATA[June 3, 2021]]></token>
-	<token name="GENERATION_DIR"><![CDATA[c:\temp\PositionControllerTilt]]></token>
-	<token name="GENERATION_TIME"><![CDATA[10:13:42 AM]]></token>
+	<token name="GENERATION_DATE"><![CDATA[June 9, 2021]]></token>
+	<token name="GENERATION_DIR"><![CDATA[c:\temp\c_code]]></token>
+	<token name="GENERATION_TIME"><![CDATA[2:40:23 PM]]></token>
 	<token name="HIERARCHICAL_SUBMODEL_NAME"><![CDATA[PositionControllerTilt]]></token>
 	<token name="IMPORT_NAMES"><![CDATA[	NULL]]></token>
 	<token name="IMPORT_NAMES2"><![CDATA[	NULL]]></token>
@@ -514,7 +514,7 @@ PID1\uI_previous
 
 ]]></token>
 	<token name="STATIC_EQUATIONS"><![CDATA[]]></token>
-	<token name="TIME_STEP_SIZE"><![CDATA[0.001]]></token>
+	<token name="TIME_STEP_SIZE"><![CDATA[0.01]]></token>
 	<token name="USER_NAME"><![CDATA[20-sim 4.8 Campus License]]></token>
 	<token name="VARIABLE_NAMES"><![CDATA[	"corrGain\\input",
 	"corrGain\\output",
