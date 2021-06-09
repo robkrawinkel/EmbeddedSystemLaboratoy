@@ -27,7 +27,7 @@ END ENTITY;
 ARCHITECTURE bhv OF PWM IS
 	
 	-- Counter for the amount of clock cycles
-	SIGNAL counter : integer range 0 to 50000000;
+	SIGNAL counter : integer range 0 to 50000000 := 0;
 
 BEGIN
 	
@@ -36,8 +36,8 @@ BEGIN
 	PROCESS(reset, CLOCK_50)
 		
 		-- Variables that store the amount of clock cycles to count based on the set frequency and dutycycle
-		VARIABLE cycles_per_period : integer range 0 to 50000000;
-		VARIABLE on_cycles_per_period : integer range 0 to 50000000;
+		VARIABLE cycles_per_period : integer range 0 to 50000000 := 0;
+		VARIABLE on_cycles_per_period : integer range 0 to 50000000 := 0;
 		
 	BEGIN
 		

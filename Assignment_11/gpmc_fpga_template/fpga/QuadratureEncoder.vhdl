@@ -41,8 +41,8 @@ ENTITY QuadratureEncoder IS
 END ENTITY;
 
 ARCHITECTURE bhv OF QuadratureEncoder IS
-	SIGNAL inputSignals : std_logic_vector(1 downto 0);
-	SIGNAL stepCountInternal : integer RANGE -8192 TO 8191;
+	SIGNAL inputSignals : std_logic_vector(1 downto 0)  := (OTHERS => '0');
+	SIGNAL stepCountInternal : integer RANGE -8192 TO 8191 := 0;
 
 BEGIN
 
@@ -50,11 +50,11 @@ BEGIN
 	PROCESS(reset, CLOCK_50)
 	
 		-- Create variable to keep track of direction, ClockWise
-		VARIABLE CW	: std_logic;
-		VARIABLE state: integer range 0 to 4;
+		VARIABLE CW	: std_logic := '0';
+		VARIABLE state: integer range 0 to 4 := 4;
 		
 		-- Variables to keep track of previous states
-		VARIABLE oldState : integer range 0 to 4;
+		VARIABLE oldState : integer range 0 to 4 := '0';
 
 	BEGIN
 		

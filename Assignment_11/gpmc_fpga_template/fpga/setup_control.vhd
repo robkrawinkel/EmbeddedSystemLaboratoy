@@ -53,16 +53,16 @@ architecture structure of setup_control is
 	-- RESET signal
 	SIGNAL reset : std_logic := '0';
   -- Internal memory for the system and a subset for the IP
-	SIGNAL mem        		: std_logic_vector(31 downto 0);
-	SIGNAL memSEND    		: std_logic_vector(31 downto 0);
-	SIGNAL stepCount0_min	: integer RANGE -8192 TO 0;
-	SIGNAL stepCount0_max	: integer RANGE 0 TO 8191;
-	SIGNAL stepCount1_min	: integer RANGE -8192 TO 0;
-	SIGNAL stepCount1_max	: integer RANGE 0 TO 8191;
-	signal stepCount0 : integer RANGE -8192 TO 8191;
-	signal stepCount1 : integer RANGE -8192 TO 8191;
+	SIGNAL mem        		: std_logic_vector(31 downto 0) := (OTHERS => '0');
+	SIGNAL memSEND    		: std_logic_vector(31 downto 0) := (OTHERS => '0');
+	SIGNAL stepCount0_min	: integer RANGE -8192 TO 0 := -8192;
+	SIGNAL stepCount0_max	: integer RANGE 0 TO 8191 := 8191;
+	SIGNAL stepCount1_min	: integer RANGE -8192 TO 0 := -8192;
+	SIGNAL stepCount1_max	: integer RANGE 0 TO 8191 := 8191;
+	signal stepCount0 : integer RANGE -8192 TO 8191 := 0;
+	signal stepCount1 : integer RANGE -8192 TO 8191 := 0;
 
-	SIGNAL stepReset		: std_logic;
+	SIGNAL stepReset		: std_logic := '1';
 
 	-- Define the quadrature encoder module
 	COMPONENT QuadratureEncoder		
@@ -92,13 +92,13 @@ architecture structure of setup_control is
 ------------------------------------------------------------------------------ ARCHITECTURE - PWM module ------------------------------------------------------------------------------
 
 	-- Signals for the PWM generation
-	SIGNAL PWM_frequency 	: integer range 0 to 50000000;
-	SIGNAL PWM_dutycycle0	: integer range 0 to 100;
-	SIGNAL PWM_dutycycle1	: integer range 0 to 100;
-	SIGNAL PWM_CW0	 		: std_logic;
-	SIGNAL PWM_CW1	 		: std_logic;
-	SIGNAL PWM_enable0		: std_logic;
-	SIGNAL PWM_enable1		: std_logic;
+	SIGNAL PWM_frequency 	: integer range 0 to 50000000 := 20000;
+	SIGNAL PWM_dutycycle0	: integer range 0 to 100 := 0;
+	SIGNAL PWM_dutycycle1	: integer range 0 to 100 := 0;
+	SIGNAL PWM_CW0	 		: std_logic := '0';
+	SIGNAL PWM_CW1	 		: std_logic := '0';
+	SIGNAL PWM_enable0		: std_logic := '0';
+	SIGNAL PWM_enable1		: std_logic := '0';
 
 	-- Define the PWM module
 	COMPONENT PWM
@@ -124,14 +124,14 @@ architecture structure of setup_control is
 ------------------------------------------------------------------------------ ARCHITECTURE - Calibrate ------------------------------------------------------------------------------
 
 	SIGNAL CALL_calibrate_enable	: std_logic := '1';
-	SIGNAL CALL_calibrate_running	: std_logic;
-	SIGNAL CALL_dutycycle0			: integer RANGE 0 TO 100;
-	SIGNAL CALL_dutycycle1			: integer RANGE 0 TO 100;
-	SIGNAL CALL_CW0					: std_logic;
-	SIGNAL CALL_CW1					: std_logic;
-	SIGNAL CALL_enable0				: std_logic;
-	SIGNAL CALL_enable1				: std_logic;
-	SIGNAL CALL_stepReset			: std_logic;
+	SIGNAL CALL_calibrate_running	: std_logic := '0';
+	SIGNAL CALL_dutycycle0			: integer RANGE 0 TO 100 := '20';
+	SIGNAL CALL_dutycycle1			: integer RANGE 0 TO 100 := '20';
+	SIGNAL CALL_CW0					: std_logic := '0';
+	SIGNAL CALL_CW1					: std_logic := '0';
+	SIGNAL CALL_enable0				: std_logic := '0';
+	SIGNAL CALL_enable1				: std_logic := '0';
+	SIGNAL CALL_stepReset			: std_logic := '1';
 
 	-- Define calibrate component
 	COMPONENT calibrate
@@ -165,13 +165,13 @@ architecture structure of setup_control is
 	END COMPONENT;
 
 ------------------------------------------------------------------------------ ARCHITECTURE - Communication ------------------------------------------------------------------------------
-	SIGNAL COMM_dutycycle0 	: integer range 0 to 100;
-	SIGNAL COMM_dutycycle1 	: integer range 0 to 100;
-	SIGNAL COMM_CW0			: std_logic;
-	SIGNAL COMM_CW1			: std_logic;
-	SIGNAL COMM_enable0		: std_logic;
-	SIGNAL COMM_enable1		: std_logic;
-	SIGNAL COMM_recalibrate : std_logic;
+	SIGNAL COMM_dutycycle0 	: integer range 0 to 100 := 0;
+	SIGNAL COMM_dutycycle1 	: integer range 0 to 100 := 0;
+	SIGNAL COMM_CW0			: std_logic := '0';
+	SIGNAL COMM_CW1			: std_logic := '0';
+	SIGNAL COMM_enable0		: std_logic := '0';
+	SIGNAL COMM_enable1		: std_logic := '0';
+	SIGNAL COMM_recalibrate : std_logic := '0';
 	
 	COMPONENT Communication
 		PORT (

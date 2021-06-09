@@ -91,8 +91,8 @@ component ramstix_gpmc_driver is
   
 
 	-- Internal memory for the system
-	SIGNAL memREAD     		: std_logic_vector(31 downto 0);
-	SIGNAL memSEND    		: std_logic_vector(31 downto 0);
+	SIGNAL memREAD     		: std_logic_vector(31 downto 0) := (OTHERS => '0');
+	SIGNAL memSEND    		: std_logic_vector(31 downto 0) := (OTHERS => '0');
 
 BEGIN
 	
@@ -121,11 +121,11 @@ BEGIN
 	PROCESS(reset, CLOCK_50)
 		
 		-- Variables that store the amount of clock cycles to count based on the set frequency and dutycycle
-		VARIABLE PWM_0 : integer range -128 to 128;
-		VARIABLE PWM_1 : integer range -128 to 128;
-		VARIABLE counter : integer;
-		VARIABLE sendID : integer range 0 to 7;
-		VARIABLE calibrate_running_old : std_logic;
+		VARIABLE PWM_0 : integer range -128 to 128 := 0;
+		VARIABLE PWM_1 : integer range -128 to 128 := 0;
+		VARIABLE counter : integer := 0;
+		VARIABLE sendID : integer range 0 to 7 := 1;
+		VARIABLE calibrate_running_old : std_logic := '0';
 		
 	BEGIN
 		

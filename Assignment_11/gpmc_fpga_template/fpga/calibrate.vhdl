@@ -54,12 +54,12 @@ BEGIN
 	PROCESS(reset, CLOCK_50)
 	
 		-- Variables for the calibrate process
-		VARIABLE calibrate_state 			: integer RANGE 0 TO 5;
-		VARIABLE calibrate_stepCount0_old 	: integer RANGE -8192 TO 8191;
-		VARIABLE calibrate_stepCount1_old 	: integer RANGE -8192 TO 8191;
-		VARIABLE calibrate_clockCounter 	: integer;
+		VARIABLE calibrate_state 			: integer RANGE 0 TO 5 := 0;
+		VARIABLE calibrate_stepCount0_old 	: integer RANGE -8192 TO 8191 := -8190;
+		VARIABLE calibrate_stepCount1_old 	: integer RANGE -8192 TO 8191 := -8190;
+		VARIABLE calibrate_clockCounter 	: integer := 0;
 
-		VARIABLE calibrate_enable_old		: std_logic;
+		VARIABLE calibrate_enable_old		: std_logic := '0';
 
 	BEGIN
 		
