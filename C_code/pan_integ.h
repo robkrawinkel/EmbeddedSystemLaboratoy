@@ -33,7 +33,6 @@ that are supplied for computation.
 
 /* the integration methods */
 void pan_DiscreteInitialize (void);
-void pan_DiscreteTerminate (void);
 void pan_DiscreteStep (void);
 
 extern char pan_major;

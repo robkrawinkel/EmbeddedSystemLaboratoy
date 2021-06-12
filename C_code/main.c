@@ -9,11 +9,11 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdint.h>
-#include <alt_types.h>
 #include <io.h>
 #include "system.h"
 
 //uart packages
+//#include <alt_types.h>
 #include "sys/alt_irq.h"
 #include "InterruptHandlerForUart.h"
 #include "sys/alt_stdio.h"
@@ -85,8 +85,13 @@ int main()
 
 	pan_y[0] = 0.0;		/* out */
 	
-	tilt_u = pan_u;
-	tilt_y = pan_y;
+	tilt_u[0] = 0.0;		/* corr */
+	tilt_u[1] = 0.0;		/* in */
+	tilt_u[2] = 0.0;		/* position */
+
+	tilt_y[0] = 0.0;		/* out */
+
+
 
 
 	/* Initialize the submodel itself */

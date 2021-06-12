@@ -24,14 +24,14 @@
 
 
 /* Simulation variables */
-extern double xx_start_time;
-extern double xx_finish_time;
-extern double xx_step_size;
-extern double xx_time;
-extern XXInteger xx_steps;
-extern XXBoolean xx_initialize;
-extern XXBoolean xx_major;
-extern XXBoolean xx_stop_simulation;
+extern double tilt_start_time;
+extern double tilt_finish_time;
+extern double tilt_step_size;
+extern double tilt_time;
+extern int tilt_steps;
+extern char tilt_initialize;
+extern char tilt_major;
+extern char tilt_stop_simulation;
 
 /* Model size constants */
 #define tilt_constants_size 0
@@ -65,15 +65,10 @@ void tilt_ModelInitialize_parameters(void);
 void tilt_ModelInitialize_initialvalues(void);
 void tilt_ModelInitialize_states(void);
 void tilt_ModelInitialize_variables(void);
-void tilt_ModelTerminate (void);
 
 /* Computation methods */
-void tiltCalculateInitial (void);
-void tiltCalculateStatic (void);
-void tiltCalculateInput (void);
-void tiltCalculateDynamic (void);
-void tiltCalculateOutput (void);
-void tiltCalculateFinal (void);
+void tilt_CalculateDynamic (void);
+void tilt_CalculateOutput (void);
 
 
 #endif

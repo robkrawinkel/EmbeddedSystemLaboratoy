@@ -72,9 +72,6 @@ void pan_InitializeSubmodel (double *u, double *y, double t)
 	pan_CopyInputsToVariables (u);
 
 	/* Calculate the model for the first time */
-	pan_CalculateInitial ();
-	pan_CalculateStatic ();
-	pan_CalculateInput ();
 	pan_CalculateDynamic ();
 	pan_CalculateOutput ();
 
@@ -93,7 +90,6 @@ void pan_CalculateSubmodel (double *u, double *y, double t)
 	pan_CopyInputsToVariables (u);
 
 	/* Calculate the model */
-	pan_CalculateInput ();
 	pan_DiscreteStep ();
 	pan_CalculateOutput ();
 
@@ -108,14 +104,8 @@ void pan_TerminateSubmodel (double *u, double *y, double t)
 	pan_time = t;
 	pan_CopyInputsToVariables (u);
 
-	/* Calculate the final model equations */
-	pan_CalculateFinal ();
-
 	/* Set the outputs */
 	pan_CopyVariablesToOutputs (y);
 
-	/* and terminate the model itself (releasing memory) */
-	pan_ModelTerminate ();
-	pan_DiscreteTerminate ();
 }
 

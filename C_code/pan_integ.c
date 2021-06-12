@@ -49,12 +49,6 @@ void pan_DiscreteInitialize (void)
 	pan_major = 1;
 }
 
-/* the termination of the Discrete integration method */
-void pan_DiscreteTerminate (void)
-{
-	/* nothing to be done */
-}
-
 /* the Discrete integration method itself */
 void pan_DiscreteStep (void)
 {

@@ -22,8 +22,8 @@
 #include "tilt_submod.h"
 
 /* The submodel I/O variables */
-XXInteger tilt_number_of_inputs = 3;
-XXInteger tilt_number_of_outputs = 1;
+int tilt_number_of_inputs = 3;
+int tilt_number_of_outputs = 1;
 
 /* the names of the submodel io variables
    uncomment this part if you need these names
@@ -70,9 +70,6 @@ void tilt_InitializeSubmodel (double *u, double *y, double t)
 	tilt_CopyInputsToVariables (u);
 
 	/* Calculate the model for the first time */
-	tilt_CalculateInitial ();
-	tilt_CalculateStatic ();
-	tilt_CalculateInput ();
 	tilt_CalculateDynamic ();
 	tilt_CalculateOutput ();
 
@@ -91,7 +88,6 @@ void tilt_CalculateSubmodel (double *u, double *y, double t)
 	tilt_CopyInputsToVariables (u);
 
 	/* Calculate the model */
-	tilt_CalculateInput ();
 	tilt_DiscreteStep ();
 	tilt_CalculateOutput ();
 
@@ -106,14 +102,7 @@ void tilt_TerminateSubmodel (double *u, double *y, double t)
 	tilt_time = t;
 	tilt_CopyInputsToVariables (u);
 
-	/* Calculate the final model equations */
-	tilt_CalculateFinal ();
-
 	/* Set the outputs */
 	tilt_CopyVariablesToOutputs (y);
-
-	/* and terminate the model itself (releasing memory) */
-	tilt_ModelTerminate ();
-	tilt_DiscreteTerminate ();
 }
 

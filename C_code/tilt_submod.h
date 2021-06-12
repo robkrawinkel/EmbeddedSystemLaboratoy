@@ -25,8 +25,8 @@
 #include "tilt_model.h"
 
 /* Submodel I/O variables */
-extern XXInteger tilt_number_of_inputs;
-extern XXInteger tilt_number_of_outputs;
+extern int tilt_number_of_inputs;
+extern int tilt_number_of_outputs;
 
 /* The names of the variables as used in the arrays above */
 //extern XXString tilt_input_names[];

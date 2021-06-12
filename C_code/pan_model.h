@@ -66,15 +66,10 @@ void pan_ModelInitialize_parameters(void);
 void pan_ModelInitialize_initialvalues(void);
 void pan_ModelInitialize_states(void);
 void pan_ModelInitialize_variables(void);
-void pan_ModelTerminate (void);
 
 /* Computation methods */
-void pan_CalculateInitial (void);
-void pan_CalculateStatic (void);
-void pan_CalculateInput (void);
 void pan_CalculateDynamic (void);
 void pan_CalculateOutput (void);
-void pan_CalculateFinal (void);
 
 
 #endif

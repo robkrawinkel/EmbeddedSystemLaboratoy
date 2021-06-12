@@ -49,16 +49,10 @@ void tilt_DiscreteInitialize (void)
 	tilt_major = 1;
 }
 
-/* the termination of the Discrete integration method */
-void tilt_DiscreteTerminate (void)
-{
-	/* nothing to be done */
-}
-
 /* the Discrete integration method itself */
 void tilt_DiscreteStep (void)
 {
-	XXInteger index;
+	int index;
 
 	/* for each of the supplied states */
 	for (index = 0; index < tilt_STATE_SIZE; index++)

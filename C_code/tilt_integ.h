@@ -32,10 +32,9 @@ that are supplied for computation.
 
 /* the integration methods */
 void tilt_DiscreteInitialize (void);
-void tilt_DiscreteTerminate (void);
 void tilt_DiscreteStep (void);
 
-extern XXBoolean tilt_major;
+extern char tilt_major;
 
 #endif
 

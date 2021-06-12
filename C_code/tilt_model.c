@@ -157,31 +157,6 @@ void tilt_ModelInitialize (void)
 	tilt_ModelInitialize_states();
 }
 
-/* This function calculates the initial equations of the model.
- * These equations are calculated before anything else
- */
-void tilt_CalculateInitial (void)
-{
-
-}
-
-/* This function calculates the static equations of the model.
- * These equations are only dependent from parameters and constants
- */
-void tilt_CalculateStatic (void)
-{
-
-}
-
-/* This function calculates the input equations of the model.
- * These equations are dynamic equations that must not change
- * in calls from the integration method (like random and delay).
- */
-void tilt_CalculateInput (void)
-{
-
-}
-
 /* This function calculates the dynamic equations of the model.
  * These equations are called from the integration method
  * to calculate the new model rates (that are then integrated).
@@ -251,17 +226,4 @@ void tilt_CalculateOutput (void)
 
 }
 
-/* This function calculates the final equations of the model.
- * These equations are calculated after all the calculations
- * are performed
- */
-void tilt_CalculateFinal (void)
-{
-
-}
-
-/* this method is called after all calculations are performed */
-void tilt_ModelTerminate(void)
-{
-}
 
