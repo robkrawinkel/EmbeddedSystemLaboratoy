@@ -18,7 +18,7 @@
 /* 20-sim include files */
 #include "pan_model.h"
 #include "pan_integ.h"
-#include "pan_funcs.h"
+////#include "pan_funcs.h"
 #include "pan_submod.h"
 //#include "motionprofiles.h"
 //#include "EulerAngles.h"

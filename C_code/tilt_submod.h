@@ -18,27 +18,27 @@
    The model itself is the xxmodel.c file
 */
 
-#ifndef XX_SUBMOD_H
-#define XX_SUBMOD_H
+#ifndef tilt_SUBMOD_H
+#define tilt_SUBMOD_H
 
 /* Our own include files */
-#include "xxmodel.h"
+#include "tilt_model.h"
 
 /* Submodel I/O variables */
-extern XXInteger xx_number_of_inputs;
-extern XXInteger xx_number_of_outputs;
+extern XXInteger tilt_number_of_inputs;
+extern XXInteger tilt_number_of_outputs;
 
 /* The names of the variables as used in the arrays above */
-extern XXString xx_input_names[];
-extern XXString xx_output_names[];
+//extern XXString tilt_input_names[];
+//extern XXString tilt_output_names[];
 
 
 /* The submodel functions */
-void XXInitializeSubmodel (XXDouble *u, XXDouble *y, XXDouble t);
-void XXCalculateSubmodel (XXDouble *u, XXDouble *y, XXDouble t);
-void XXTerminateSubmodel (XXDouble *u, XXDouble *y, XXDouble t);
-void XXCopyInputsToVariables (XXDouble *u);
-void XXCopyVariablesToOutputs (XXDouble *y);
+void tilt_InitializeSubmodel (double *u, double *y, double t);
+void tilt_CalculateSubmodel (double *u, double *y, double t);
+void tilt_TerminateSubmodel (double *u, double *y, double t);
+void tilt_CopyInputsToVariables (double *u);
+void tilt_CopyVariablesToOutputs (double *y);
 
 #endif
 

@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include <math.h>
 /* Our own include files */
-#include "pan_funcs.h"
+//#include "pan_funcs.h"
 
 /* Constants that are used in our functions below */
 

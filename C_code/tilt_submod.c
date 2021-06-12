@@ -16,16 +16,14 @@
 #include <stdlib.h>
 
 /* 20-sim include files */
-#include "xxmodel.h"
-#include "xxinteg.h"
-#include "xxfuncs.h"
-#include "xxsubmod.h"
-#include "motionprofiles.h"
-#include "EulerAngles.h"
+#include "tilt_model.h"
+#include "tilt_integ.h"
+//#include "pan_funcs.h"
+#include "tilt_submod.h"
 
 /* The submodel I/O variables */
-XXInteger xx_number_of_inputs = 3;
-XXInteger xx_number_of_outputs = 1;
+XXInteger tilt_number_of_inputs = 3;
+XXInteger tilt_number_of_outputs = 1;
 
 /* the names of the submodel io variables
    uncomment this part if you need these names
@@ -41,81 +39,81 @@ XXString xx_output_names[] = {
 };
 */
 /* This function sets the input variables from the input vector */
-void XXCopyInputsToVariables (XXDouble *u)
+void tilt_CopyInputsToVariables (double *u)
 {
 	/* Copy the input vector to the input variables */
-	xx_V[8] = u[0];		/* corr */
-	xx_V[9] = u[1];		/* in */
-	xx_V[10] = u[2];		/* position */
+	tilt_V[8] = u[0];		/* corr */
+	tilt_V[9] = u[1];		/* in */
+	tilt_V[10] = u[2];		/* position */
 
 }
 
 /* This function uses the output variables to fill the output vector */
-void XXCopyVariablesToOutputs (XXDouble *y)
+void tilt_CopyVariablesToOutputs (double *y)
 {
 	/* Copy the output variables to the output vector */
-	y[0] = 	xx_V[11];		/* out */
+	y[0] = 	tilt_V[11];		/* out */
 
 }
 
 /* The initialization function for submodel */
-void XXInitializeSubmodel (XXDouble *u, XXDouble *y, XXDouble t)
+void tilt_InitializeSubmodel (double *u, double *y, double t)
 {
 	/* Initialization phase (allocating memory) */
-	xx_initialize = XXTRUE;
-	xx_steps = 0;
-	XXModelInitialize ();
-	XXDiscreteInitialize ();
+	tilt_initialize = 1;
+	tilt_steps = 0;
+	tilt_ModelInitialize ();
+	tilt_DiscreteInitialize ();
 
 	/* Copy the inputs */
-	xx_time = t;
-	XXCopyInputsToVariables (u);
+	tilt_time = t;
+	tilt_CopyInputsToVariables (u);
 
 	/* Calculate the model for the first time */
-	XXCalculateInitial ();
-	XXCalculateStatic ();
-	XXCalculateInput ();
-	XXCalculateDynamic ();
-	XXCalculateOutput ();
+	tilt_CalculateInitial ();
+	tilt_CalculateStatic ();
+	tilt_CalculateInput ();
+	tilt_CalculateDynamic ();
+	tilt_CalculateOutput ();
 
 	/* Set the outputs */
-	XXCopyVariablesToOutputs (y);
+	tilt_CopyVariablesToOutputs (y);
 
 	/* End of initialization phase */
-	xx_initialize = XXFALSE;
+	tilt_initialize = 0;
 }
 
 /* The function that calculates the submodel */
-void XXCalculateSubmodel (XXDouble *u, XXDouble *y, XXDouble t)
+void tilt_CalculateSubmodel (double *u, double *y, double t)
 {
 	/* Copy the inputs */
-	xx_time = t;
-	XXCopyInputsToVariables (u);
+	tilt_time = t;
+	tilt_CopyInputsToVariables (u);
 
 	/* Calculate the model */
-	XXCalculateInput ();
-	XXDiscreteStep ();
-	XXCalculateOutput ();
+	tilt_CalculateInput ();
+	tilt_DiscreteStep ();
+	tilt_CalculateOutput ();
 
 	/* Copy the outputs */
-	XXCopyVariablesToOutputs (y);
+	tilt_CopyVariablesToOutputs (y);
 }
 
 /* The termination function for submodel */
-void XXTerminateSubmodel (XXDouble *u, XXDouble *y, XXDouble t)
+void tilt_TerminateSubmodel (double *u, double *y, double t)
 {
 	/* Copy the inputs */
-	xx_time = t;
-	XXCopyInputsToVariables (u);
+	tilt_time = t;
+	tilt_CopyInputsToVariables (u);
 
 	/* Calculate the final model equations */
-	XXCalculateFinal ();
+	tilt_CalculateFinal ();
 
 	/* Set the outputs */
-	XXCopyVariablesToOutputs (y);
+	tilt_CopyVariablesToOutputs (y);
 
 	/* and terminate the model itself (releasing memory) */
-	XXModelTerminate ();
-	XXDiscreteTerminate ();
+	tilt_ModelTerminate ();
+	tilt_DiscreteTerminate ();
 }
 

@@ -18,35 +18,34 @@
    The model itself is the xxmodel.c file
 */
 
-#ifndef XX_MODEL_H
-#define XX_MODEL_H
+#ifndef tilt_MODEL_H
+#define tilt_MODEL_H
 
-/* Our own include files */
-#include "xxtypes.h"
+
 
 /* Simulation variables */
-extern XXDouble xx_start_time;
-extern XXDouble xx_finish_time;
-extern XXDouble xx_step_size;
-extern XXDouble xx_time;
+extern double xx_start_time;
+extern double xx_finish_time;
+extern double xx_step_size;
+extern double xx_time;
 extern XXInteger xx_steps;
 extern XXBoolean xx_initialize;
 extern XXBoolean xx_major;
 extern XXBoolean xx_stop_simulation;
 
 /* Model size constants */
-#define xx_constants_size 0
-#define xx_parameters_size 7
-#define xx_initialvalues_size 3
-#define xx_variables_size 12
-#define xx_states_size 3
+#define tilt_constants_size 0
+#define tilt_parameters_size 7
+#define tilt_initialvalues_size 3
+#define tilt_variables_size 12
+#define tilt_states_size 3
 
 /* Variable arrays */
-extern XXDouble xx_P[];
-extern XXDouble xx_I[];
-extern XXDouble xx_V[];
-extern XXDouble xx_s[];
-extern XXDouble xx_R[];
+extern double tilt_P[];
+extern double tilt_I[];
+extern double tilt_V[];
+extern double tilt_s[];
+extern double tilt_R[];
 
 
 /* The names of the variables as used in the arrays above
@@ -60,21 +59,21 @@ extern XXString xx_rate_names[];
 
 /* Initialization methods */
 /* Initialize complete model */
-void XXModelInitialize (void);
+void tilt_ModelInitialize (void);
 /* Initialize specific model values */
-void XXModelInitialize_parameters(void);
-void XXModelInitialize_initialvalues(void);
-void XXModelInitialize_states(void);
-void XXModelInitialize_variables(void);
-void XXModelTerminate (void);
+void tilt_ModelInitialize_parameters(void);
+void tilt_ModelInitialize_initialvalues(void);
+void tilt_ModelInitialize_states(void);
+void tilt_ModelInitialize_variables(void);
+void tilt_ModelTerminate (void);
 
 /* Computation methods */
-void XXCalculateInitial (void);
-void XXCalculateStatic (void);
-void XXCalculateInput (void);
-void XXCalculateDynamic (void);
-void XXCalculateOutput (void);
-void XXCalculateFinal (void);
+void tiltCalculateInitial (void);
+void tiltCalculateStatic (void);
+void tiltCalculateInput (void);
+void tiltCalculateDynamic (void);
+void tiltCalculateOutput (void);
+void tiltCalculateFinal (void);
 
 
 #endif

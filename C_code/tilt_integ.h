@@ -22,21 +22,20 @@ that are supplied for computation.
    integration methods with these two as an example.
 */
 
-#ifndef XX_INTEG_H
-#define XX_INTEG_H
+#ifndef tilt_INTEG_H
+#define tilt_INTEG_H
 
-/* 20-sim include files */
-#include "xxtypes.h"
+
 
 /* the chosen integration method */
 #define Discrete_METHOD
 
 /* the integration methods */
-void XXDiscreteInitialize (void);
-void XXDiscreteTerminate (void);
-void XXDiscreteStep (void);
+void tilt_DiscreteInitialize (void);
+void tilt_DiscreteTerminate (void);
+void tilt_DiscreteStep (void);
 
-extern XXBoolean xx_major;
+extern XXBoolean tilt_major;
 
 #endif
 

@@ -27,10 +27,13 @@
 //defines
 #define BAUD_RATE_0 115200
 #define pi 3.1415
+#define maxPWMPan 70
+#define maxPWMTilt 30
 
 
 /* 20-sim include files */
 #include "pan_submod.h"
+#include "tilt_submod.h"
 
 
 uint16_t maxStepCount0 = 1115;
@@ -66,28 +69,36 @@ int main()
 {
 	unsigned char ch;
 	printf("\n\nHello NiosII!!!!!\n");
-	IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000000000000000000000);
-	//IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000001000000000000000);
+
 	InitUart();
 
 	//initialize 20-sim
-	double u [3 + 1];
-	double y [1 + 1];
+	double pan_u [3 + 1];
+	double pan_y [1 + 1];
+	double tilt_u[3 + 1];
+	double tilt_y[1 + 1];
 
 	/* Initialize the inputs and outputs with correct initial values */
-	u[0] = 0.0;		/* corr */
-	u[1] = 0.0;		/* in */
-	u[2] = 0.0;		/* position */
+	pan_u[0] = 0.0;		/* corr */
+	pan_u[1] = 0.0;		/* in */
+	pan_u[2] = 0.0;		/* position */
 
-	y[0] = 0.0;		/* out */
+	pan_y[0] = 0.0;		/* out */
+	
+	tilt_u = pan_u;
+	tilt_y = pan_y;
 
 
 	/* Initialize the submodel itself */
-	pan_InitializeSubmodel (&u, &y, pan_time);
+	pan_InitializeSubmodel (&pan_u, &pan_y, pan_time);
+	tilt_InitializeSubmodel(&tilt_u, &tilt_y, pan_time);
 	
-	//end initialize 20-sim
+	//reset calibration
+	IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000001000000000000000);
+	IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000000000000000000000);
 	
-	//variables for avalon communication
+	
+	//variables
 	uint32_t nReadOut = 0;
 	uint16_t stepCount0 = 0;
 	uint16_t stepCount1 = 0;
@@ -131,30 +142,30 @@ int main()
 			printf("stepCount0: %d\t stepCount1: %d \n\r", stepCount0, stepCount1);
 		
 		//generate inputs
-		u[1] = 0;
+		pan_u[1] = 0;
 		if(pan_time >= 1){
-			u[1] = 0.5*pi;
+			pan_u[1] = 0.5*pi;
 
 		}
 		if(pan_time >= 5){
-			u[1] = 1.5*pi;
+			pan_u[1] = 1.5*pi;
 
 		}
 		if(pan_time >= 10){
 
-			u[1] = 0.5*pi;
+			pan_u[1] = 0.5*pi;
 
 		}
 		
 		
 		/* Call the 20-sim submodel to calculate the output */
-		u[2] = Stepcount0ToSI(stepCount0);
-		double temp = y[0];
+		pan_u[2] = Stepcount0ToSI(stepCount0);
 		
-		//printf("%f\n",temp);
 
-		pan_CalculateSubmodel (&u, &y, pan_time);
-		PWM0 = y[0]*70;
+		pan_CalculateSubmodel (&pan_u, &pan_y, pan_time);
+		tilt_CalculateSubmodel(&tilt_u, &tilt_y,pan_time);
+		PWM0 = pan_y[0]*maxPWMPan;
+		PWM1 = tilt_y[0]*maxPWMTilt;
 		int16_t temp16 = 0;
 		avalondSend = PWM0 << 24 | PWM1 <<16 | temp16;
 		//printf("%x\n",avalondSend);
@@ -176,7 +187,8 @@ int main()
 	} 
 
 	/* Perform the final 20-sim calculations */
-	pan_TerminateSubmodel (&u, &y, pan_time);
+	pan_TerminateSubmodel (&pan_u, &pan_y, pan_time);
+	tilt_TerminateSubmodel(&tilt_u,&tilt_y,pan_time);
 
 return 0;
 

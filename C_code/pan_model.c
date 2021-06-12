@@ -39,7 +39,7 @@
 
 /* 20-sim include files */
 #include "pan_model.h"
-#include "pan_funcs.h"
+//#include "pan_funcs.h"
 
 /* the global variables */
 double pan_start_time = 0.0;
