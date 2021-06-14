@@ -52,7 +52,8 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 	SIGNAL stepCount1_min	: integer RANGE -8192 TO 0;
 	SIGNAL stepCount1_max	: integer RANGE 0 TO 8191;
 
-	SIGNAL stepReset		: std_logic;
+	SIGNAL stepReset0		: std_logic;
+	SIGNAL stepReset1		: std_logic;
 
 	-- Define the quadrature encoder module
 	COMPONENT QuadratureEncoder		
@@ -115,14 +116,16 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 ------------------------------------------------------------------------------ ARCHITECTURE - Calibrate ------------------------------------------------------------------------------
 
 	SIGNAL CALL_calibrate_enable	: std_logic;
-	SIGNAL CALL_calibrate_running	: std_logic;
+	SIGNAL CALL_calibrate_running0	: std_logic;
+	SIGNAL CALL_calibrate_running1	: std_logic;
 	SIGNAL CALL_dutycycle0			: integer RANGE 0 TO 100;
 	SIGNAL CALL_dutycycle1			: integer RANGE 0 TO 100;
 	SIGNAL CALL_CW0					: std_logic;
 	SIGNAL CALL_CW1					: std_logic;
 	SIGNAL CALL_enable0				: std_logic;
 	SIGNAL CALL_enable1				: std_logic;
-	SIGNAL CALL_stepReset			: std_logic;
+	SIGNAL CALL_stepReset0			: std_logic;
+	SIGNAL CALL_stepReset1			: std_logic;
 
 	-- Define calibrate component
 	COMPONENT calibrate
@@ -313,7 +316,7 @@ BEGIN
 	
 			--flag to recalibrate
 			doRecalibrate => COMM_recalibrate,
-			calibrate_running => CALL_calibrate_running
+			calibrate_running => (CALL_calibrate_running0 OR CALL_calibrate_running1)
 
 		);
 	
@@ -326,7 +329,7 @@ BEGIN
 
 			-- Enable calibration
 			calibrate_enable	=> CALL_calibrate_enable,
-			calibrate_running	=> CALL_calibrate_running,
+			calibrate_running	=> CALL_calibrate_running0,
 
 			-- Motor control
 			dutycycle			=> CALL_dutycycle0,
@@ -337,7 +340,7 @@ BEGIN
 			stepCount			=> stepCount0,
 			stepCount_min		=> stepCount0_min,
 			stepCount_max		=> stepCount0_max,
-			stepReset			=> CALL_stepReset
+			stepReset			=> CALL_stepReset0
 
 		);	
 
@@ -349,7 +352,7 @@ BEGIN
 
 			-- Enable calibration
 			calibrate_enable	=> CALL_calibrate_enable,
-			calibrate_running	=> CALL_calibrate_running,
+			calibrate_running	=> CALL_calibrate_running1,
 
 			-- Motor control
 			dutycycle			=> CALL_dutycycle1,
@@ -360,7 +363,7 @@ BEGIN
 			stepCount			=> stepCount1,
 			stepCount_min		=> stepCount1_min,
 			stepCount_max		=> stepCount1_max,
-			stepReset			=> CALL_stepReset
+			stepReset			=> CALL_stepReset1
 
 		);	
 	
@@ -386,13 +389,15 @@ BEGIN
 
 			-- Start calibration of the motors after reset
 			CALL_calibrate_enable <= '1';
-			stepReset <= '1';		-- Reset the stepcount
+			stepReset0 <= '1';		-- Reset the stepcount
+			stepReset1 <= '1';		-- Reset the stepcount
 
 		ELSIF rising_edge(clk) THEN
 
-			IF (CALL_calibrate_running = '1') THEN
+			IF (CALL_calibrate_running0 = '1' OR CALL_calibrate_running1 = '1') THEN
 				-- If calibrating, its process controlls the motors
-				stepReset <= CALL_stepReset;
+				stepReset0 <= CALL_stepReset0;
+				stepReset1 <= CALL_stepReset1;
 
 				PWM_dutycycle0 	<= CALL_dutycycle0;
 				PWM_dutycycle1 	<= CALL_dutycycle1;
@@ -405,11 +410,12 @@ BEGIN
 			ELSE
 				-- If not calibrating, the motors are controlled by the communication process
 
-				-- Turn off calibration now that it is finished
+				-- Control the calibration by the communication bus
 				CALL_calibrate_enable <= COMM_recalibrate;
 
 				-- Don't reset the step counter
-				stepReset <= '0';
+				stepReset0 <= '0';
+				stepReset1 <= '0';
 
 				-- communication control
 				PWM_dutycycle0 	<= COMM_dutycycle0;
