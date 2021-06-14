@@ -52,7 +52,7 @@ int8_t deltaRotX;       // Variable to store the relative rotation angle
 int8_t deltaRotY;
 
 // Function to send two data bytes over the UART bus
-void sendUART(int8_t msg0, int8_t msg1) {
+void sendUART(int UART_port, int8_t msg0, int8_t msg1) {
     int8_t UART_msg[3];
 
     UART_msg[0] = msg0;
@@ -173,9 +173,9 @@ int main( int argc, char** argv )
             deltaRotX = int8_t(atan(relativePosX * 2 * tan(viewAngleX/2 / 180 * pi)) / pi * 180);    
             deltaRotY = int8_t(atan(relativePosY * 2 * tan(viewAngleY/2 / 180 * pi)) / pi * 180);
 
-            sendUART(deltaRotX, deltaRotY);
+            sendUART(UART_port, deltaRotX, deltaRotY);
         } else {
-            sendUART(INT8_MIN, INT8_MIN);
+            sendUART(UART_port, INT8_MIN, INT8_MIN);
         }
 
         auto endTime = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
