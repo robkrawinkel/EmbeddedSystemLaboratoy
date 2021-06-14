@@ -4,6 +4,9 @@
 #include <errno.h>      // Error integer and strerror() function
 #include <termios.h>    // Contains POSIX terminal control definitions
 #include <unistd.h>     // write(), read(), close()
+#include <cstdint>
+#include <stdint.h>
+#include <chrono>
 
 #include <opencv2/opencv.hpp>
 
@@ -32,10 +35,32 @@ using namespace std;
 // Set the camera properties
 #define viewAngleX 120  // FOV in degree
 #define viewAngleY 120  // FOV in degree
+#define pi 3.14159265359
 
 // Set the UART properties
 #define UART_device_name "/dev/ttyO0"
 #define UART_bus_speed B115200
+
+
+int frameSizeX;         // Variables to store the size of the frame captured by the camera
+int frameSizeY;
+int posX;               // Variables to store the location of the green screen on the display in pixels from top left (0,0)
+int posY;
+double relativePosX;    // Variable to store the location of the green screen relative to the middle of the frame
+double relativePosY;
+int8_t deltaRotX;       // Variable to store the relative rotation angle
+int8_t deltaRotY;
+
+// Function to send two data bytes over the UART bus
+void sendUART(int8_t msg0, int8_t msg1) {
+    int8_t UART_msg[3];
+
+    UART_msg[0] = msg0;
+    UART_msg[1] = msg1;
+    UART_msg[2] = '\n';
+
+    write(UART_port, UART_msg, sizeof(UART_msg));
+}
 
 int main( int argc, char** argv )
 {
@@ -83,13 +108,6 @@ int main( int argc, char** argv )
         printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
     }
 
-    // // Read and write examples
-    // unsigned char msg[] = { 'H', 'e', 'l', 'l', 'o', '\r' };
-    // write(UART_port, msg, sizeof(msg));
-    //
-    // char read_buf [256];
-    // int n = read(UART_port, &read_buf, sizeof(read_buf));
-
     // ------------------------------------------------------------- OpenCV setup
     VideoCapture cap(0); //capture the video from webcam
 
@@ -103,31 +121,26 @@ int main( int argc, char** argv )
     Mat imgTmp;
     cap.read(imgTmp); 
 
-    int frameX = imgTmp.cols;
-    int frameY = imgTmp.rows;
-
+    // Store the frame size
+    frameSizeX = imgTmp.cols;
+    frameSizeY = imgTmp.rows;
 
     while (true)
     {
-        Mat imgOriginal;
+        auto startTime = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
 
+        Mat imgOriginal;
         bool bSuccess = cap.read(imgOriginal); // read a new frame from video
 
-
-
-        if (!bSuccess) //if not success, break loop
-        {
+        if (!bSuccess) {
             printf("Cannot read a frame from video stream\n");
-
             break;
         }
 
         Mat imgHSV;
-
         cvtColor(imgOriginal, imgHSV, COLOR_BGR2HSV); //Convert the captured frame from BGR to HSV
 
         Mat imgThresholded;
-
         inRange(imgHSV, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), imgThresholded); //Threshold the image
 
         //morphological opening (removes small objects from the foreground)
@@ -149,17 +162,26 @@ int main( int argc, char** argv )
         if (dArea > 10000)
         {
             //calculate the position of the ball 0,0 is in the upperleft corner of the display
-            int posX = dM10 / dArea;
-            int posY = dM01 / dArea;        
+            posX = dM10 / dArea;
+            posY = dM01 / dArea;        
 
-            int relativeX = (posX - frameX / 2) / frameX;   // Position relative to the middle of the display
-            int relativeY = (posY - frameY / 2) / frameY;
+            // Position relative to the middle of the display
+            relativePosX = (posX - frameSizeX / 2) / frameSizeX;
+            relativePosY = (posY - frameSizeY / 2) / frameSizeY;
 
-            int8_t deltaX = atan(relativeX * 2 * tan(viewAngleX/2));
-            int8_t deltaY = atan(relativeY * 2 * tan(viewAngleY/2));
+            // Angle relative to the centre of the camera view
+            deltaRotX = int8_t(atan(relativePosX * 2 * tan(viewAngleX/2 / 180 * pi)) / pi * 180);    
+            deltaRotY = int8_t(atan(relativePosY * 2 * tan(viewAngleY/2 / 180 * pi)) / pi * 180);
 
+            sendUART(deltaRotX, deltaRotY);
+        } else {
+            sendUART(INT8_MIN, INT8_MIN);
         }
 
+        auto endTime = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
+
+
+        printf("Loop time in ms: %d", endTime-startTime);
     }
 
     return 0;
