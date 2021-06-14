@@ -136,20 +136,14 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 			calibrate_running	: INOUT std_logic;
 
 			-- Motor control
-			dutycycle0			: OUT integer RANGE 0 TO 100;
-			dutycycle1			: OUT integer RANGE 0 TO 100;
-			CW0					: OUT std_logic;
-			CW1					: OUT std_logic;
-			PWM_enable0			: OUT std_logic;
-			PWM_enable1			: OUT std_logic;
+			dutycycle			: OUT integer RANGE 0 TO 100;
+			CW					: OUT std_logic;
+			PWM_enable			: INOUT std_logic;
 
 			-- Stepcount control
-			stepCount0			: IN integer RANGE -8192 TO 8191;
-			stepCount0_min		: OUT integer RANGE -8192 TO 0;
-			stepCount0_max		: OUT integer RANGE 0 TO 8191;
-			stepCount1			: IN integer RANGE -8192 TO 8191;
-			stepCount1_min		: OUT integer RANGE -8192 TO 0;
-			stepCount1_max		: OUT integer RANGE 0 TO 8191;
+			stepCount			: IN integer RANGE -8192 TO 8191;
+			stepCount_min		: INOUT integer RANGE -8192 TO 0;
+			stepCount_max		: INOUT integer RANGE 0 TO 8191;
 			stepReset			: OUT std_logic
 
 		);
@@ -323,8 +317,8 @@ BEGIN
 
 		);
 	
-
-	CalibrateIP: calibrate
+	-- Initialize calibrate IPs
+	Calibrate0: calibrate
 		PORT MAP(
 			-- CLOCK and reset
 			reset				=> reset,
@@ -335,20 +329,37 @@ BEGIN
 			calibrate_running	=> CALL_calibrate_running,
 
 			-- Motor control
-			dutycycle0			=> CALL_dutycycle0,
-			dutycycle1			=> CALL_dutycycle1,
-			CW0					=> CALL_CW0,
-			CW1					=> CALL_CW1,
-			PWM_enable0			=> CALL_enable0,
-			PWM_enable1			=> CALL_enable1,
+			dutycycle			=> CALL_dutycycle0,
+			CW					=> CALL_CW0,
+			PWM_enable			=> CALL_enable0,
 
 			-- Stepcount control
-			stepCount0			=> stepCount0,
-			stepCount0_min		=> stepCount0_min,
-			stepCount0_max		=> stepCount0_max,
-			stepCount1			=> stepCount1,
-			stepCount1_min		=> stepCount1_min,
-			stepCount1_max		=> stepCount1_max,
+			stepCount			=> stepCount0,
+			stepCount_min		=> stepCount0_min,
+			stepCount_max		=> stepCount0_max,
+			stepReset			=> CALL_stepReset
+
+		);	
+
+	Calibrate1: calibrate
+		PORT MAP(
+			-- CLOCK and reset
+			reset				=> reset,
+			CLOCK_50			=> clk,
+
+			-- Enable calibration
+			calibrate_enable	=> CALL_calibrate_enable,
+			calibrate_running	=> CALL_calibrate_running,
+
+			-- Motor control
+			dutycycle			=> CALL_dutycycle1,
+			CW					=> CALL_CW1,
+			PWM_enable			=> CALL_enable1,
+
+			-- Stepcount control
+			stepCount			=> stepCount1,
+			stepCount_min		=> stepCount1_min,
+			stepCount_max		=> stepCount1_max,
 			stepReset			=> CALL_stepReset
 
 		);	
