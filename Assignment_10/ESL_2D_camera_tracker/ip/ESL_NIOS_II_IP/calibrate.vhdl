@@ -24,6 +24,7 @@ ENTITY calibrate IS
 		dutycycle			: OUT integer RANGE 0 TO 100;
 		CW					: OUT std_logic;
 		PWM_enable			: INOUT std_logic;
+		calibrate_dutyCycle	: IN integer RANGE 0 TO 100;
 
 		-- Stepcount control
 		stepCount			: IN integer RANGE -8192 TO 8191;
@@ -38,7 +39,7 @@ ARCHITECTURE bhv OF calibrate IS
 	
 	CONSTANT calibrate_clockTimeout 		: integer := 5000000;	-- 5.000.000 clock pulses for 100ms
 	CONSTANT calibrate_stepCount_driftMax 	: integer := 5;			-- The maximum amount of steps a stepCount may drift at the end position
-	CONSTANT calibrate_dutyCycle			: integer := 20;		-- Dutycycle with which to rotate the motors
+	CONSTANT calibrate_dutyCycleR			: integer := 20;
 
 BEGIN
 
@@ -193,6 +194,8 @@ BEGIN
 
 						-- Setup the motor to move counterclockwise (negative stepCount)
 						CW <= '0';
+
+						dutycycle <= calibrate_dutyCycleR;
 
 						-- If the motor is not at its half way point yet
 						IF (stepCount > stepCount_max / 2) THEN

@@ -142,6 +142,7 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 			dutycycle			: OUT integer RANGE 0 TO 100;
 			CW					: OUT std_logic;
 			PWM_enable			: INOUT std_logic;
+			calibrate_dutyCycle	: IN integer RANGE 0 TO 100;
 
 			-- Stepcount control
 			stepCount			: IN integer RANGE -8192 TO 8191;
@@ -335,6 +336,7 @@ BEGIN
 			dutycycle			=> CALL_dutycycle0,
 			CW					=> CALL_CW0,
 			PWM_enable			=> CALL_enable0,
+			calibrate_dutyCycle => 50,
 
 			-- Stepcount control
 			stepCount			=> stepCount0,
@@ -358,6 +360,7 @@ BEGIN
 			dutycycle			=> CALL_dutycycle1,
 			CW					=> CALL_CW1,
 			PWM_enable			=> CALL_enable1,
+			calibrate_dutyCycle => 20,
 
 			-- Stepcount control
 			stepCount			=> stepCount1,
