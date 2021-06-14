@@ -223,7 +223,7 @@ BEGIN
 			stepCount_max => stepCount0_max,
 
 			--Reset stepcount to 0
-			stepReset => stepReset
+			stepReset => stepReset0
 		);
 
 	-- Initialize encoder 1
@@ -244,7 +244,7 @@ BEGIN
 			stepCount_max => stepCount1_max,
 
 			--Reset stepcount to 0
-			stepReset => stepReset
+			stepReset => stepReset1
 		);
 
 	-- Initialize PWM generator 0
