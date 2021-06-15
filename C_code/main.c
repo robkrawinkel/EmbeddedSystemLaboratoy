@@ -160,7 +160,7 @@ int main()
 		if(!EmptyUart0()){
 			ch = GetUart0();
 			printf("received message: %c\n",ch);
-			//PutUart0(ch);
+			PutUart0(ch);
 			switch (messageID)​{
 				case 0: //set pan
 					panAngle = (int)ch;						
