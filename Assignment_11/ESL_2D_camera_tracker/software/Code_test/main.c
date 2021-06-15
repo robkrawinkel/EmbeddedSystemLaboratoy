@@ -77,11 +77,7 @@ int main()
 	double pan_y [1 + 1];
 	double tilt_u[3 + 1];
 	double tilt_y[1 + 1];
-	int messageID = 2; //three different messages are received over UART, this counts them
-	int panAngle;
-	int tiltAngle;
-	
-	
+
 	/* Initialize the inputs and outputs with correct initial values */
 	pan_u[0] = 0.0;		/* corr */
 	pan_u[1] = 0.0;		/* in */
@@ -150,48 +146,25 @@ int main()
 		if(stepCount0 != stepCount0Old || stepCount1 != stepCount1Old)
 			printf("stepCount0: %d\t stepCount1: %d \n\r", stepCount0, stepCount1);
 		
-		
-		//receive UART data as input
-		if(!EmptyUart0()){
-			ch = GetUart0();
-			printf("received message: %c\n",ch);
-			//PutUart0(ch);
-			switch (messageID)​{
-				case 0: //set pan
-					panAngle = (int)ch;						
-					messageID++;
-					break;
-				case 1: //set tilt
-					tiltAngle = (int)ch;						
-					messageID++;
-					break;
-				default: //line break
-					if(ch == '\n'){
-						messageID = 0;
-						
-						//check if an object is detected
-						if (panAngle != -128 || tiltAngle != -128){
-							pan_u[1] += panAngle/360*2*pi;
-							tilt_u[1] += tiltAngle/360*2*pi;
-						}
-					}
-				}
-		}
-		
 		//generate inputs
 		pan_u[1] = 0;
-		if(pan_time >= 1)
+		if(pan_time >= 1){
 			pan_u[1] = 0.5*pi;
-		if(pan_time >= 5)
+
+		}
+		if(pan_time >= 5){
 			pan_u[1] = 1.5*pi;
-		if(pan_time >= 10)
+
+		}
+		if(pan_time >= 10){
+
 			pan_u[1] = 0.5*pi;
+
+		}
 		
-		tilt_u[1] = pan_u[1];
 		
 		/* Call the 20-sim submodel to calculate the output */
 		pan_u[2] = Stepcount0ToSI(stepCount0);
-		tilt_u[2] = Stepcount1ToSI(stepCount1);
 		
 
 		pan_CalculateSubmodel (&pan_u, &pan_y, pan_time);
@@ -203,7 +176,15 @@ int main()
 		//printf("%x\n",avalondSend);
 		IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,avalondSend);
 		
-
+		if(!EmptyUart0()){
+			ch = GetUart0();
+			printf("received message: %c\n",ch);
+			PutUart0(ch);
+			PutUart0('\r');
+			PutUart0('\n');
+			
+			
+		}
 		
 		stepCount0Old = stepCount0;
 		stepCount1Old = stepCount1;
