@@ -81,6 +81,17 @@ int main()
 	int panAngle;
 	int tiltAngle;
 	
+	//variables
+	uint32_t nReadOut = 0;
+	uint16_t stepCount0 = 0;
+	uint16_t stepCount1 = 0;
+	uint16_t stepCount0Old = 0;
+	uint16_t stepCount1Old = 0;
+	int8_t PWM0 = 0;
+	int8_t PWM1 = 0;
+	uint32_t avalondSend = 0;
+	uint8_t homingFlag = 0;
+	
 	
 	/* Initialize the inputs and outputs with correct initial values */
 	pan_u[0] = 0.0;		/* corr */
@@ -95,7 +106,7 @@ int main()
 
 	tilt_y[0] = 0.0;		/* out */
 
-
+	
 
 
 	/* Initialize the submodel itself */
@@ -103,19 +114,13 @@ int main()
 	tilt_InitializeSubmodel(&tilt_u, &tilt_y, pan_time);
 	
 	//reset calibration
-	IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000001000000000000000);
-	IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000000000000000000000);
+	avalonSend = 2^15;
+	IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,avalonSend);
+	avalonSend = 0;
+	IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,avalonSend);
 	
 	
-	//variables
-	uint32_t nReadOut = 0;
-	uint16_t stepCount0 = 0;
-	uint16_t stepCount1 = 0;
-	uint16_t stepCount0Old = 0;
-	uint16_t stepCount1Old = 0;
-	int8_t PWM0 = 0;
-	int8_t PWM1 = 0;
-	uint32_t avalondSend = 0;
+
 	while( (pan_stop_simulation == 0) ) {
 
 		//avalon bus communication
@@ -171,14 +176,17 @@ int main()
 						
 						//check if an object is detected
 						if (panAngle != -128 || tiltAngle != -128){
-							pan_u[1] += panAngle/360*2*pi;
-							tilt_u[1] += tiltAngle/360*2*pi;
+							pan_u[1] = pan_u[2] + panAngle/180*pi;
+							tilt_u[1] = tilt_u[2] + tiltAngle/180*pi;
+							homingFlag = 1;
 						}
+						else
+							homingFlag = 0;
 					}
 				}
 		}
 		
-		//generate inputs
+		//generate inputs (DELETE THIS!)
 		pan_u[1] = 0;
 		if(pan_time >= 1)
 			pan_u[1] = 0.5*pi;
@@ -198,7 +206,7 @@ int main()
 		tilt_CalculateSubmodel(&tilt_u, &tilt_y,pan_time);
 		PWM0 = pan_y[0]*maxPWMPan;
 		PWM1 = tilt_y[0]*maxPWMTilt;
-		int16_t temp16 = 0;
+		int16_t temp16 = 0 + homingFlag * 2^14;
 		avalondSend = PWM0 << 24 | PWM1 <<16 | temp16;
 		//printf("%x\n",avalondSend);
 		IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,avalondSend);
