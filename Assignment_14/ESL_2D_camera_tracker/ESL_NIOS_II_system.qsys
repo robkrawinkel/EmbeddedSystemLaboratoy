@@ -20,6 +20,14 @@
          type = "int";
       }
    }
+   element jtag_uart.avalon_jtag_slave
+   {
+      datum baseAddress
+      {
+         value = "70728";
+         type = "String";
+      }
+   }
    element clk_0
    {
       datum _sortIndex
@@ -28,12 +36,28 @@
          type = "int";
       }
    }
+   element sysid.control_slave
+   {
+      datum baseAddress
+      {
+         value = "70720";
+         type = "String";
+      }
+   }
    element cpu
    {
       datum _sortIndex
       {
          value = "2";
          type = "int";
+      }
+   }
+   element cpu.jtag_debug_module
+   {
+      datum baseAddress
+      {
+         value = "67584";
+         type = "String";
       }
    }
    element jtag_uart
@@ -50,6 +74,38 @@
       {
          value = "1";
          type = "int";
+      }
+   }
+   element ESL_NIOS_II_IP_0.s0
+   {
+      datum baseAddress
+      {
+         value = "69632";
+         type = "String";
+      }
+   }
+   element uart_0.s1
+   {
+      datum baseAddress
+      {
+         value = "70656";
+         type = "String";
+      }
+   }
+   element onchip_mem.s1
+   {
+      datum baseAddress
+      {
+         value = "32768";
+         type = "String";
+      }
+   }
+   element sys_clock_timer.s1
+   {
+      datum baseAddress
+      {
+         value = "70688";
+         type = "String";
       }
    }
    element sys_clock_timer

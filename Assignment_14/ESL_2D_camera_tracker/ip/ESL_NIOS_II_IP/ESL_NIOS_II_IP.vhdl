@@ -406,7 +406,7 @@ BEGIN
 		);
 	-- Initialize homing 0	
 	Homing0: homing
-		PORT (
+		PORT MAP(
 			-- CLOCK and reset
 			reset				=> reset,
 			CLOCK_50			=> clk,
@@ -429,7 +429,7 @@ BEGIN
 
 	-- Initialize homing 1	
 	Homing1: homing
-		PORT (
+		PORT MAP(
 			-- CLOCK and reset
 			reset				=> reset,
 			CLOCK_50			=> clk,
