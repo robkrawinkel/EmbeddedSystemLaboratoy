@@ -99,7 +99,7 @@ int main()
 	tilt_InitializeSubmodel(&tilt_u, &tilt_y, pan_time);
 	
 	//reset calibration
-	IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000001000000000000000);
+	//IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000001000000000000000);
 	IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000000000000000000000);
 	
 	
@@ -173,7 +173,7 @@ int main()
 		PWM1 = tilt_y[0]*maxPWMTilt;
 		int16_t temp16 = 0;
 		avalondSend = PWM0 << 24 | PWM1 <<16 | temp16;
-		//printf("%x\n",avalondSend);
+		printf("%f\n",pan_time);
 		IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,avalondSend);
 		
 		if(!EmptyUart0()){

@@ -485,8 +485,8 @@ BEGIN
 
 				PWM_dutycycle0 	<= CALL_dutycycle0;
 				PWM_dutycycle1 	<= CALL_dutycycle1;
-				PWM_CW0 		<= CALL_CW0;
-				PWM_CW1			<= CALL_CW1;
+				PWM_CW0 		<= NOT CALL_CW0;
+				PWM_CW1			<= NOT CALL_CW1;
 				PWM_enable0		<= CALL_enable0;
 				PWM_enable1		<= CALL_enable1;
 

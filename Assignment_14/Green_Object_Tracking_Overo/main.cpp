@@ -181,7 +181,7 @@ int main( int argc, char** argv )
         auto endTime = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
 
 
-        printf("Loop time in ms: %d", endTime-startTime);
+        printf("PosX: %d\t PosY: %d\t Loop time in ms: %d", posX, posY, endTime-startTime);
     }
 
     return 0;

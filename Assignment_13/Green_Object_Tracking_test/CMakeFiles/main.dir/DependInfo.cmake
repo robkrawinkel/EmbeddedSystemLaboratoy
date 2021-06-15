@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Red_Object_Tracking/main.cpp" "/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Red_Object_Tracking/CMakeFiles/main.dir/main.cpp.o"
+  "/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Green_Object_Tracking_test/main.cpp" "/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Green_Object_Tracking_test/CMakeFiles/main.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

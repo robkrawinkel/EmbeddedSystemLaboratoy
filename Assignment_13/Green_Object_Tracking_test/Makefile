@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Red_Object_Tracking
+CMAKE_SOURCE_DIR = /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Green_Object_Tracking_test
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Red_Object_Tracking
+CMAKE_BINARY_DIR = /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Green_Object_Tracking_test
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Red_Object_Tracking/CMakeFiles /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Red_Object_Tracking/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Green_Object_Tracking_test/CMakeFiles /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Green_Object_Tracking_test/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Red_Object_Tracking/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Green_Object_Tracking_test/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

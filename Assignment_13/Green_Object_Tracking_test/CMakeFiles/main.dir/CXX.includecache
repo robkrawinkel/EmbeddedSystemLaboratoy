@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Red_Object_Tracking/main.cpp
+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Green_Object_Tracking_test/main.cpp
 iostream
 -
 opencv2/opencv.hpp

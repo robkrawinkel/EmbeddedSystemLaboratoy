@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Green_Object_Tracking_Overo/main.cpp
+stdio.h
+-
+math.h
+-
+fcntl.h
+-
+errno.h
+-
+termios.h
+-
+unistd.h
+-
+cstdint
+-
+stdint.h
+-
+chrono
+-
+opencv2/opencv.hpp
+-
+
