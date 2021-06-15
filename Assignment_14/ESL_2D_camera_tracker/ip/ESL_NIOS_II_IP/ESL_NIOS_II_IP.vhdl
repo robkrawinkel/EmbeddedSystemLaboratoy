@@ -153,14 +153,49 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 		);
 	END COMPONENT;
 
+------------------------------------------------------------------------------ ARCHITECTURE - Homing ------------------------------------------------------------------------------
+
+	SIGNAL HOME_homing_enable		: std_logic;
+	SIGNAL HOME_dutycycle0			: integer RANGE 0 TO 100;
+	SIGNAL HOME_dutycycle1			: integer RANGE 0 TO 100;
+	SIGNAL HOME_CW0					: std_logic;
+	SIGNAL HOME_CW1					: std_logic;
+	SIGNAL HOME_enable0				: std_logic;
+	SIGNAL HOME_enable1				: std_logic;
+
+	COMPONENT homing
+		PORT (
+			-- CLOCK and reset
+			reset				: IN std_logic;
+			CLOCK_50			: IN std_logic;
+
+			-- Enable homing
+			homing_enable		: IN std_logic;
+
+			-- Motor control
+			dutycycle			: OUT integer RANGE 0 TO 100;
+			CW					: OUT std_logic;
+			PWM_enable			: INOUT std_logic;
+			homing_dutyCycle	: IN integer RANGE 0 TO 100;
+
+			-- Stepcount input
+			stepCount			: IN integer RANGE -8192 TO 8191;
+			stepCount_min		: IN integer RANGE -8192 TO 0;
+			stepCount_max		: IN integer RANGE 0 TO 8191
+
+		);
+	END COMPONENT;
+
+
 ------------------------------------------------------------------------------ ARCHITECTURE - Communication ------------------------------------------------------------------------------
-	SIGNAL COMM_dutycycle0 	: integer range 0 to 100;
-	SIGNAL COMM_dutycycle1 	: integer range 0 to 100;
-	SIGNAL COMM_CW0			: std_logic;
-	SIGNAL COMM_CW1			: std_logic;
-	SIGNAL COMM_enable0		: std_logic;
-	SIGNAL COMM_enable1		: std_logic;
-	SIGNAL COMM_recalibrate : std_logic;
+	SIGNAL COMM_dutycycle0 		: integer range 0 to 100;
+	SIGNAL COMM_dutycycle1 		: integer range 0 to 100;
+	SIGNAL COMM_CW0				: std_logic;
+	SIGNAL COMM_CW1				: std_logic;
+	SIGNAL COMM_enable0			: std_logic;
+	SIGNAL COMM_enable1			: std_logic;
+	SIGNAL COMM_recalibrate 	: std_logic;
+	SIGNAL COMM_homing_enable 	: std_logic;
 	
 	COMPONENT Communication
 		PORT (
@@ -368,7 +403,53 @@ BEGIN
 			stepCount_max		=> stepCount1_max,
 			stepReset			=> CALL_stepReset1
 
-		);	
+		);
+	-- Initialize homing 0	
+	Homing0: homing
+		PORT (
+			-- CLOCK and reset
+			reset				=> reset,
+			CLOCK_50			=> clk,
+
+			-- Enable homing
+			homing_enable		=> HOME_homing_enable,
+
+			-- Motor control
+			dutycycle			=> HOME_dutycycle0,
+			CW					=> HOME_CW0,
+			PWM_enable			=> HOME_enable0,
+			homing_dutyCycle	=> 50,
+
+			-- Stepcount input
+			stepCount			=> stepCount0,
+			stepCount_min		=> stepCount0_min,
+			stepCount_max		=> stepCount0_max
+
+		);
+
+	-- Initialize homing 1	
+	Homing1: homing
+		PORT (
+			-- CLOCK and reset
+			reset				=> reset,
+			CLOCK_50			=> clk,
+
+			-- Enable homing
+			homing_enable		=> HOME_homing_enable,
+
+			-- Motor control
+			dutycycle			=> HOME_dutycycle1,
+			CW					=> HOME_CW1,
+			PWM_enable			=> HOME_enable1,
+			homing_dutyCycle	=> 20,
+
+			-- Stepcount input
+			stepCount			=> stepCount1,
+			stepCount_min		=> stepCount1_min,
+			stepCount_max		=> stepCount1_max
+
+		);
+
 	
 	-- Output to the leds a 1 and the step count of encoder 0 in 7 bits signed
 	LED <= '1' & std_logic_vector(to_signed(stepCount1, 7));
@@ -409,12 +490,21 @@ BEGIN
 				PWM_enable0		<= CALL_enable0;
 				PWM_enable1		<= CALL_enable1;
 
+			ELSIF (HOME_homing_enable = '1') THEN
+
+				PWM_dutycycle0 	<= HOME_dutycycle0;
+				PWM_dutycycle1 	<= HOME_dutycycle1;
+				PWM_CW0 		<= HOME_CW0;
+				PWM_CW1			<= HOME_CW1;
+				PWM_enable0		<= HOME_enable0;
+				PWM_enable1		<= HOME_enable1;
 
 			ELSE
-				-- If not calibrating, the motors are controlled by the communication process
+				-- If not calibrating or homing, the motors are controlled by the communication process
 
-				-- Control the calibration by the communication bus
+				-- Control the calibration and homing by the communication bus
 				CALL_calibrate_enable <= COMM_recalibrate;
+				HOME_homing_enable <= COMM_homing_enable;
 
 				-- Don't reset the step counter
 				stepReset0 <= '0';

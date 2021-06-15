@@ -6,7 +6,7 @@ LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
 
-ENTITY calibrate IS
+ENTITY homing IS
 	PORT (
 		-- CLOCK and reset
 		reset				: IN std_logic;
@@ -29,7 +29,7 @@ ENTITY calibrate IS
 	);
 END ENTITY;
 
-ARCHITECTURE bhv OF calibrate IS
+ARCHITECTURE bhv OF homing IS
 	
 	CONSTANT homing_stepCount_driftMax 	: integer := 3;			-- The maximum amount of steps a stepCount may drift at the end position
 
