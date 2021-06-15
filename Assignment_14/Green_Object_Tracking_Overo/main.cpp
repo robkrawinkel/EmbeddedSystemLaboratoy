@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <stdint.h>
 #include <chrono>
+#include <iostream>
 
 #include <opencv2/opencv.hpp>
 
@@ -181,7 +182,7 @@ int main( int argc, char** argv )
         auto endTime = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
 
 
-        printf("PosX: %d\t PosY: %d\t Loop time in ms: %d", posX, posY, endTime-startTime);
+        printf("PosX: %d\t PosY: %d\t Loop time in ms: %d\n", posX, posY, endTime-startTime);
     }
 
     return 0;
