@@ -1,0 +1,3 @@
+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Red_Object_Tracking/CMakeFiles/rebuild_cache.dir
+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Red_Object_Tracking/CMakeFiles/edit_cache.dir
+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Red_Object_Tracking/CMakeFiles/main.dir
