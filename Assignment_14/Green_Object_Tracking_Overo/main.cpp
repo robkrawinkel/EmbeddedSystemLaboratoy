@@ -182,7 +182,7 @@ int main( int argc, char** argv )
         auto endTime = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
 
 
-        printf("PosX: %d\t PosY: %d\t Loop time in ms: %d\n", posX, posY, endTime-startTime);
+        printf("PosX: %d\t PosY: %d\t Area: %d\t Loop time in ms: %d\n", posX, posY, dArea, endTime-startTime);
     }
 
     return 0;
