@@ -53,7 +53,6 @@ add_file timer.vhdl {SYNTHESIS SIMULATION}
 add_file PWM.vhdl {SYNTHESIS SIMULATION}
 add_file Communication.vhdl {SYNTHESIS SIMULATION}
 add_file calibrate.vhdl {SYNTHESIS SIMULATION}
-add_file ramstix_gpmc_driver.vhd {SYNTHESIS SIMULATION}
 
 
 ## 

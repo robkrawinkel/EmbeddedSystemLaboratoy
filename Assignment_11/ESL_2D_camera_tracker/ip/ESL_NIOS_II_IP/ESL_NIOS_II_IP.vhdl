@@ -12,14 +12,14 @@ ENTITY ESL_NIOS_II_IP IS
 		clk				: IN  std_logic;
 		reset			: IN  std_logic;
 
-		-- GPMC side
-		GPMC_DATA     : inout std_logic_vector(16 - 1 downto 0);
-		GPMC_ADDR     : in    std_logic_vector(GPMC_ADDR_WIDTH_HIGH downto GPMC_ADDR_WIDTH_LOW);
-		GPMC_nPWE     : in    std_logic;
-		GPMC_nOE      : in    std_logic;
-		GPMC_FPGA_IRQ : in    std_logic;
-		GPMC_nCS6     : in    std_logic;
-		GPMC_CLK      : in    std_logic;
+		-- Signals to connect to an Avalon-MM slave INterface
+		slave_address		: IN  std_logic_vector(7 downto 0);
+		slave_read			: IN  std_logic;
+		slave_write			: IN  std_logic;
+		slave_readdata		: OUT std_logic_vector(DATA_WIDTH-1 downto 0);
+		slave_writedata		: IN  std_logic_vector(DATA_WIDTH-1 downto 0);
+		slave_byteenable	: IN  std_logic_vector((DATA_WIDTH/8)-1 downto 0);
+
 		-- Signals to connect to custom user logic
 		LED				: OUT std_logic_vector(LED_WIDTH-1 downto 0);
 		GPIO_0			: INOUT std_logic_vector(33 downto 0);
@@ -38,12 +38,22 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 	-- Internal memory for the system and a subset for the IP
 	SIGNAL mem        		: std_logic_vector(31 downto 0);
 	SIGNAL memSEND    		: std_logic_vector(31 downto 0);
+
+
+------------------------------------------------------------------------------ ARCHITECTURE - Quadrature encoder ------------------------------------------------------------------------------
+
+
+	-- Signals for quadrature encoder
+	SIGNAL stepCount0 		: integer RANGE -8192 TO 8191;
+	SIGNAL stepCount1 		: integer RANGE -8192 TO 8191;
+
 	SIGNAL stepCount0_min	: integer RANGE -8192 TO 0;
 	SIGNAL stepCount0_max	: integer RANGE 0 TO 8191;
 	SIGNAL stepCount1_min	: integer RANGE -8192 TO 0;
 	SIGNAL stepCount1_max	: integer RANGE 0 TO 8191;
 
-	SIGNAL stepReset		: std_logic;
+	SIGNAL stepReset0		: std_logic;
+	SIGNAL stepReset1		: std_logic;
 
 	-- Define the quadrature encoder module
 	COMPONENT QuadratureEncoder		
@@ -71,6 +81,7 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 
 
 ------------------------------------------------------------------------------ ARCHITECTURE - PWM module ------------------------------------------------------------------------------
+
 
 	-- Signals for the PWM generation
 	SIGNAL PWM_frequency 	: integer range 0 to 50000000;
@@ -105,14 +116,16 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 ------------------------------------------------------------------------------ ARCHITECTURE - Calibrate ------------------------------------------------------------------------------
 
 	SIGNAL CALL_calibrate_enable	: std_logic;
-	SIGNAL CALL_calibrate_running	: std_logic;
+	SIGNAL CALL_calibrate_running0	: std_logic;
+	SIGNAL CALL_calibrate_running1	: std_logic;
 	SIGNAL CALL_dutycycle0			: integer RANGE 0 TO 100;
 	SIGNAL CALL_dutycycle1			: integer RANGE 0 TO 100;
 	SIGNAL CALL_CW0					: std_logic;
 	SIGNAL CALL_CW1					: std_logic;
 	SIGNAL CALL_enable0				: std_logic;
 	SIGNAL CALL_enable1				: std_logic;
-	SIGNAL CALL_stepReset			: std_logic;
+	SIGNAL CALL_stepReset0			: std_logic;
+	SIGNAL CALL_stepReset1			: std_logic;
 
 	-- Define calibrate component
 	COMPONENT calibrate
@@ -126,17 +139,15 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 			calibrate_running	: INOUT std_logic;
 
 			-- Motor control
-			dutycycle0			: OUT integer RANGE 0 TO 100;
-			dutycycle1			: OUT integer RANGE 0 TO 100;
-			CW0					: OUT std_logic;
-			CW1					: OUT std_logic;
-			PWM_enable0			: OUT std_logic;
-			PWM_enable1			: OUT std_logic;
+			dutycycle			: OUT integer RANGE 0 TO 100;
+			CW					: OUT std_logic;
+			PWM_enable			: INOUT std_logic;
+			calibrate_dutyCycle	: IN integer RANGE 0 TO 100;
 
 			-- Stepcount control
-			stepCount0			: IN integer RANGE -8192 TO 8191;
-			stepCount0_min		: OUT integer RANGE -8192 TO 0;
-			stepCount0_max		: OUT integer RANGE 0 TO 8191;
+			stepCount			: IN integer RANGE -8192 TO 8191;
+			stepCount_min		: INOUT integer RANGE -8192 TO 0;
+			stepCount_max		: INOUT integer RANGE 0 TO 8191;
 			stepReset			: OUT std_logic
 
 		);
@@ -155,17 +166,16 @@ ARCHITECTURE behavior OF ESL_NIOS_II_IP IS
 		PORT (
 			-- CLOCK and reset
 			reset		: IN std_logic;
-			CLOCK_50	: IN sDATA_WIDTHtd_logic;
+			CLOCK_50	: IN std_logic;
 			
 
-			-- GPMC side
-			GPMC_DATA     : inout std_logic_vector(16 - 1 downto 0);
-			GPMC_ADDR     : in    std_logic_vector(GPMC_ADDR_WIDTH_HIGH downto GPMC_ADDR_WIDTH_LOW);
-			GPMC_nPWE     : in    std_logic;
-			GPMC_nOE      : in    std_logic;
-			GPMC_FPGA_IRQ : in    std_logic;
-			GPMC_nCS6     : in    std_logic;
-			GPMC_CLK      : in    std_logic;
+			-- Signals to connect to an Avalon-MM slave INterface
+			slave_address		: IN  std_logic_vector(7 downto 0);
+			slave_read			: IN  std_logic;
+			slave_write			: IN  std_logic;
+			slave_readdata		: OUT std_logic_vector(DATA_WIDTH-1 downto 0);
+			slave_writedata		: IN  std_logic_vector(DATA_WIDTH-1 downto 0);
+			slave_byteenable	: IN  std_logic_vector((DATA_WIDTH/8)-1 downto 0);
 
 			-- Output signals for the PWM signal of PWM blocks
 			dutycycle0			: OUT integer range 0 to 100; 		--dutycycle of the signal in percentage
@@ -214,11 +224,11 @@ BEGIN
 			stepCount_max => stepCount0_max,
 
 			--Reset stepcount to 0
-			stepReset => stepReset
+			stepReset => stepReset0
 		);
 
 	-- Initialize encoder 1
-	encoder1: QuaratureEncoder
+	encoder1: QuadratureEncoder
 		PORT MAP (
 			-- CLOCK and reset
 			reset		=> reset,
@@ -235,7 +245,7 @@ BEGIN
 			stepCount_max => stepCount1_max,
 
 			--Reset stepcount to 0
-			stepReset => stepReset
+			stepReset => stepReset1
 		);
 
 	-- Initialize PWM generator 0
@@ -281,18 +291,23 @@ BEGIN
 			reset		=> reset,
 			CLOCK_50	=> clk,
 			
-			GPMC_DATA     => GPMC_DATA,
-			GPMC_ADDR     => GPMC_ADDR,
-			GPMC_nPWE     => GPMC_nPWE,
-			GPMC_nOE      => GPMC_nOE,
-			GPMC_FPGA_IRQ => GPMC_FPGA_IRQ,
-			GPMC_nCS6     => GPMC_nCS6,
-			GPMC_CLK      => GPMC_CLK,
+			-- Signals to connect to an Avalon-MM slave INterface
+			slave_address	=> slave_address,	
+			slave_read		=> slave_read,
+			slave_write		=> slave_write,
+			slave_readdata	=> slave_readdata,
+			slave_writedata	=> slave_writedata,
+			slave_byteenable=> slave_byteenable,
 
 			-- Output signals for the PWM signal of PWM blocks
 			dutycycle0	=> COMM_dutycycle0,
 			CW0			=> COMM_CW0,
 			enable0     => COMM_enable0,
+			dutycycle1	=> COMM_dutycycle1,
+			CW1			=> COMM_CW1,
+			enable1     => COMM_enable1,
+			
+			-- Input signals from the encoder
 			stepCount0 	=> stepCount0,
 			stepCount1	=> stepCount1,
 			
@@ -302,12 +317,12 @@ BEGIN
 	
 			--flag to recalibrate
 			doRecalibrate => COMM_recalibrate,
-			calibrate_running => CALL_calibrate_running
+			calibrate_running => (CALL_calibrate_running0 OR CALL_calibrate_running1)
 
 		);
 	
-
-	CalibrateIP: calibrate
+	-- Initialize calibrate IPs
+	Calibrate0: calibrate
 		PORT MAP(
 			-- CLOCK and reset
 			reset				=> reset,
@@ -315,24 +330,43 @@ BEGIN
 
 			-- Enable calibration
 			calibrate_enable	=> CALL_calibrate_enable,
-			calibrate_running	=> CALL_calibrate_running,
+			calibrate_running	=> CALL_calibrate_running0,
 
 			-- Motor control
-			dutycycle0			=> CALL_dutycycle0,
-			dutycycle1			=> CALL_dutycycle1,
-			CW0					=> CALL_CW0,
-			CW1					=> CALL_CW1,
-			PWM_enable0			=> CALL_enable0,
-			PWM_enable1			=> CALL_enable1,
+			dutycycle			=> CALL_dutycycle0,
+			CW					=> CALL_CW0,
+			PWM_enable			=> CALL_enable0,
+			calibrate_dutyCycle => 50,
 
 			-- Stepcount control
-			stepCount0			=> stepCount0,
-			stepCount0_min		=> stepCount0_min,
-			stepCount0_max		=> stepCount0_max,
-			stepCount1			=> stepCount1,
-			stepCount1_min		=> stepCount1_min,
-			stepCount1_max		=> stepCount1_max,
-			stepReset			=> CALL_stepReset
+			stepCount			=> stepCount0,
+			stepCount_min		=> stepCount0_min,
+			stepCount_max		=> stepCount0_max,
+			stepReset			=> CALL_stepReset0
+
+		);	
+
+	Calibrate1: calibrate
+		PORT MAP(
+			-- CLOCK and reset
+			reset				=> reset,
+			CLOCK_50			=> clk,
+
+			-- Enable calibration
+			calibrate_enable	=> CALL_calibrate_enable,
+			calibrate_running	=> CALL_calibrate_running1,
+
+			-- Motor control
+			dutycycle			=> CALL_dutycycle1,
+			CW					=> CALL_CW1,
+			PWM_enable			=> CALL_enable1,
+			calibrate_dutyCycle => 20,
+
+			-- Stepcount control
+			stepCount			=> stepCount1,
+			stepCount_min		=> stepCount1_min,
+			stepCount_max		=> stepCount1_max,
+			stepReset			=> CALL_stepReset1
 
 		);	
 	
@@ -358,13 +392,15 @@ BEGIN
 
 			-- Start calibration of the motors after reset
 			CALL_calibrate_enable <= '1';
-			stepReset <= '1';		-- Reset the stepcount
+			stepReset0 <= '1';		-- Reset the stepcount
+			stepReset1 <= '1';		-- Reset the stepcount
 
 		ELSIF rising_edge(clk) THEN
 
-			IF (CALL_calibrate_running = '1') THEN
+			IF (CALL_calibrate_running0 = '1' OR CALL_calibrate_running1 = '1') THEN
 				-- If calibrating, its process controlls the motors
-				stepReset <= CALL_stepReset;
+				stepReset0 <= CALL_stepReset0;
+				stepReset1 <= CALL_stepReset1;
 
 				PWM_dutycycle0 	<= CALL_dutycycle0;
 				PWM_dutycycle1 	<= CALL_dutycycle1;
@@ -377,11 +413,12 @@ BEGIN
 			ELSE
 				-- If not calibrating, the motors are controlled by the communication process
 
-				-- Turn off calibration now that it is finished
+				-- Control the calibration by the communication bus
 				CALL_calibrate_enable <= COMM_recalibrate;
 
 				-- Don't reset the step counter
-				stepReset <= '0';
+				stepReset0 <= '0';
+				stepReset1 <= '0';
 
 				-- communication control
 				PWM_dutycycle0 	<= COMM_dutycycle0;

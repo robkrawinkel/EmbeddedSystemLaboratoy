@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_13/Green_Object_Tracking_test/main.cpp
+iostream
+-
+opencv2/opencv.hpp
+-
+
