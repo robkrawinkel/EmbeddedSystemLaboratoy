@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Jun 15, 2021 1:06:10 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1623755170222</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Jun 22, 2021 4:22:46 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1624371766590</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_14/ESL_2D_camera_tracker/software/20-sim_14_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../ESL_NIOS_II_system.sopcinfo</SopcDesignFile>

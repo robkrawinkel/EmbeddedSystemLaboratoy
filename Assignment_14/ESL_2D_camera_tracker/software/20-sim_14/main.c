@@ -73,10 +73,11 @@ double Stepcount0ToSI(int16_t steps)
 
 int main()
 {
-	unsigned char ch;
+	int8_t ch;
 	printf("\n\nHello NiosII!!!!!\n");
-	//IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000000000000000000000);
-	IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000001000000000000000);
+
+	//IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000001000000000000000);
+	IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000000000000000000000);
 	InitUart();
 
 	//initialize 20-sim
@@ -104,6 +105,10 @@ int main()
 	uint16_t stepCount1Old = 0;
 	int8_t PWM0 = 0;
 	int8_t PWM1 = 0;
+	int8_t panAngle = 0;
+	int8_t tiltAngle = 0;
+	int8_t messageID = 2;
+	int8_t PID_counter = 0;
 	uint32_t avalondSend = 0;
 	while( (xx_stop_simulation == XXFALSE) ) {
 
@@ -136,25 +141,78 @@ int main()
 		
 		
 
-		if(stepCount0 != stepCount0Old || stepCount1 != stepCount1Old)
-			printf("stepCount0: %d\t stepCount1: %d \n\r", stepCount0, stepCount1);
-		
+		//if(stepCount0 != stepCount0Old || stepCount1 != stepCount1Old)
+			//printf("stepCount0: %d\t stepCount1: %d \n\r", stepCount0, stepCount1);
+		/*
 		//generate inputs
 		u[1] = 0;
 		if(xx_time >= 1){
 			u[1] = 0.5*pi;
 
 		}
-		if(xx_time >= 5){
+		if(xx_time >= 15){
 			u[1] = 1.5*pi;
 
 		}
-		if(xx_time >= 10){
+		if(xx_time >= 20){
 
 			u[1] = 0.5*pi;
 
+		}*/
+		if(PID_counter++ > 50){
+			PWM0 = 0;
+			PWM1 = 0;
+			PID_counter = 0;
 		}
-		
+		//receive UART data as input
+		if(!EmptyUart0()){
+			ch = GetUart0();
+			//printf("received message: %d\n",ch);
+			//PutUart0(ch);
+			switch(messageID){
+				case 0: //set pan
+					panAngle = ch;
+					messageID++;
+					break;
+				case 1: //set tilt
+					tiltAngle = ch;
+					messageID++;
+					break;
+				default: //line break
+					if(ch == '\n'){
+						messageID = 0;
+						if(panAngle != -128)
+							PWM0 = -panAngle/2;
+						if(tiltAngle != -128)
+							PWM1 = -tiltAngle/20;
+						if(PWM0 > 0 && PWM0 < 40)
+							PWM0 = 40;
+						if(PWM0 < 0 && PWM0 > -40)
+							PWM0 = -40;
+						if(PWM1 > 0 && PWM1 < 5)
+							PWM1 = 5;
+						if(PWM1 < 0 && PWM1 > -5)
+							PWM1 = -5;
+
+
+
+						//check if an object is detected
+						if (panAngle != -128 || tiltAngle != -128){
+							u[1] += panAngle/360*2*pi*200;
+						}
+						else{
+							u[1] = pi;
+						}
+
+					}
+					break;
+				}
+
+		}
+
+		if(u[1] < 0)
+			u[1] = 0;
+
 		
 		/* Call the 20-sim submodel to calculate the output */
 		u[2] = Stepcount0ToSI(stepCount0);
@@ -163,18 +221,14 @@ int main()
 		//printf("%f\n",temp);
 
 		XXCalculateSubmodel (&u, &y, xx_time);
-		PWM0 = y[0]*70;
+		//printf("model setpoint: %f\t model input %f\t model output%f\n", u[1], u[2], y[0]);
+		//PWM0 = y[0]*70;
+
 		int16_t temp16 = 0;
 		avalondSend = PWM0 << 24 | PWM1 <<16 | temp16;
 		//printf("%x\n",avalondSend);
 		IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,avalondSend);
-		
-		if(!EmptyUart0()){
-			ch = GetUart0();
-			printf("received message: %c\n",ch);
-			
-			
-		}
+
 		
 		stepCount0Old = stepCount0;
 		stepCount1Old = stepCount1;

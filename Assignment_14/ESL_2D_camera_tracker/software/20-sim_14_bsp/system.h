@@ -4,7 +4,7 @@
  * Machine generated for CPU 'cpu' in SOPC Builder design 'ESL_NIOS_II_system'
  * SOPC Builder design path: ../../ESL_NIOS_II_system.sopcinfo
  *
- * Generated: Tue Jun 15 13:01:07 CEST 2021
+ * Generated: Tue Jun 22 16:22:47 CEST 2021
  */
 
 /*
@@ -277,7 +277,7 @@
 #define SYSID_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SYSID_NAME "/dev/sysid"
 #define SYSID_SPAN 8
-#define SYSID_TIMESTAMP 1623753927
+#define SYSID_TIMESTAMP 1623757666
 #define SYSID_TYPE "altera_avalon_sysid_qsys"
 
 
