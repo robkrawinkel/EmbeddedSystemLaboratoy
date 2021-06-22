@@ -42,6 +42,7 @@ using namespace std;
 #define UART_device_name "/dev/ttyO0"
 #define UART_bus_speed B115200
 
+#define ANGLE_const 1.7321
 
 int frameSizeX;         // Variables to store the size of the frame captured by the camera
 int frameSizeY;
@@ -49,6 +50,8 @@ int posX;               // Variables to store the location of the green screen o
 int posY;
 double relativePosX;    // Variable to store the location of the green screen relative to the middle of the frame
 double relativePosY;
+double tempX;
+double tempY;
 int8_t deltaRotX;       // Variable to store the relative rotation angle
 int8_t deltaRotY;
 
@@ -68,13 +71,17 @@ int main( int argc, char** argv )
     // ------------------------------------------------------------- UART setup
     // From: https://blog.mbedded.ninja/programming/operating-systems/linux/linux-serial-ports-using-c-cpp/
     int UART_port = open(UART_device_name, O_RDWR);
-    
-    struct termios tty;
 
-    // Get the current UART settings
-    if(tcgetattr(UART_port, &tty) != 0) {
-        printf("Error %i from tcgetattr: %s\n", errno, strerror(errno));
+    if (UART_port == 0) {
+        printf("port opening failed\n");
     }
+    
+    // struct termios tty;
+
+    // // Get the current UART settings
+    // if(tcgetattr(UART_port, &tty) != 0) {
+    //     printf("Error %i from tcgetattr: %s\n", errno, strerror(errno));
+    // }
 
     // // Set the UART settings
     // tty.c_cflag &= ~PARENB;         // Clear parity bit, disabling parity (most common)
@@ -99,15 +106,15 @@ int main( int argc, char** argv )
     // tty.c_cc[VTIME] = 10;           // Wait for up to 1s (10 deciseconds), returning as soon as any data is received.
     // tty.c_cc[VMIN] = 0;
 
-    // Set in/out baud rate
-    cfsetispeed(&tty, UART_bus_speed);
-    cfsetospeed(&tty, UART_bus_speed);
-    //cfsetspeed(&tty, UART_bus_speed);     // Combined in and output setting
+    // // Set in/out baud rate
+    // cfsetispeed(&tty, UART_bus_speed);
+    // cfsetospeed(&tty, UART_bus_speed);
+    // //cfsetspeed(&tty, UART_bus_speed);     // Combined in and output setting
 
-    // Save tty settings, also checking for error
-    if (tcsetattr(UART_port, TCSANOW, &tty) != 0) {
-        printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
-    }
+    // // Save tty settings, also checking for error
+    // if (tcsetattr(UART_port, TCSANOW, &tty) != 0) {
+    //     printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
+    // }
 
     // ------------------------------------------------------------- OpenCV setup
     VideoCapture cap(0); //capture the video from webcam
@@ -160,29 +167,32 @@ int main( int argc, char** argv )
         double dArea = oMoments.m00;
 
         // if the area <= 10000, I consider that the there are no object in the image and it's because of the noise, the area is not zero 
-        if (dArea > 10000)
+        if (dArea > 1000000)
         {
             //calculate the position of the ball 0,0 is in the upperleft corner of the display
             posX = dM10 / dArea;
             posY = dM01 / dArea;        
 
             // Position relative to the middle of the display
-            relativePosX = (posX - frameSizeX / 2) / frameSizeX;
-            relativePosY = (posY - frameSizeY / 2) / frameSizeY;
+            relativePosX = ((double)posX - (double)frameSizeX / 2.0) / (double)frameSizeX;
+            relativePosY = ((double)posY - (double)frameSizeY / 2.0) / (double)frameSizeY;
 
             // Angle relative to the centre of the camera view
-            deltaRotX = int8_t(atan(relativePosX * 2 * tan(viewAngleX/2 / 180 * pi)) / pi * 180);    
-            deltaRotY = int8_t(atan(relativePosY * 2 * tan(viewAngleY/2 / 180 * pi)) / pi * 180);
+            tempX = atan(relativePosX * 2.0 * ANGLE_const) / pi * 180.0;    
+            tempY = atan(relativePosY * 2.0 * ANGLE_const) / pi * 180.0;
+
+            deltaRotX = tempX;
+            deltaRotY = tempY;
 
             sendUART(UART_port, deltaRotX, deltaRotY);
         } else {
-            sendUART(UART_port, INT8_MIN, INT8_MIN);
+            sendUART(UART_port, -128, -128);
         }
 
         auto endTime = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
 
 
-        printf("PosX: %d\t PosY: %d\t Area: %d\t Loop time in ms: %d\n", posX, posY, dArea, endTime-startTime);
+        printf("PosX: %d\t PosY: %d\t Area: %f\t frameSizeX: %d\t relativePosX: %f\t tempX: %f\t deltaRotX: %d\n", posX, posY, dArea, frameSizeX, relativePosX, tempX, deltaRotX);
     }
 
     return 0;

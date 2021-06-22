@@ -67,7 +67,7 @@ double Stepcount0ToSI(int16_t steps)
 
 int main()
 {
-	unsigned char ch;
+	int8_t ch;
 	printf("\n\nHello NiosII!!!!!\n");
 
 	InitUart();
@@ -99,7 +99,7 @@ int main()
 	tilt_InitializeSubmodel(&tilt_u, &tilt_y, pan_time);
 	
 	//reset calibration
-	//IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000001000000000000000);
+	IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000001000000000000000);
 	IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000000000000000000000);
 	
 	
@@ -165,6 +165,8 @@ int main()
 		
 		/* Call the 20-sim submodel to calculate the output */
 		pan_u[2] = Stepcount0ToSI(stepCount0);
+		tilt_u[1] = pan_u[1];
+		tilt_u[2] = Stepcount1ToSI(stepCount1);
 		
 
 		pan_CalculateSubmodel (&pan_u, &pan_y, pan_time);
@@ -173,15 +175,12 @@ int main()
 		PWM1 = tilt_y[0]*maxPWMTilt;
 		int16_t temp16 = 0;
 		avalondSend = PWM0 << 24 | PWM1 <<16 | temp16;
-		printf("%f\n",pan_time);
+		//printf("%f\n",pan_time);
 		IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,avalondSend);
 		
 		if(!EmptyUart0()){
 			ch = GetUart0();
-			printf("received message: %c\n",ch);
-			PutUart0(ch);
-			PutUart0('\r');
-			PutUart0('\n');
+			printf("received message: %d\n",ch);
 			
 			
 		}

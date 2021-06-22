@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Jun 15, 2021 12:46:31 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1623753991984</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Jun 22, 2021 3:34:29 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1624368869130</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/home/esl21/Documents/EmbeddedSystemLaboratoy/Assignment_14/ESL_2D_camera_tracker/software/two_motors_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../ESL_NIOS_II_system.sopcinfo</SopcDesignFile>
