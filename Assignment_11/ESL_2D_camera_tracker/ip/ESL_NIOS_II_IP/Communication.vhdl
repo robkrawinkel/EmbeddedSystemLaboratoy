@@ -16,14 +16,13 @@ ENTITY Communication IS
 	CLOCK_50	: IN std_logic;
 	
 
-    -- GPMC side
-    GPMC_DATA     : inout std_logic_vector(16 - 1 downto 0);
-    GPMC_ADDR     : in    std_logic_vector(GPMC_ADDR_WIDTH_HIGH downto GPMC_ADDR_WIDTH_LOW);
-    GPMC_nPWE     : in    std_logic;
-    GPMC_nOE      : in    std_logic;
-    GPMC_FPGA_IRQ : in    std_logic;
-    GPMC_nCS6     : in    std_logic;
-    GPMC_CLK      : in    std_logic;
+	-- Signals to connect to an Avalon-MM slave INterface
+	slave_address		: IN  std_logic_vector(7 downto 0);
+	slave_read			: IN  std_logic;
+	slave_write			: IN  std_logic;
+	slave_readdata		: OUT std_logic_vector(DATA_WIDTH-1 downto 0);
+	slave_writedata		: IN  std_logic_vector(DATA_WIDTH-1 downto 0);
+	slave_byteenable	: IN  std_logic_vector((DATA_WIDTH/8)-1 downto 0);
 
 	-- Output signals for the PWM signal of PWM blocks
 	dutycycle0			: OUT integer range 0 to 100; 		--dutycycle of the signal in percentage
@@ -51,72 +50,13 @@ END ENTITY;
 ARCHITECTURE bhv OF Communication IS
 	
 
------------------------------------------GPMC driver
-component ramstix_gpmc_driver is
-    generic(
-    DATA_WIDTH           : integer := 16;
-    GPMC_ADDR_WIDTH_HIGH : integer := 10;
-    GPMC_ADDR_WIDTH_LOW  : integer := 1;
-    -- RAM_SIZE should be a power of 2
-    RAM_SIZE             : integer := 32
-  );
- port(
-    clk           : in    std_logic;
-    -- Input (data from fpga to gumstix) at IDX 0 and IDX 1
-    in_reg0 : in std_logic_vector(16 - 1 downto 0);
-    in_reg1 : in std_logic_vector(16 - 1 downto 0);
-
-    -- Output (data from gumstix to fpga) at IDX 2 and IDX 3
-    out_reg2      : out   std_logic_vector(16 - 1 downto 0);
-    out_reg3      : out   std_logic_vector(16 - 1 downto 0);
-
-	 -- GPMC bus signals
-    GPMC_DATA     : inout std_logic_vector(16 - 1 downto 0);
-    GPMC_ADDR     : in    std_logic_vector(GPMC_ADDR_WIDTH_HIGH downto GPMC_ADDR_WIDTH_LOW);
-    GPMC_nPWE     : in    std_logic;
-    GPMC_nOE      : in    std_logic;
-    GPMC_FPGA_IRQ : in    std_logic;
-    GPMC_nCS6     : in    std_logic;
-    GPMC_CLK      : in    std_logic
-  );
-
-
-  end component;
-
-    -- Define signals to connect the component to the gpmc_driver
-	signal in_reg0 : std_logic_vector(16 - 1 downto 0) := (others => '0');
-	signal in_reg1 : std_logic_vector(16 - 1 downto 0) := (others => '0');
-   signal out_reg2 : std_logic_vector(16 - 1 downto 0) := (others => '0');
-	signal out_reg3 : std_logic_vector(16 - 1 downto 0) := (others => '0');
-  
-
 	-- Internal memory for the system
 	SIGNAL memREAD     		: std_logic_vector(31 downto 0);
 	SIGNAL memSEND    		: std_logic_vector(31 downto 0);
 
 BEGIN
 	
-  -- Map GPMC controller to I/O.
-  gpmc_driver : ramstix_gpmc_driver generic map(
-	DATA_WIDTH           => DATA_WIDTH,
-	GPMC_ADDR_WIDTH_HIGH => GPMC_ADDR_WIDTH_HIGH,
-	GPMC_ADDR_WIDTH_LOW  => GPMC_ADDR_WIDTH_LOW,
-	RAM_SIZE             => RAM_SIZE
-  )
-  port map (
-	clk           => CLOCK_50,
-	in_reg0 => in_reg0,
-	in_reg1 => in_reg1,
-	out_reg2 => out_reg2,
-	out_reg3 => out_reg3,
-	GPMC_DATA     => GPMC_DATA,
-	GPMC_ADDR     => GPMC_ADDR,
-	GPMC_nPWE     => GPMC_nPWE,
-	GPMC_nOE      => GPMC_nOE,
-	GPMC_FPGA_IRQ => GPMC_FPGA_IRQ,
-	GPMC_nCS6     => GPMC_nCS6,
-	GPMC_CLK      => GPMC_CLK
-  );
+
 	-- Create a process which reacts to the specified signals
 	PROCESS(reset, CLOCK_50)
 		
@@ -155,7 +95,7 @@ BEGIN
 			END IF;
 
 			-- Send data
-			
+			IF (slave_read = '1') THEN
 
 				CASE sendID IS
 					WHEN 1 => 
@@ -167,16 +107,25 @@ BEGIN
 						memSend <= (others => '0') ;
 						sendID := 1;
 				END CASE;
+<<<<<<< HEAD
 				in_reg0(15 downto 0) <= memSend(31 downto 16);
 				in_reg1(15 downto 0) <= memSend(15 downto 0);
 
+=======
+				slave_readdata <= memSEND;
+			END IF;
+>>>>>>> main
 			
 			---------------------------------------------------- Reading data
 
-			
+			IF (slave_write = '1') THEN
 				counter := 0;
+<<<<<<< HEAD
 				memRead(31 downto 16) <= out_reg2(15 downto 0);
 				memRead(15 downto 0) <= out_reg3(15 downto 0);
+=======
+				memRead <= slave_writedata;
+>>>>>>> main
 				
 				--Control the PWM signals depending on the input signal
 				PWM_0 := to_integer(signed(memRead(31 downto 24)));
@@ -230,17 +179,17 @@ BEGIN
 					dutycycle1 <= PWM_1;
 				END IF;
 
+			ELSE
 
-
-				--counter := counter + 1;
-				--IF counter >= 50000000 THEN --check if a message was received in the last 100ms
-				--	counter := 0;
-				--	enable1 <= '0';
-				--	enable0 <= '0';
-				--	doRecalibrate <= '0';
-				--END IF;
+				counter := counter + 1;
+				IF counter >= 50000000 THEN --check if a message was received in the last 100ms
+					counter := 0;
+					enable1 <= '0';
+					enable0 <= '0';
+					doRecalibrate <= '0';
+				END IF;
 				
-
+			END IF;
 
 			
 
