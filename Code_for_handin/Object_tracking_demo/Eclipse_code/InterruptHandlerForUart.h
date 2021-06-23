@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-//Description : Uart Interrupt Handler & Q Buffer For NiosII
-//Vision : V1.0
-//Filename : InterruptHandlerForUart.h 
+// Description : Uart Interrupt Handler & Q Buffer For NiosII
+// Vision : V1.0
+// Filename : InterruptHandlerForUart.h 
 // Copyright 2006, Cheong Min LEE
 // Email: lcm2559@yahoo.co.kr
 // The test may be run in NiosII standalone mode

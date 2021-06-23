@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 // 
-// ESL demo, accepting uart communication from the OVero fire for the required
+// ESL demo, accepting uart communication from the Overo fire for the required
 // angle that needs to be reached by the motors.
 // A simple proportional controller is used to turn the motors. The required PWM
 // values are send to the FPGA over the avalon bus.
@@ -32,6 +32,7 @@
 
 #define pi 3.1415926538
 
+// Set default max stepcount values that were determined during testing
 uint16_t maxStepCount0 = 1115;
 uint16_t maxStepCount1 = 221;
 
@@ -46,17 +47,17 @@ void InitUart()
     alt_irq_enable (UART_0_IRQ);
 }
 
-//function to convert the stepcount output of the FPGA encoder to radian degrees (for the pan motor)
+//function to convert the stepcount output of the FPGA encoder to radians (for the pan motor)
 double Stepcount0ToSI(int16_t steps)
 {
-	double stepsPerRotation = maxStepCount0/325*360;
+	double stepsPerRotation = maxStepCount0/325*360;		// The pan motor can rotate about 325 degrees total
 	return steps/stepsPerRotation*2*pi;
 }
 
-//function to convert the stepcount output of the FPGA encoder to radian degrees (for the tilt motor)
+//function to convert the stepcount output of the FPGA encoder to radians (for the tilt motor)
 double Stepcount1ToSI(int16_t steps)
 {
-	double stepsPerRotation = maxStepCount1/170*360;
+	double stepsPerRotation = maxStepCount1/170*360;		// The tilt motor can rotate about 170 degrees total
 	return steps/stepsPerRotation*2*pi;
 
 }
@@ -132,8 +133,14 @@ int main()
 		}
 		
 		//receive UART data as input
+		// Data is sent in the format [panAngle, tiltAngle, \n], all int8_t values
+		// -128 is sent if no valid angle could be sent due to the phone screen not being visible to the camera
+
 		if(!EmptyUart0()){
+
+			// Get a character from the uart bus
 			ch = GetUart0();
+
 			//store sequential received messages as different variables
 			switch(messageID){
 				case 0: //set pan
@@ -148,18 +155,25 @@ int main()
 					if(ch == '\n'){
 						messageID = 0;
 						//set the PWM values if an angle is received over the uart bus. Uses minimum values due to high resistances in the physical setup.
+						
+						// If the values are valid, set the PWM values based on the angle that it should rotate
 						if(panAngle != -128)
 							PWM0 = -panAngle/2;
 						if(tiltAngle != -128)
 							PWM1 = -tiltAngle/20;
+
+						// Set the PWM0 value to a minimum of 40 to make sure it actually rotates
 						if(PWM0 > 0 && PWM0 < 40)
 							PWM0 = 40;
 						if(PWM0 < 0 && PWM0 > -40)
 							PWM0 = -40;
+
+						// Set the PWM1 value to a minimum of 5 to make sure it actually rotates
 						if(PWM1 > 0 && PWM1 < 5)
 							PWM1 = 5;
 						if(PWM1 < 0 && PWM1 > -5)
 							PWM1 = -5;
+
 					}
 					break;
 				}
@@ -168,8 +182,8 @@ int main()
 
 		//send the PWM values over the avalon bus
 		int16_t temp16 = 0;
-		avalondSend = PWM0 << 24 | PWM1 <<16 | temp16;
-		IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,avalondSend);
+		avalondSend = PWM0 << 24 | PWM1 << 16 | temp16;
+		IOWR(ESL_NIOS_II_IP_0_BASE, 0x00, avalondSend);
 	} 
 
 	return 0;
