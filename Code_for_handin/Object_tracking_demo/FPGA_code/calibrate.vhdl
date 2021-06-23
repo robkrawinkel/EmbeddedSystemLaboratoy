@@ -68,7 +68,7 @@ BEGIN
 			
 		ELSIF rising_edge(CLOCK_50) THEN
 
-			-- If calibrate enable changed to being on, start calibration
+			-- If calibrate enable changed to being on, rising edge, start calibration
 			IF calibrate_enable /= calibrate_enable_old AND calibrate_enable = '1' THEN
 				calibrate_running <= '1';
 				calibrate_state := 0;
@@ -119,7 +119,7 @@ BEGIN
 							-- Check to see if the step count has changed more than the set amount since the last timeout
 							IF (ABS(stepCount - calibrate_stepCount_old) > calibrate_stepCount_driftMax) THEN
 								
-								-- If it has changed substatially, update the old value and reset the clock counter
+								-- If it has changed substantially, update the old value and reset the clock counter
 								calibrate_stepCount_old := stepCount;
 								calibrate_clockCounter := 0;
 
@@ -183,7 +183,7 @@ BEGIN
 						END IF;
 
 					WHEN 4 =>
-						-- Set the stepcounts maximums to the current values
+						-- Set the stepcount maximum to the current value
 						stepCount_max <= stepCount;
 
 						-- Update the calibrate state
@@ -195,6 +195,7 @@ BEGIN
 						-- Setup the motor to move counterclockwise (negative stepCount)
 						CW <= '0';
 
+						-- Set the dutycycle to the return dutycycle (slower to not overshoot)
 						dutycycle <= calibrate_dutyCycleR;
 
 						-- If the motor is not at its half way point yet

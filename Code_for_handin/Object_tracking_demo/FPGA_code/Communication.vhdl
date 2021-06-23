@@ -112,8 +112,8 @@ BEGIN
 			---------------------------------------------------- Reading data
 
 			IF (slave_write = '1') THEN
-				counter := 0;
-				memRead <= slave_writedata;
+				counter := 0;					-- Set timeout timer to 0
+				memRead <= slave_writedata;		-- Read data
 				
 				--Read the PWM values from the input signal
 				PWM_0 := to_integer(signed(memRead(31 downto 24)));
@@ -171,7 +171,8 @@ BEGIN
 			ELSE
 				--disable the motor drivers if no message is received for 1s
 				counter := counter + 1;
-				IF counter >= 50000000 THEN --check if a message was received in the last 100ms
+				
+				IF counter >= 50000000 THEN
 					counter := 0;
 					enable1 <= '0';
 					enable0 <= '0';

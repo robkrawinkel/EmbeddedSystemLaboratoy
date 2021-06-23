@@ -480,6 +480,7 @@ BEGIN
 
 			IF (CALL_calibrate_running0 = '1' OR CALL_calibrate_running1 = '1') THEN
 				-- If calibrating, its process controlls the motors
+				
 				stepReset0 <= CALL_stepReset0;
 				stepReset1 <= CALL_stepReset1;
 
@@ -491,6 +492,7 @@ BEGIN
 				PWM_enable1		<= CALL_enable1;
 
 			ELSIF (HOME_homing_enable = '1') THEN
+				-- If homing, the homing processes control the motors
 
 				PWM_dutycycle0 	<= HOME_dutycycle0;
 				PWM_dutycycle1 	<= HOME_dutycycle1;
@@ -536,55 +538,8 @@ BEGIN
 
 			END IF;
 
-
-			-- PWM_frequency <= 20000;
-			-- PWM_dutycycle1 <= 50;
-			-- PWM_dutycycle0 <= 10;
-
-			-- -- If key0 is pressed rotate both motors counter clockwise
-			-- IF KEY(0) = '0' THEN
-			-- 	PWM_CW0 <= '0';
-			-- 	PWM_CW1 <= '0';
-			-- 	PWM_enable0 <= '1';
-			-- 	PWM_enable1 <= '1';
-
-			-- -- If key1 is pressed rotate both motors clockwise
-			-- ELSIF KEY(1) = '0' THEN
-			-- 	PWM_CW0 <= '1';
-			-- 	PWM_CW1 <= '1';
-			-- 	PWM_enable0 <= '1';
-			-- 	PWM_enable1 <= '1';
-
-			-- -- If none of the buttons are pressed stop the PWM generation
-			-- ELSE
-			-- 	PWM_enable0 <= '0';
-			-- 	PWM_enable1 <= '0';
-
-			-- END IF;
 		END IF;
 	END PROCESS;
-
-	
-	---- Communication with the bus process
-	--p_avalon : PROCESS(clk, reset)
-	--BEGIN
-	--	IF (reset = '1') THEN
-	--		mem <= (others => '0');
-	--		memSEND <= (others => '0');
-	--	ELSIF (rising_edge(clk)) THEN
-    --
-	--		-- Send the step counter data in 16 bit signed, concatenated to get 32 bits
-	--		memSEND <= std_logic_vector(to_signed(stepcount0,16)) & std_logic_vector(to_signed(stepCount1,16));
-	--		
-	--		IF (slave_read = '1') THEN
-	--			slave_readdata <= memSEND;
-	--		END IF;
-	--		
-	--		IF (slave_write = '1') THEN
-	--			mem <= slave_writedata;
-	--		END IF;
-	--	END IF;
-	--END PROCESS;
 	
 END ARCHITECTURE;
 

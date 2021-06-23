@@ -95,23 +95,25 @@ BEGIN
 					
 					--if something has changed, find out if the counter should be increased/decreased and set the rotational direction
 					IF state /= oldState THEN
-						IF state = oldState + 1 THEN
+
+						IF state = oldState + 1 THEN				-- If state increased
 							CW := '1';
-						ELSIF state = 0 AND oldState = 3 THEN
+						ELSIF state = 0 AND oldState = 3 THEN		-- If state moved from 3 to 0
 							CW := '1';
 
-							IF stepCount < stepCount_max THEN
+							IF stepCount < stepCount_max THEN		-- Increase the stepcount if not already at the max yet
 								stepCount <= stepCount + 1;
 							ELSE
 								stepCount <= stepCount_max;
 							END IF;
 
-						ELSIF state = oldState - 1 THEN
-							CW := '0';
-						ELSIF state = 3 AND oldState = 0 THEN
+						ELSIF state = oldState - 1 THEN				-- If state decreased
 							CW := '0';
 
-							IF stepCount > stepCount_min THEN
+						ELSIF state = 3 AND oldState = 0 THEN		-- If state moved from 0 to 3
+							CW := '0';
+
+							IF stepCount > stepCount_min THEN		-- Decrease the stepcount if not already at the minimum
 								stepCount <= stepCount - 1;
 							ELSE
 								stepCount <= stepCount_min;

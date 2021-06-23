@@ -55,7 +55,6 @@ BEGIN
 			cycles_per_period := 50000000/frequency;
 			on_cycles_per_period := ((50000000/frequency) * dutycycle) / 100;
 
-			--set the rotational direction based on the CW input
 			IF enable = '1' THEN
 
 				-- Set the directional outputs
