@@ -11,19 +11,10 @@
 
 #include <opencv2/opencv.hpp>
 
-//#include "opencv2/opencv.hpp"
-//#include "opencv2/highgui/highgui.hpp"
-//#include "opencv2/imgproc/imgproc.hpp"
-
-
-// Tweak the HSV values in that order:
-//  Set the ranges to maximum for all, try to narrow H first, don't create black spots in the tracked object
-//  Repeat for S and then V to find the ideal ranges
-
 using namespace cv;
 using namespace std;
 
-// Set threshold values of the image to track the green phone screen
+// Set threshold values of the filter to track a green phone screen
 #define iLowH 35
 #define iHighH 102
 
@@ -34,15 +25,18 @@ using namespace std;
 #define iHighV 255
 
 // Set the camera properties
-#define viewAngleX 120  // FOV in degree
-#define viewAngleY 120  // FOV in degree
+// #define viewAngle 120  // FOV in degree
+// Viewing angle is not used as it is included in the angle constant below, this saves on calculations
+#define ANGLE_const 1.7321 // tand(viewAngle/2)
 #define pi 3.14159265359
+
+// (0,0) is in the top left of the frame as defined by OpenCV
+
 
 // Set the UART properties
 #define UART_device_name "/dev/ttyO0"
 #define UART_bus_speed B115200
 
-#define ANGLE_const 1.7321
 
 int frameSizeX;         // Variables to store the size of the frame captured by the camera
 int frameSizeY;
@@ -50,7 +44,7 @@ int posX;               // Variables to store the location of the green screen o
 int posY;
 double relativePosX;    // Variable to store the location of the green screen relative to the middle of the frame
 double relativePosY;
-double tempX;
+double tempX;           // Temporary double to store the intermediate result in for the angle calculation
 double tempY;
 int8_t deltaRotX;       // Variable to store the relative rotation angle
 int8_t deltaRotY;
@@ -68,14 +62,18 @@ void sendUART(int UART_port, int8_t msg0, int8_t msg1) {
 
 int main( int argc, char** argv )
 {
-    // ------------------------------------------------------------- UART setup
+// ------------------------------------------------------------- UART setup
     // From: https://blog.mbedded.ninja/programming/operating-systems/linux/linux-serial-ports-using-c-cpp/
+    
     int UART_port = open(UART_device_name, O_RDWR);
 
     if (UART_port == 0) {
-        printf("port opening failed\n");
+        printf("Port opening failed\n");
     }
-    
+
+// Here are a lot of settings to set up the UART communication, however they might not be neccessary if the defaults already work
+// The defaults worked just fine!
+
     // struct termios tty;
 
     // // Get the current UART settings
@@ -116,7 +114,7 @@ int main( int argc, char** argv )
     //     printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
     // }
 
-    // ------------------------------------------------------------- OpenCV setup
+// ------------------------------------------------------------- OpenCV setup
     VideoCapture cap(0); //capture the video from webcam
 
     if ( !cap.isOpened() )  // if not success, exit program
@@ -133,29 +131,34 @@ int main( int argc, char** argv )
     frameSizeX = imgTmp.cols;
     frameSizeY = imgTmp.rows;
 
+// ------------------------------------------------------------- Main loop
     while (true)
     {
+        // Get the current time
         auto startTime = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
 
+        // Read a new frame from the camera
         Mat imgOriginal;
-        bool bSuccess = cap.read(imgOriginal); // read a new frame from video
+        bool bSuccess = cap.read(imgOriginal); 
 
         if (!bSuccess) {
             printf("Cannot read a frame from video stream\n");
             break;
         }
 
+        // Convert the captured frame from BGR to HSV
         Mat imgHSV;
-        cvtColor(imgOriginal, imgHSV, COLOR_BGR2HSV); //Convert the captured frame from BGR to HSV
+        cvtColor(imgOriginal, imgHSV, COLOR_BGR2HSV); 
 
+        // Threshold the image using the filter settings set in the define section
         Mat imgThresholded;
-        inRange(imgHSV, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), imgThresholded); //Threshold the image
+        inRange(imgHSV, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), imgThresholded);
 
-        //morphological opening (removes small objects from the foreground)
+        // morphological opening (removes small objects from the foreground)
         erode(imgThresholded, imgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)) );
         dilate( imgThresholded, imgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)) ); 
 
-        //morphological closing (removes small holes from the foreground)
+        // morphological closing (removes small holes from the foreground)
         dilate( imgThresholded, imgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)) ); 
         erode(imgThresholded, imgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)) );
 
@@ -166,7 +169,7 @@ int main( int argc, char** argv )
         double dM10 = oMoments.m10;
         double dArea = oMoments.m00;
 
-        // if the area <= 10000, I consider that the there are no object in the image and it's because of the noise, the area is not zero 
+        // if the area <= 1000000, I consider that the there are no object in the image and it's because of the noise, the area is not zero 
         if (dArea > 1000000)
         {
             //calculate the position of the ball 0,0 is in the upperleft corner of the display
@@ -181,17 +184,22 @@ int main( int argc, char** argv )
             tempX = atan(relativePosX * 2.0 * ANGLE_const) / pi * 180.0;    
             tempY = atan(relativePosY * 2.0 * ANGLE_const) / pi * 180.0;
 
+            // Convert temp doubles to 8 bit integers
             deltaRotX = tempX;
             deltaRotY = tempY;
 
+            // Send the relative rotations over UART using the custom function
             sendUART(UART_port, deltaRotX, deltaRotY);
+
         } else {
+            // If there is no object in the scene of the minimum defined size, send the minimum rotational value to indicate that homing should start
             sendUART(UART_port, -128, -128);
         }
 
+        // Store end time of the loop
         auto endTime = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
 
-
+        // Print debug values to the console window
         printf("PosX: %d\t PosY: %d\t Area: %f\t frameSizeX: %d\t relativePosX: %f\t tempX: %f\t deltaRotX: %d\n", posX, posY, dArea, frameSizeX, relativePosX, tempX, deltaRotX);
     }
 
