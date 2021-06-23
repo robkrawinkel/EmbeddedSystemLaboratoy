@@ -1,9 +1,16 @@
 //-----------------------------------------------------------------------------
 // 
-// ESL demo, accepting uart communication from the OVero fire for the required
-// angle that needs to be reached by the motors.
-// A simple proportional controller is used to turn the motors. The required PWM
-// values are send to the FPGA over the avalon bus.
+// ESL demo
+// Version: 1.0
+// Creator: Rene Moll
+// Date: 10th April 2012
+//
+//-----------------------------------------------------------------------------
+//
+// Demo application which sets and reads form a register in the demo IP.
+// 
+// IOWR/IORD are part of the HAL, see the Nios 2 Software developer’s handbook
+// for more information.
 //
 //-----------------------------------------------------------------------------
 
@@ -17,8 +24,6 @@
 #include <io.h>
 #include "system.h"
 #include "sys/alt_irq.h"
-#include "InterruptHandlerForUart.h"
-
 
 #include "sys/alt_stdio.h"
 
@@ -27,24 +32,13 @@
 #include "altera_avalon_uart_fd.h"
 
 
-//uart baudrate
-#define BAUD_RATE_0 115200
+/* 20-sim include files */
+#include "xxsubmod.h"
 
 #define pi 3.1415926538
 
 uint16_t maxStepCount0 = 1115;
 uint16_t maxStepCount1 = 221;
-
-void InitUart()
-{
-    int context_uart0;
-
-    InitUart0(BAUD_RATE_0);
-
-    alt_irq_register(UART_0_IRQ,&context_uart0,IsrUart0); // install UART0 ISR
-
-    alt_irq_enable (UART_0_IRQ);
-}
 
 //function to convert the stepcount output of the FPGA encoder to radian degrees (for the pan motor)
 double Stepcount0ToSI(int16_t steps)
@@ -61,49 +55,54 @@ double Stepcount1ToSI(int16_t steps)
 
 }
 
-
 int main()
 {
-
 	printf("\n\nHello NiosII!!!!!\n");
-
-	//Force a recalibration of the quadrature encoders on the NIOS II FPGA side
+	
+	//reset quadrature encoders on the FPGA
 	IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000001000000000000000);
 	IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,0b00000000000000000000000000000000);
-	
-	//initialize relevant communication
-	InitUart();
+
+	//initialize 20-sim
+	XXDouble u [3 + 1];
+	XXDouble y [1 + 1];
+
+	/* Initialize the inputs and outputs with correct initial values */
+	u[0] = 0.0;		/* corr */
+	u[1] = 0.0;		/* in */
+	u[2] = 0.0;		/* position */
+
+	y[0] = 0.0;		/* out */
 
 
+	/* Initialize the submodel itself */
+	XXInitializeSubmodel (&u, &y, xx_time);
 	
-	//Avalon communication variables
+	//end initialize 20-sim
+	
+	//variables for avalon communication
 	uint32_t nReadOut = 0;
 	uint32_t avalondSend = 0;
-	
-	//UART variables
-	int8_t ch;
-	int8_t messageID = 2;	
-	int8_t panAngle = 0;
-	int8_t tiltAngle = 0;
 	
 	//quadrature encoder variables
 	uint16_t stepCount0 = 0;
 	uint16_t stepCount1 = 0;
+	uint16_t stepCount0Old = 0;
+	uint16_t stepCount1Old = 0;
 	
 	//motor driver variables
 	int8_t PWM0 = 0;
 	int8_t PWM1 = 0;
-	int8_t PID_counter = 0;	
 
-	
-	while(1) {
+
+	while( (xx_stop_simulation == XXFALSE) ) {
 
 		//avalon bus communication
 		nReadOut = IORD(ESL_NIOS_II_IP_0_BASE, 0x00);
-		uint8_t readID = nReadOut >> 29;
+		unsigned int readID = nReadOut >> 29;
 		nReadOut = nReadOut << 3;
 		uint32_t temp32;
-
+		
 		//differentiate between two different types of messages received, the maximum stepcount or current stepcount, using bitshifting
 		switch(readID) {
 			case 1://read current stepcount
@@ -124,53 +123,47 @@ int main()
 				break;
 		}
 		
-		//reset the PWM values to 0 after 50 cycles, to prevent the motor from running if no data is received
-		if(PID_counter++ > 50){
-			PWM0 = 0;
-			PWM1 = 0;
-			PID_counter = 0;
-		}
 		
-		//receive UART data as input
-		if(!EmptyUart0()){
-			ch = GetUart0();
-			//store sequential received messages as different variables
-			switch(messageID){
-				case 0: //set pan
-					panAngle = ch;
-					messageID++;
-					break;
-				case 1: //set tilt
-					tiltAngle = ch;
-					messageID++;
-					break;
-				default: //line break
-					if(ch == '\n'){
-						messageID = 0;
-						//set the PWM values if an angle is received over the uart bus. Uses minimum values due to high resistances in the physical setup.
-						if(panAngle != -128)
-							PWM0 = -panAngle/2;
-						if(tiltAngle != -128)
-							PWM1 = -tiltAngle/20;
-						if(PWM0 > 0 && PWM0 < 40)
-							PWM0 = 40;
-						if(PWM0 < 0 && PWM0 > -40)
-							PWM0 = -40;
-						if(PWM1 > 0 && PWM1 < 5)
-							PWM1 = 5;
-						if(PWM1 < 0 && PWM1 > -5)
-							PWM1 = -5;
-					}
-					break;
-				}
-
+		//print updated stepcount for debugging
+		if(stepCount0 != stepCount0Old || stepCount1 != stepCount1Old)
+			printf("stepCount0: %d\t stepCount1: %d \n\r", stepCount0, stepCount1);
+		
+		
+		//generate inputs, based on time
+		u[1] = 0;
+		if(xx_time >= 1){
+			u[1] = 0.5*pi;
 		}
+		if(xx_time >= 15){
+			u[1] = 1.5*pi;
+		}
+		if(xx_time >= 20){
+			u[1] = 0.5*pi;
+		}
+
+		/* Call the 20-sim submodel to calculate the output */
+		u[2] = Stepcount0ToSI(stepCount0);
+		double temp = y[0];
+		
+
+
+		XXCalculateSubmodel (&u, &y, xx_time);
+		//multiply the output by the maximum dutycycle
+		PWM0 = y[0]*70;
 
 		//send the PWM values over the avalon bus
 		int16_t temp16 = 0;
 		avalondSend = PWM0 << 24 | PWM1 <<16 | temp16;
 		IOWR(ESL_NIOS_II_IP_0_BASE, 0x00,avalondSend);
+
+		//update stepcounter and time
+		stepCount0Old = stepCount0;
+		stepCount1Old = stepCount1;
+		xx_time+=0.0013;
 	} 
+
+	/* Perform the final 20-sim calculations */
+	XXTerminateSubmodel (&u, &y, xx_time);
 
 	return 0;
 
