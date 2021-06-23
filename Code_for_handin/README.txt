@@ -1,0 +1,3 @@
+As discussed in the report, on the final setup where everything was combined the PID controller no longer worked.
+The code that was used for the final demonstrator without the PID controller (and with a simple proportional controller) can be found in the Object_tracking_demo folder.
+As the individual code that was used to test the PID controller on the NIOS II did work, we also included that in the PID_motor_controller_demo folder
